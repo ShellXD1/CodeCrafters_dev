@@ -1,125 +1,173 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Pantalla de Inicio',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomeScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('Inicio'),
+        leading: IconButton(
+          icon: Icon(Icons.home),
+          onPressed: () {
+            // Acción al presionar el botón de la casita (regresar a la pantalla de inicio)
+            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
+          },
+        ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            color: const Color.fromARGB(255, 255, 255, 255), // Puedes cambiar el color de fondo si lo deseas
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Center(
+              child: Text(
+                '¡Bienvenido!',
+                style: TextStyle(fontSize: 36.0),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          SizedBox(height: 20.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Recetas:',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24.0),
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.blueGrey,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Receta 1',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      Text(
+                        'Receta 2',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      Text(
+                        'Receta 3',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Text(
+                  'Ingredientes de Cocina:',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24.0),
+                ),
+                SizedBox(height: 10.0),
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.blueGrey,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Ingrediente 1',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      Text(
+                        'Ingrediente 2',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      Text(
+                        'Ingrediente 3',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        color: Color(0xFF9EE060), // Color personalizado
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Acción al presionar el botón "Recetas"
+                  print("Botón 'Recetas' presionado");
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9EE060), // Color personalizado
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero, // Hace que el botón sea rectangular
+                  ),
+                  padding: EdgeInsets.all(16.0), // Aumenta el padding del botón para hacerlo más grande
+                ),
+                child: Text(
+                  'Recetas',
+                  style: TextStyle(fontSize: 20.0), // Aumenta el tamaño del texto
+                ),
+              ),
+            ),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Acción al presionar el botón "Ingredientes"
+                  print("Botón 'Ingredientes' presionado");
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9EE060), // Color personalizado
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero, // Hace que el botón sea rectangular
+                  ),
+                  padding: EdgeInsets.all(16.0), // Aumenta el padding del botón para hacerlo más grande
+                ),
+                child: Text(
+                  'Ingredientes',
+                  style: TextStyle(fontSize: 20.0), // Aumenta el tamaño del texto
+                ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

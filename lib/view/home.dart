@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
+import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
+import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 
 class HomeScreen extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
+  final IngredientViewModel ingredientViewModel;
+  
 
-  const HomeScreen({Key? key, required this.recipeViewModel}) : super(key: key);
+  const HomeScreen({Key? key, required this.recipeViewModel, required this.ingredientViewModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +140,10 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   // Acción al presionar el botón "Ingredientes"
                   print("Botón 'Ingredientes' presionado");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: ingredientViewModel)),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),

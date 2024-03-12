@@ -40,7 +40,7 @@ class RecetasView extends StatelessWidget {
                     children: [
                       for (var recipe in recipeViewModel.recipes)
                         RecipeCard(
-                          imagePath: 'assets/${recipe.image}', // Utilizamos imágenes para las recetas
+                          imagePath: 'assets/recetas/${recipe.image}', // Utilizamos imágenes para las recetas
                           name: recipe.name,
                           onTap: () {
                             print("Receta '${recipe.name}' seleccionada");
@@ -83,6 +83,8 @@ class RecetasView extends StatelessWidget {
                 onPressed: () {
                   // Acción al presionar el botón "Ingredientes"
                   print("Botón 'Ingredientes' presionado");
+                  Navigator.popUntil(context, ModalRoute.withName('/')); // Regresar a la pantalla de inicio
+                  Navigator.pushNamed(context, '/ingredientes'); // Navegar a la pantalla de recetas
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),

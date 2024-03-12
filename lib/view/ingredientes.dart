@@ -150,6 +150,8 @@ class IngredientesView extends StatelessWidget {
               onPressed: () {
                 // Acción al presionar el botón "Recetas"
                 print("Botón 'Recetas' presionado");
+                Navigator.popUntil(context, ModalRoute.withName('/')); // Regresar a la pantalla de inicio
+                Navigator.pushNamed(context, '/recetas'); // Navegar a la pantalla de recetas
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF9EE060),

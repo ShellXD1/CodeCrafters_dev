@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      for (var recipe in recipeViewModel.recipes)
+                      for (var recipe in recipeViewModel.recipes.take(3))
                         Text(
                           recipe.name,
                           style: TextStyle(fontSize: 25.0),
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      for (var recipe in ingredientViewModel.ingredient)
+                      for (var recipe in ingredientViewModel.ingredient.take(3))
                         Text(
                           recipe.name,
                           style: TextStyle(fontSize: 25.0),

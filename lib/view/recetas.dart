@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
 import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 
 class RecetasView extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
 
-  const RecetasView({Key? key, required this.recipeViewModel}) : super(key: key);
+  const RecetasView({Key? key, required this.recipeViewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +14,11 @@ class RecetasView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Recetas'),
         leading: IconButton(
-          icon: Icon(Icons.home, size: 50.0), // Mantenemos el ícono de inicio como estaba
+          icon: Icon(Icons.home,
+              size: 50.0), // Mantenemos el ícono de inicio como estaba
           onPressed: () {
-            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
+            print(
+                "Botón de la casita presionado (regresar a la pantalla de inicio)");
             Navigator.pop(context); // Regresar a la pantalla de inicio
           },
         ),
@@ -40,11 +44,21 @@ class RecetasView extends StatelessWidget {
                     children: [
                       for (var recipe in recipeViewModel.recipes)
                         RecipeCard(
-                          imagePath: 'assets/${recipe.image}', // Utilizamos imágenes para las recetas
+                          imagePath:
+                              'assets/${recipe.image}', // Utilizamos imágenes para las recetas
                           name: recipe.name,
                           onTap: () {
                             print("Receta '${recipe.name}' seleccionada");
-                            // Puedes navegar a una nueva pantalla para ver los detalles de la receta aquí
+                            int recipeIndex =
+                                recipeViewModel.recipes.indexOf(recipe);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecetaDetalladaWiew(
+                                    recipeViewModel: recipeViewModel,
+                                    recipeIndex: recipeIndex),
+                              ),
+                            );
                           },
                         ),
                     ],
@@ -152,4 +166,3 @@ class RecipeCard extends StatelessWidget {
     );
   }
 }
-

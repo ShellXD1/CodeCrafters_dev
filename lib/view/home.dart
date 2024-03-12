@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Recetas:',
+                  'Recetas del dia:',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0),
                 ),
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0),
                 Text(
-                  'Ingredientes de Cocina:',
+                  'Ingredientes por terminarse:',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0),
                 ),
@@ -88,18 +88,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        'Ingrediente 1',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
-                      Text(
-                        'Ingrediente 2',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
-                      Text(
-                        'Ingrediente 3',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
+                      for (var recipe in ingredientViewModel.ingredient)
+                        Text(
+                          recipe.name,
+                          style: TextStyle(fontSize: 25.0),
+                        ),
                     ],
                   ),
                 ),

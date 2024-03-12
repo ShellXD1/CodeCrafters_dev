@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/view/recetas.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
+import 'package:proyecto_tsp_dev/view/ingredientes.dart';
+import 'package:proyecto_tsp_dev/view/baseScreen.dart';
+
 
 class IngredientesView extends StatelessWidget {
   final IngredientViewModel ingredientViewModel;
@@ -8,17 +13,9 @@ class IngredientesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Recetas'),
-        leading: IconButton(
-          icon: Icon(Icons.home, size: 50.0), // Mantenemos el ícono de inicio como estaba
-          onPressed: () {
-            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
-            Navigator.pop(context); // Regresar a la pantalla de inicio
-          },
-        ),
-      ),
+    return BaseScreen(
+      recipeViewModel: RecipeViewModel(), // Debes pasar el ViewModel necesario, aunque no lo uses en esta vista
+      ingredientViewModel: ingredientViewModel,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,59 +40,14 @@ class IngredientesView extends StatelessWidget {
                           quantity: ingredient.quantity,
                           name: ingredient.name,
                           onTap: () {
-                            print("Ingrediente '${ingredient.name}' seleccionada");
-                            // Puedes navegar a una nueva pantalla para ver los detalles de la receta aquí
+                            print("Ingrediente '${ingredient.name}' seleccionado");
+                            // Puedes navegar a una nueva pantalla para ver los detalles del ingrediente aquí
                           },
                         ),
                     ],
                   ),
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Recetas',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Ingredientes"
-                  print("Botón 'Ingredientes' presionado");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Ingredientes',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-              ),
             ),
           ],
         ),

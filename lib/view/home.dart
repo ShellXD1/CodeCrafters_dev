@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Recetas:',
+                  'Recetas del dia:',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0),
                 ),
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      for (var recipe in recipeViewModel.recipes)
+                      for (var recipe in recipeViewModel.recipes.take(3))
                         Text(
                           recipe.name,
                           style: TextStyle(fontSize: 25.0),
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0),
                 Text(
-                  'Ingredientes de Cocina:',
+                  'Ingredientes por terminarse:',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0),
                 ),
@@ -88,18 +88,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        'Ingrediente 1',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
-                      Text(
-                        'Ingrediente 2',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
-                      Text(
-                        'Ingrediente 3',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
+                      for (var recipe in ingredientViewModel.ingredient.take(3))
+                        Text(
+                          recipe.name,
+                          style: TextStyle(fontSize: 25.0),
+                        ),
                     ],
                   ),
                 ),

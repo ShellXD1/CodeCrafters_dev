@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
+import 'package:proyecto_tsp_dev/view/recetas.dart';
+import 'package:proyecto_tsp_dev/view/ingredientes.dart';
+import 'package:proyecto_tsp_dev/view/baseScreen.dart';
 
 class RecetasView extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
@@ -8,17 +12,9 @@ class RecetasView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Recetas'),
-        leading: IconButton(
-          icon: Icon(Icons.home, size: 50.0), // Mantenemos el ícono de inicio como estaba
-          onPressed: () {
-            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
-            Navigator.pop(context); // Regresar a la pantalla de inicio
-          },
-        ),
-      ),
+    return BaseScreen(
+      recipeViewModel: recipeViewModel,
+      ingredientViewModel: IngredientViewModel(), // Debes pasar el ViewModel necesario, aunque no lo uses en esta vista
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,68 +30,27 @@ class RecetasView extends StatelessWidget {
                 ),
                 SizedBox(height: 10.0),
                 Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(30.0),
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.blueGrey,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   child: Column(
                     children: [
                       for (var recipe in recipeViewModel.recipes)
-                        RecipeCard(
-                          imagePath: 'assets/${recipe.image}', // Utilizamos imágenes para las recetas
-                          name: recipe.name,
-                          onTap: () {
-                            print("Receta '${recipe.name}' seleccionada");
-                            // Puedes navegar a una nueva pantalla para ver los detalles de la receta aquí
-                          },
+                        Text(
+                          recipe.name,
+                          style: TextStyle(fontSize: 25.0),
                         ),
                     ],
                   ),
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Recetas',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Ingredientes"
-                  print("Botón 'Ingredientes' presionado");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Ingredientes',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-              ),
             ),
           ],
         ),

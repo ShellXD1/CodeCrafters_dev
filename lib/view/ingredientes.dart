@@ -43,8 +43,63 @@ class IngredientesView extends StatelessWidget {
                           quantity: ingredient.quantity,
                           name: ingredient.name,
                           onTap: () {
-                            print("Ingrediente '${ingredient.name}' seleccionada");
-                            // Puedes navegar a una nueva pantalla para ver los detalles de la receta aquí
+                            final TextEditingController _quantityController = TextEditingController(text: ingredient.quantity.toString());
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Modificar Cantidad'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFormField(
+                                        controller: _quantityController,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              int currentValue = int.tryParse(_quantityController.text) ?? ingredient.quantity;
+                                              _quantityController.text = (currentValue - 1).toString();
+                                            },
+                                            child: Icon(Icons.remove),
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              int currentValue = int.tryParse(_quantityController.text) ?? ingredient.quantity;
+                                              _quantityController.text = (currentValue + 1).toString();
+                                            },
+                                            child: Icon(Icons.add),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Cancelar'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        // Aquí puedes hacer lo que necesites con la nueva cantidad
+                                        int newQuantity = int.tryParse(_quantityController.text) ?? ingredient.quantity;
+                                        print('Nueva cantidad para ${ingredient.name}: $newQuantity');
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Guardar'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                         ),
 

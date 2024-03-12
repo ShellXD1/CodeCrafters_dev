@@ -10,7 +10,7 @@ class IngredientesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recetas'),
+        title: Text('Ingredientes'),
         leading: IconButton(
           icon: Icon(Icons.home, size: 50.0), // Mantenemos el ícono de inicio como estaba
           onPressed: () {
@@ -47,6 +47,7 @@ class IngredientesView extends StatelessWidget {
                             // Puedes navegar a una nueva pantalla para ver los detalles de la receta aquí
                           },
                         ),
+
                     ],
                   ),
                 ),
@@ -56,50 +57,82 @@ class IngredientesView extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
+  color: Color(0xFF9EE060),
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      ElevatedButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return AgregarIngredienteWidget(
+                onIngredientAdded: (name, quantity) {
+                  // Lógica para agregar el ingrediente aquí
+                  print('Nombre del ingrediente: $name, Cantidad: $quantity');
+                  // Puedes actualizar el estado de la lista de ingredientes aquí
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Recetas',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Ingredientes"
-                  print("Botón 'Ingredientes' presionado");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Ingredientes',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-              ),
-            ),
-          ],
+              );
+            },
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFF9EE060),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          padding: EdgeInsets.all(20.0),
+        ),
+        child: Text(
+          'Agregar Ingrediente',
+          style: TextStyle(fontSize: 25.0),
         ),
       ),
+      Row(
+        children: <Widget>[
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón "Recetas"
+                print("Botón 'Recetas' presionado");
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF9EE060),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                padding: EdgeInsets.all(16.0),
+              ),
+              child: Text(
+                'Recetas',
+                style: TextStyle(fontSize: 25.0),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón "Ingredientes"
+                print("Botón 'Ingredientes' presionado");
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF9EE060),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                padding: EdgeInsets.all(16.0),
+              ),
+              child: Text(
+                'Ingredientes',
+                style: TextStyle(fontSize: 25.0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
     );
   }
 }
@@ -156,3 +189,82 @@ class IngredientCard extends StatelessWidget {
   }
 }
 
+class AgregarIngredienteWidget extends StatefulWidget {
+  final Function(String name, int quantity) onIngredientAdded;
+
+  const AgregarIngredienteWidget({Key? key, required this.onIngredientAdded}) : super(key: key);
+
+  @override
+  _AgregarIngredienteWidgetState createState() => _AgregarIngredienteWidgetState();
+}
+
+class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
+  String _selectedIngredient = 'Seleccione un ingrediente'; // Valor predeterminado
+  int _quantity = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(color: Colors.blueGrey, width: 2.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<String>(
+                value: _selectedIngredient,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedIngredient = newValue!;
+                  });
+                },
+                items: <String>[
+                  'Seleccione un ingrediente', // Valor predeterminado
+                  'Ingrediente 1',
+                  'Ingrediente 2',
+                  'Ingrediente 3',
+                  // Agrega más ingredientes según sea necesario
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                decoration: InputDecoration(labelText: 'Selecciona un ingrediente'),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Cantidad'),
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    _quantity = int.tryParse(value) ?? 0;
+                  });
+                },
+              ),
+              SizedBox(height: 10.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (_selectedIngredient != 'Seleccione un ingrediente') {
+                    widget.onIngredientAdded(_selectedIngredient, _quantity);
+                    Navigator.pop(context); // Cerrar el widget de agregar ingrediente
+                  } else {
+                    // Puedes mostrar un mensaje de error o manejar la situación de otra manera
+                  }
+                },
+                child: Text('Agregar'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -12,6 +12,9 @@ class IngredientViewModel extends ChangeNotifier {
     Ingredient(name: 'Jitomate', quantity: 3),
     Ingredient(name: 'Dientes de ajo', quantity: 3),
     Ingredient(name: 'Cebolla', quantity: 3),
+    Ingredient(name: 'Cebollin', quantity: 7),
+    Ingredient(name: 'Jalapeño', quantity: 1),
+    Ingredient(name: 'Tomatillo', quantity: 1),
   ];
 
   List<Ingredient> get ingredient => _ingredient;

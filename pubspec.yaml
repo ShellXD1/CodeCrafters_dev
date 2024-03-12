@@ -24,5 +24,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/spaghetti_carbonara.jpg
-    - assets/ensalada_cesar.jpg
+    - assets/ensalada.png
+    - assets/spaghetti.png
+    - assets/huarache.png
+  

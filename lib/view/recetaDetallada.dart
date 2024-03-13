@@ -44,7 +44,7 @@ Widget Cuerpo() {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5),
-          Preparacion(),
+          PreparacionWidget(),
         ],
       ),
     ),
@@ -71,15 +71,53 @@ Widget Ingredientes() {
   );
 }
 
-Widget Preparacion() {
-  return Container(
-    padding: EdgeInsets.all(12),
-    color: Color.fromARGB(255, 158, 224, 96),
-    child: Text(
-      "Instrucciones de preparación aquí",
-      style: TextStyle(fontSize: 16),
-    ),
-  );
+class PreparacionWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 158, 224, 96),
+              content: Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Instrucciones de preparación"),
+                      SizedBox(height: 16),
+                      Text("Aquí van las instrucciones de preparación"),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        color: Color.fromARGB(255, 158, 224, 96),
+        child: Text(
+          "Mostrar instrucciones de preparación",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    );
+  }
 }
 
 Widget nin() {

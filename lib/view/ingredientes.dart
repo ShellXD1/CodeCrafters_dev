@@ -10,9 +10,9 @@ class IngredientesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ingredientes'),
+        title: Text('Ingredientes', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
-          icon: Icon(Icons.home, size: 50.0), // Mantenemos el ícono de inicio como estaba
+          icon: Icon(Icons.home, size: 40.0), // Mantenemos el ícono de inicio como estaba
           onPressed: () {
             print("Botón de la casita presionado (regresar a la pantalla de inicio)");
             Navigator.pop(context); // Regresar a la pantalla de inicio
@@ -30,7 +30,7 @@ class IngredientesView extends StatelessWidget {
                 Text(
                   'Ingredientes:',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24.0),
+                  style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
                 SizedBox(height: 10.0),
                 Container(
@@ -49,7 +49,7 @@ class IngredientesView extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Modificar Cantidad'),
+                                  title: Text('Modificar Cantidad', style: TextStyle( fontFamily: 'Chivo'),),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -85,7 +85,7 @@ class IngredientesView extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('Cancelar'),
+                                      child: Text('Cancelar', style: TextStyle( fontFamily: 'Chivo'),),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -94,7 +94,7 @@ class IngredientesView extends StatelessWidget {
                                         print('Nueva cantidad para ${ingredient.name}: $newQuantity');
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('Guardar'),
+                                      child: Text('Guardar', style: TextStyle( fontFamily: 'Chivo'),),
                                     ),
                                   ],
                                 );
@@ -140,7 +140,7 @@ class IngredientesView extends StatelessWidget {
         ),
         child: Text(
           'Agregar Ingrediente',
-          style: TextStyle(fontSize: 25.0),
+          style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
         ),
       ),
       Row(
@@ -162,7 +162,7 @@ class IngredientesView extends StatelessWidget {
               ),
               child: Text(
                 'Recetas',
-                style: TextStyle(fontSize: 25.0),
+                style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
               ),
             ),
           ),
@@ -181,7 +181,7 @@ class IngredientesView extends StatelessWidget {
               ),
               child: Text(
                 'Ingredientes',
-                style: TextStyle(fontSize: 25.0),
+                style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
               ),
             ),
           ),

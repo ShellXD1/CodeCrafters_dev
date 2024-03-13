@@ -18,7 +18,7 @@ class RecetaDetalladaView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Receta'),
+        title: Text('Detalles de la receta', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         // Otras acciones del app bar
       ),
       body: Cuerpo(recipe: recipe),
@@ -37,14 +37,14 @@ Widget Cuerpo({required Recipe recipe}) {
           SizedBox(height: 20),
           Text(
             'Ingredientes:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Chivo'),
           ),
           SizedBox(height: 5),
           IngredientesWidget(ingredient: recipe.ingredient),
           SizedBox(height: 20),
           Text(
             'Preparación:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Chivo'),
           ),
           SizedBox(height: 5),
           PreparacionWidget(process: recipe.process),
@@ -87,7 +87,7 @@ class IngredientesWidget extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Lista de Ingredientes"),
+                      Text("Lista de Ingredientes", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Chivo')),
                       SizedBox(height: 16),
                       Text(ingredient),
                     ],
@@ -113,7 +113,7 @@ class IngredientesWidget extends StatelessWidget {
         color: Color.fromARGB(255, 158, 224, 96),
         child: Text(
           "Lista de ingredientes aqui",
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),
     );
@@ -139,7 +139,7 @@ class PreparacionWidget extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Instrucciones de preparación"),
+                      Text("Instrucciones de preparación", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Chivo')),
                       SizedBox(height: 16),
                       Text(process),
                     ],
@@ -165,7 +165,7 @@ class PreparacionWidget extends StatelessWidget {
         color: Color.fromARGB(255, 158, 224, 96),
         child: Text(
           "Mostrar instrucciones de preparación",
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),
     );

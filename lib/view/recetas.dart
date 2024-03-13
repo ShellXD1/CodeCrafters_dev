@@ -12,10 +12,10 @@ class RecetasView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recetas'),
+        title: Text('Recetas', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
           icon: Icon(Icons.home,
-              size: 50.0), // Mantenemos el ícono de inicio como estaba
+              size: 40.0), // Mantenemos el ícono de inicio como estaba
           onPressed: () {
             print(
                 "Botón de la casita presionado (regresar a la pantalla de inicio)");
@@ -34,7 +34,7 @@ class RecetasView extends StatelessWidget {
                 Text(
                   'Recetas:',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24.0),
+                  style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
                 SizedBox(height: 10.0),
                 Container(
@@ -88,7 +88,7 @@ class RecetasView extends StatelessWidget {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(fontSize: 25.0),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
                 ),
               ),
             ),
@@ -113,7 +113,7 @@ class RecetasView extends StatelessWidget {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(fontSize: 25.0),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
                 ),
               ),
             ),

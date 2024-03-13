@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeSingleViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 
 class HomeScreen extends StatelessWidget {
-  final RecipeSingleViewModel recipeViewModel;
+  final RecipeViewModel recipeViewModel;
   final IngredientViewModel ingredientViewModel;
 
   const HomeScreen(
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      for (var recipe in recipeViewModel.recipeSingles.take(3))
+                      for (var recipe in recipeViewModel.recipes.take(3))
                         Text(
                           recipe.name,
                           style: TextStyle(fontSize: 25.0),
@@ -117,8 +117,8 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => RecetasView(
-                            recipeSingleViewModel: recipeViewModel)),
+                        builder: (context) =>
+                            RecetasView(recipeViewModel: recipeViewModel)),
                   );
                 },
                 style: ElevatedButton.styleFrom(

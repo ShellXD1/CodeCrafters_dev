@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeSingleViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 
 class RecetasView extends StatelessWidget {
-  final RecipeSingleViewModel recipeSingleViewModel;
+  final RecipeViewModel recipeViewModel;
 
-  const RecetasView({Key? key, required this.recipeSingleViewModel})
+  const RecetasView({Key? key, required this.recipeViewModel})
       : super(key: key);
 
   @override
@@ -42,22 +42,20 @@ class RecetasView extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     children: [
-                      for (var recipe in recipeSingleViewModel.recipeSingles)
+                      for (var recipe in recipeViewModel.recipes)
                         RecipeCard(
                           imagePath:
                               'assets/recetas/${recipe.image}', // Utilizamos imágenes para las recetas
                           name: recipe.name,
                           onTap: () {
                             print("Receta '${recipe.name}' seleccionada");
-                            int recipeIndex = recipeSingleViewModel
-                                .recipeSingles
-                                .indexOf(recipe);
+                            int recipeIndex =
+                                recipeViewModel.recipes.indexOf(recipe);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => RecetaDetalladaView(
-                                    recipeSingleViewModel:
-                                        recipeSingleViewModel,
+                                    recipeViewModel: recipeViewModel,
                                     recipeIndex: recipeIndex),
                               ),
                             );

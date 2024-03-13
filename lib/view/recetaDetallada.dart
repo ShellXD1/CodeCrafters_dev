@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeSingleViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 
 class RecetaDetalladaView extends StatelessWidget {
-  final RecipeSingleViewModel recipeSingleViewModel;
+  final RecipeViewModel recipeViewModel;
   final int recipeIndex;
 
   const RecetaDetalladaView({
     Key? key,
-    required this.recipeSingleViewModel,
+    required this.recipeViewModel,
     required this.recipeIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Obtén la receta correspondiente al índice
-    final RecipeSingle recipe =
-        recipeSingleViewModel.recipeSingles[recipeIndex];
+    final Recipe recipe = recipeViewModel.recipes[recipeIndex];
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +26,7 @@ class RecetaDetalladaView extends StatelessWidget {
   }
 }
 
-Widget Cuerpo({required RecipeSingle recipe}) {
+Widget Cuerpo({required Recipe recipe}) {
   return Center(
     child: Container(
       padding: EdgeInsets.all(12),
@@ -41,21 +40,21 @@ Widget Cuerpo({required RecipeSingle recipe}) {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5),
-          IngredientesWidget(),
+          IngredientesWidget(ingredient: recipe.ingredient),
           SizedBox(height: 20),
           Text(
             'Preparación:',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5),
-          PreparacionWidget(),
+          PreparacionWidget(process: recipe.process),
         ],
       ),
     ),
   );
 }
 
-Widget RecetaDes(RecipeSingle recipe) {
+Widget RecetaDes(Recipe recipe) {
   return Container(
     height: 200,
     width: 250,
@@ -68,6 +67,11 @@ Widget RecetaDes(RecipeSingle recipe) {
 }
 
 class IngredientesWidget extends StatelessWidget {
+  final String ingredient;
+
+  const IngredientesWidget({Key? key, required this.ingredient})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -85,7 +89,7 @@ class IngredientesWidget extends StatelessWidget {
                     children: [
                       Text("Lista de Ingredientes"),
                       SizedBox(height: 16),
-                      Text("Aquí van los ingredientes de la receta"),
+                      Text(ingredient),
                     ],
                   ),
                   Positioned(
@@ -117,6 +121,9 @@ class IngredientesWidget extends StatelessWidget {
 }
 
 class PreparacionWidget extends StatelessWidget {
+  final String process;
+
+  const PreparacionWidget({Key? key, required this.process}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -134,7 +141,7 @@ class PreparacionWidget extends StatelessWidget {
                     children: [
                       Text("Instrucciones de preparación"),
                       SizedBox(height: 16),
-                      Text("Aquí van las instrucciones de preparación"),
+                      Text(process),
                     ],
                   ),
                   Positioned(

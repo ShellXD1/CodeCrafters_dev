@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/view/home.dart';
 import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeSingleViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 
 void main() {
-  final RecipeSingleViewModel recipeSingleViewModel = RecipeSingleViewModel();
+  final RecipeViewModel recipeViewModel = RecipeViewModel();
   final IngredientViewModel ingredientViewModel = IngredientViewModel();
 
   runApp(MyApp(
-    recipeSingleViewModel: recipeSingleViewModel,
+    recipeViewModel: recipeViewModel,
     ingredientViewModel: ingredientViewModel,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final RecipeSingleViewModel recipeSingleViewModel;
+  final RecipeViewModel recipeViewModel;
   final IngredientViewModel ingredientViewModel;
 
   const MyApp(
       {Key? key,
-      required this.recipeSingleViewModel,
+      required this.recipeViewModel,
       required this.ingredientViewModel})
       : super(key: key);
 
@@ -35,10 +35,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(
-            recipeViewModel: recipeSingleViewModel,
+            recipeViewModel: recipeViewModel,
             ingredientViewModel: ingredientViewModel),
-        '/recetas': (context) =>
-            RecetasView(recipeSingleViewModel: recipeSingleViewModel),
+        '/recetas': (context) => RecetasView(recipeViewModel: recipeViewModel),
         '/ingredientes': (context) =>
             IngredientesView(ingredientViewModel: ingredientViewModel),
       },

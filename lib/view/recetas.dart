@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeSingleViewModel.dart';
 
 class RecetasView extends StatelessWidget {
-  final RecipeViewModel recipeViewModel;
+  final RecipeSingleViewModel recipeSingleViewModel;
 
-  const RecetasView({Key? key, required this.recipeViewModel})
+  const RecetasView({Key? key, required this.recipeSingleViewModel})
       : super(key: key);
 
   @override
@@ -42,19 +42,22 @@ class RecetasView extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     children: [
-                      for (var recipe in recipeViewModel.recipes)
+                      for (var recipe in recipeSingleViewModel.recipeSingles)
                         RecipeCard(
-                          imagePath: 'assets/recetas/${recipe.image}', // Utilizamos imágenes para las recetas
+                          imagePath:
+                              'assets/recetas/${recipe.image}', // Utilizamos imágenes para las recetas
                           name: recipe.name,
                           onTap: () {
                             print("Receta '${recipe.name}' seleccionada");
-                            int recipeIndex =
-                                recipeViewModel.recipes.indexOf(recipe);
+                            int recipeIndex = recipeSingleViewModel
+                                .recipeSingles
+                                .indexOf(recipe);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RecetaDetalladaWiew(
-                                    recipeViewModel: recipeViewModel,
+                                builder: (context) => RecetaDetalladaView(
+                                    recipeSingleViewModel:
+                                        recipeSingleViewModel,
                                     recipeIndex: recipeIndex),
                               ),
                             );
@@ -96,8 +99,12 @@ class RecetasView extends StatelessWidget {
                 onPressed: () {
                   // Acción al presionar el botón "Ingredientes"
                   print("Botón 'Ingredientes' presionado");
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Regresar a la pantalla de inicio
-                  Navigator.pushNamed(context, '/ingredientes'); // Navegar a la pantalla de recetas
+                  Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(
+                          '/')); // Regresar a la pantalla de inicio
+                  Navigator.pushNamed(context,
+                      '/ingredientes'); // Navegar a la pantalla de recetas
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),

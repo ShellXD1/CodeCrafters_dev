@@ -1,43 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recipeSingleViewModel.dart';
 
-class RecetaDetalladaWiew extends StatelessWidget {
-  final RecipeViewModel recipeViewModel;
+class RecetaDetalladaView extends StatelessWidget {
+  final RecipeSingleViewModel recipeSingleViewModel;
   final int recipeIndex;
 
-  const RecetaDetalladaWiew(
-      {Key? key, required this.recipeViewModel, required this.recipeIndex})
-      : super(key: key);
+  const RecetaDetalladaView({
+    Key? key,
+    required this.recipeSingleViewModel,
+    required this.recipeIndex,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Obtén la receta correspondiente al índice
-    final Recipe recipe = recipeViewModel.recipes[recipeIndex];
+    final RecipeSingle recipe =
+        recipeSingleViewModel.recipeSingles[recipeIndex];
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Receta'),
-          // Otras acciones del app bar
-        ),
-        body: Cuerpo());
+      appBar: AppBar(
+        title: Text('Receta'),
+        // Otras acciones del app bar
+      ),
+      body: Cuerpo(recipe: recipe),
+    );
   }
 }
 
-Widget Cuerpo() {
+Widget Cuerpo({required RecipeSingle recipe}) {
   return Center(
     child: Container(
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          RecetaDes(),
+          RecetaDes(recipe),
           SizedBox(height: 20),
           Text(
             'Ingredientes:',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5),
-          Ingredientes(),
+          IngredientesWidget(),
           SizedBox(height: 20),
           Text(
             'Preparación:',
@@ -51,24 +55,65 @@ Widget Cuerpo() {
   );
 }
 
-Widget RecetaDes() {
+Widget RecetaDes(RecipeSingle recipe) {
   return Container(
     height: 200,
     width: 250,
-    child: Image.network(
-        "https://bing.com/th?id=OSK.19a39d79f953b931afef10230e77eaea"),
+    child: Image.asset(
+      'assets/recetas/${recipe.image}',
+      fit: BoxFit.cover,
+      height: 150.0,
+    ),
   );
 }
 
-Widget Ingredientes() {
-  return Container(
-    padding: EdgeInsets.all(12),
-    color: Color.fromARGB(255, 158, 224, 96),
-    child: Text(
-      "Lista de ingredientes aquí",
-      style: TextStyle(fontSize: 16),
-    ),
-  );
+class IngredientesWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 158, 224, 96),
+              content: Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Lista de Ingredientes"),
+                      SizedBox(height: 16),
+                      Text("Aquí van los ingredientes de la receta"),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        color: Color.fromARGB(255, 158, 224, 96),
+        child: Text(
+          "Lista de ingredientes aqui",
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
+    );
+  }
 }
 
 class PreparacionWidget extends StatelessWidget {
@@ -118,11 +163,4 @@ class PreparacionWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget nin() {
-  return FloatingActionButton(
-    onPressed: () {},
-    child: null,
-  );
 }

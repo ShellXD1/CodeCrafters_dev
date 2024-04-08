@@ -12,10 +12,10 @@ class RecetasView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recetas'),
+        title: Text('Recetas', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
           icon: Icon(Icons.home,
-              size: 50.0), // Mantenemos el ícono de inicio como estaba
+              size: 40.0), // Mantenemos el ícono de inicio como estaba
           onPressed: () {
             print(
                 "Botón de la casita presionado (regresar a la pantalla de inicio)");
@@ -34,7 +34,7 @@ class RecetasView extends StatelessWidget {
                 Text(
                   'Recetas:',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24.0),
+                  style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
                 SizedBox(height: 10.0),
                 Container(
@@ -44,7 +44,8 @@ class RecetasView extends StatelessWidget {
                     children: [
                       for (var recipe in recipeViewModel.recipes)
                         RecipeCard(
-                          imagePath: 'assets/recetas/${recipe.image}', // Utilizamos imágenes para las recetas
+                          imagePath:
+                              'assets/recetas/${recipe.image}', // Utilizamos imágenes para las recetas
                           name: recipe.name,
                           onTap: () {
                             print("Receta '${recipe.name}' seleccionada");
@@ -53,7 +54,7 @@ class RecetasView extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RecetaDetalladaWiew(
+                                builder: (context) => RecetaDetalladaView(
                                     recipeViewModel: recipeViewModel,
                                     recipeIndex: recipeIndex),
                               ),
@@ -87,7 +88,7 @@ class RecetasView extends StatelessWidget {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(fontSize: 25.0),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
                 ),
               ),
             ),
@@ -96,8 +97,12 @@ class RecetasView extends StatelessWidget {
                 onPressed: () {
                   // Acción al presionar el botón "Ingredientes"
                   print("Botón 'Ingredientes' presionado");
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Regresar a la pantalla de inicio
-                  Navigator.pushNamed(context, '/ingredientes'); // Navegar a la pantalla de recetas
+                  Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(
+                          '/')); // Regresar a la pantalla de inicio
+                  Navigator.pushNamed(context,
+                      '/ingredientes'); // Navegar a la pantalla de recetas
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),
@@ -108,7 +113,7 @@ class RecetasView extends StatelessWidget {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(fontSize: 25.0),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
                 ),
               ),
             ),

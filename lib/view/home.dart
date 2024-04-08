@@ -7,19 +7,23 @@ import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 class HomeScreen extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
   final IngredientViewModel ingredientViewModel;
-  
 
-  const HomeScreen({Key? key, required this.recipeViewModel, required this.ingredientViewModel}) : super(key: key);
+  const HomeScreen(
+      {Key? key,
+      required this.recipeViewModel,
+      required this.ingredientViewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio'),
+        title: Text('Inicio', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
-          icon: Icon(Icons.home, size: 50.0),
+          icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
-            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
+            print(
+                "Botón de la casita presionado (regresar a la pantalla de inicio)");
           },
         ),
       ),
@@ -32,7 +36,7 @@ class HomeScreen extends StatelessWidget {
             child: Center(
               child: Text(
                 '¡Bienvenido!',
-                style: TextStyle(fontSize: 36.0),
+                style: TextStyle(fontSize: 36.0, fontFamily: 'Chivo'),
               ),
             ),
           ),
@@ -44,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                 Text(
                   'Recetas del dia:',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24.0),
+                  style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
                 SizedBox(height: 10.0),
                 Container(
@@ -72,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                 Text(
                   'Ingredientes por terminarse:',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24.0),
+                  style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
                 SizedBox(height: 10.0),
                 Container(
@@ -112,7 +116,9 @@ class HomeScreen extends StatelessWidget {
                   print("Botón 'Recetas' presionado");
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RecetasView(recipeViewModel: recipeViewModel)),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            RecetasView(recipeViewModel: recipeViewModel)),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -124,7 +130,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(fontSize: 25.0),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
                 ),
               ),
             ),
@@ -135,7 +141,9 @@ class HomeScreen extends StatelessWidget {
                   print("Botón 'Ingredientes' presionado");
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: ingredientViewModel)),
+                    MaterialPageRoute(
+                        builder: (context) => IngredientesView(
+                            ingredientViewModel: ingredientViewModel)),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -147,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(fontSize: 25.0),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
                 ),
               ),
             ),

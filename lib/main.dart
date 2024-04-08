@@ -12,15 +12,18 @@ void main() {
   runApp(MyApp(
     recipeViewModel: recipeViewModel,
     ingredientViewModel: ingredientViewModel,
-    )
-    );
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
   final IngredientViewModel ingredientViewModel;
 
-  const MyApp({Key? key, required this.recipeViewModel, required this.ingredientViewModel }) : super(key: key);
+  const MyApp(
+      {Key? key,
+      required this.recipeViewModel,
+      required this.ingredientViewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +34,12 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeScreen(recipeViewModel: recipeViewModel, ingredientViewModel: ingredientViewModel),
+        '/': (context) => HomeScreen(
+            recipeViewModel: recipeViewModel,
+            ingredientViewModel: ingredientViewModel),
         '/recetas': (context) => RecetasView(recipeViewModel: recipeViewModel),
-        '/ingredientes': (context) => IngredientesView(ingredientViewModel: ingredientViewModel),
+        '/ingredientes': (context) =>
+            IngredientesView(ingredientViewModel: ingredientViewModel),
       },
     );
   }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 
-class RecetaDetalladaWiew extends StatelessWidget {
+class RecetaDetalladaView extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
   final int recipeIndex;
 
-  const RecetaDetalladaWiew(
-      {Key? key, required this.recipeViewModel, required this.recipeIndex})
-      : super(key: key);
+  const RecetaDetalladaView({
+    Key? key,
+    required this.recipeViewModel,
+    required this.recipeIndex,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,76 +17,157 @@ class RecetaDetalladaWiew extends StatelessWidget {
     final Recipe recipe = recipeViewModel.recipes[recipeIndex];
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Receta'),
-          // Otras acciones del app bar
-        ),
-        body: Cuerpo());
+      appBar: AppBar(
+        title: Text('Detalles de la receta', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
+        // Otras acciones del app bar
+      ),
+      body: Cuerpo(recipe: recipe),
+    );
   }
 }
 
-Widget Cuerpo() {
+Widget Cuerpo({required Recipe recipe}) {
   return Center(
     child: Container(
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          RecetaDes(),
+          RecetaDes(recipe),
           SizedBox(height: 20),
           Text(
             'Ingredientes:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Chivo'),
           ),
           SizedBox(height: 5),
-          Ingredientes(),
+          IngredientesWidget(ingredient: recipe.ingredient),
           SizedBox(height: 20),
           Text(
             'Preparación:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Chivo'),
           ),
           SizedBox(height: 5),
-          Preparacion(),
+          PreparacionWidget(process: recipe.process),
         ],
       ),
     ),
   );
 }
 
-Widget RecetaDes() {
+Widget RecetaDes(Recipe recipe) {
   return Container(
     height: 200,
     width: 250,
-    child: Image.network(
-        "https://bing.com/th?id=OSK.19a39d79f953b931afef10230e77eaea"),
-  );
-}
-
-Widget Ingredientes() {
-  return Container(
-    padding: EdgeInsets.all(12),
-    color: Color.fromARGB(255, 158, 224, 96),
-    child: Text(
-      "Lista de ingredientes aquí",
-      style: TextStyle(fontSize: 16),
+    child: Image.asset(
+      'assets/recetas/${recipe.image}',
+      fit: BoxFit.cover,
+      height: 150.0,
     ),
   );
 }
 
-Widget Preparacion() {
-  return Container(
-    padding: EdgeInsets.all(12),
-    color: Color.fromARGB(255, 158, 224, 96),
-    child: Text(
-      "Instrucciones de preparación aquí",
-      style: TextStyle(fontSize: 16),
-    ),
-  );
+class IngredientesWidget extends StatelessWidget {
+  final String ingredient;
+
+  const IngredientesWidget({Key? key, required this.ingredient})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 158, 224, 96),
+              content: Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Lista de Ingredientes", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Chivo')),
+                      SizedBox(height: 16),
+                      Text(ingredient),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        color: Color.fromARGB(255, 158, 224, 96),
+        child: Text(
+          "Lista de ingredientes aqui",
+          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
+        ),
+      ),
+    );
+  }
 }
 
-Widget nin() {
-  return FloatingActionButton(
-    onPressed: () {},
-    child: null,
-  );
+class PreparacionWidget extends StatelessWidget {
+  final String process;
+
+  const PreparacionWidget({Key? key, required this.process}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 158, 224, 96),
+              content: Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Instrucciones de preparación", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Chivo')),
+                      SizedBox(height: 16),
+                      Text(process),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        color: Color.fromARGB(255, 158, 224, 96),
+        child: Text(
+          "Mostrar instrucciones de preparación",
+          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
+        ),
+      ),
+    );
+  }
 }

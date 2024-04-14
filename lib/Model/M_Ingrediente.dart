@@ -16,4 +16,22 @@ class MIngrediente {
   Future<List<Ingrediente>> obtenerIngredientesPorReceta(int idReceta) async {
     return _repository.getIngredientesPorReceta(idReceta);
   }
+
+  // Método para agregar la cantidad de un ingrediente
+  Future<void> agregarCantidadIngrediente(
+      int idIngrediente, int cantidad) async {
+    await _repository.agregarCantidadIngrediente(idIngrediente, cantidad);
+  }
+
+  // Método para quitar la cantidad de un ingrediente
+  Future<void> quitarCantidadIngrediente(
+      int idIngrediente, int cantidad) async {
+    await _repository.quitarCantidadIngrediente(idIngrediente, cantidad);
+  }
+
+  // Método para obtener la lista de ingredientes por preparación
+  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
+      int idPreparacion) async {
+    return await _repository.obtenerIngredientesPorPreparacion(idPreparacion);
+  }
 }

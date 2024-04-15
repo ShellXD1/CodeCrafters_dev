@@ -23,4 +23,24 @@ class DRReceta {
   Future<void> addReceta(Receta receta) async {
     await _database.insert('Recetas', receta.toMap());
   }
+
+// Obtener nombre de una receta por su ID
+  Future<String?> obtenerNombreRecetaPorId(int idReceta) async {
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    if (result.isNotEmpty) {
+      return result.first['nombre_receta'] as String?;
+    }
+    return null;
+  }
+
+  // Obtener imagen de una receta por su ID
+  Future<String?> obtenerImagenRecetaPorId(int idReceta) async {
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    if (result.isNotEmpty) {
+      return result.first['imagen_receta'] as String?;
+    }
+    return null;
+  }
 }

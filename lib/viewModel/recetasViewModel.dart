@@ -56,4 +56,23 @@ class RecetasViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // Método para obtener el nombre y la imagen de una receta por su ID
+  Future<Map<String, String?>> obtenerNombreEImagenReceta(int idReceta) async {
+    final nombre = await _mRecetas.obtenerNombreRecetaPorId(idReceta);
+    final imagen = await _mRecetas.obtenerImagenRecetaPorId(idReceta);
+    return {'nombre': nombre, 'imagen': imagen};
+  }
+
+  // Método para obtener el nombre por su ID
+  Future<Map<String, String?>> obtenerNombreReceta(int idReceta) async {
+    final nombre = await _mRecetas.obtenerNombreRecetaPorId(idReceta);
+    return {'nombre': nombre};
+  }
+
+  // Método para obtener el nombre y la imagen de una receta por su ID
+  Future<Map<String, String?>> obtenerImagenReceta(int idReceta) async {
+    final imagen = await _mRecetas.obtenerImagenRecetaPorId(idReceta);
+    return {'imagen': imagen};
+  }
 }

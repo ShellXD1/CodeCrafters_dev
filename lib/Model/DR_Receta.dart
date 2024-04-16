@@ -14,8 +14,7 @@ class DRReceta {
             id: e['id_receta'],
             nombre: e['nombre_receta'],
             imagen: e['imagen_receta'],
-            descripcion: e['descripcion_receta'],
-            idPreparacion: e['id_pre']))
+            preparacion: e['Preparacion_receta']))
         .toList();
   }
 

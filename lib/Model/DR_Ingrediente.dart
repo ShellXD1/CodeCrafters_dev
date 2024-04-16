@@ -15,7 +15,8 @@ class DRIngrediente {
             id: e['id_ing'],
             nombre: e['nombre_ing'],
             imagen: e['imagen_ing'],
-            cantidad: e['cantidad']))
+            cantidad: e['cantidad'],
+            medida: e['medida']))
         .toList();
   }
 
@@ -33,7 +34,8 @@ class DRIngrediente {
             id: e['id_ing'],
             nombre: e['nombre_ing'],
             imagen: e['imagen_ing'],
-            cantidad: e['cantidad']))
+            cantidad: e['cantidad'],
+            medida: e['medida']))
         .toList();
   }
 
@@ -50,11 +52,11 @@ class DRIngrediente {
 
     return ingredientesPorPreparacion
         .map((ingrediente) => Ingrediente(
-              id: ingrediente['id_ing'],
-              nombre: ingrediente['nombre_ing'],
-              imagen: ingrediente['imagen_ing'],
-              cantidad: ingrediente['cantidad'],
-            ))
+            id: ingrediente['id_ing'],
+            nombre: ingrediente['nombre_ing'],
+            imagen: ingrediente['imagen_ing'],
+            cantidad: ingrediente['cantidad'],
+            medida: ingrediente['medida']))
         .toList();
   }
 

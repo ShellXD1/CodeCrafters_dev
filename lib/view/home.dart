@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 
 class HomeScreen extends StatelessWidget {
-  final RecipeViewModel recipeViewModel;
+  final RecetasViewModel recetasViewModel;
   final IngredientViewModel ingredientViewModel;
 
   const HomeScreen(
       {Key? key,
-      required this.recipeViewModel,
+      required this.recetasViewModel,
       required this.ingredientViewModel})
       : super(key: key);
 
@@ -50,55 +50,11 @@ class HomeScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
-                SizedBox(height: 10.0),
-                Container(
-                  padding: EdgeInsets.all(30.0),
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.blueGrey,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Column(
-                    children: [
-                      for (var recipe in recipeViewModel.recipes.take(3))
-                        Text(
-                          recipe.name,
-                          style: TextStyle(fontSize: 25.0),
-                        ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20.0),
+                
                 Text(
                   'Ingredientes por terminarse:',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
-                ),
-                SizedBox(height: 10.0),
-                Container(
-                  padding: EdgeInsets.all(30.0),
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.blueGrey,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Column(
-                    children: [
-                      for (var recipe in ingredientViewModel.ingredient.take(3))
-                        Text(
-                          recipe.name,
-                          style: TextStyle(fontSize: 25.0),
-                        ),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -118,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            RecetasView(recipeViewModel: recipeViewModel)),
+                            RecetasView(recetasViewModel: recetasViewModel)),
                   );
                 },
                 style: ElevatedButton.styleFrom(

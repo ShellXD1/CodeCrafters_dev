@@ -6,4 +6,9 @@ class MLista {
   final DRLista _repository;
 
   MLista(Database database) : _repository = DRLista(database);
+
+  // Método para obtener la lista_Ingredientes
+  Future<List<ListIng>> obtenerIngredientes() async {
+    return _repository.getListaIngredientes();
+  }
 }

@@ -24,7 +24,7 @@ class DRReceta {
   }
 
 // Obtener nombre de una receta por su ID
-  Future<String?> obtenerNombreRecetaPorId(int idReceta) async {
+  Future<String?> obtenerNombreReceta(int idReceta) async {
     final result = await _database
         .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
@@ -34,11 +34,21 @@ class DRReceta {
   }
 
   // Obtener imagen de una receta por su ID
-  Future<String?> obtenerImagenRecetaPorId(int idReceta) async {
+  Future<String?> obtenerImagenReceta(int idReceta) async {
     final result = await _database
         .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['imagen_receta'] as String?;
+    }
+    return null;
+  }
+
+  // Obtener preparación de la receta por su ID
+  Future<String?> obtenerPreparacionReceta(int idReceta) async {
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    if (result.isNotEmpty) {
+      return result.first['Preparacion_receta'] as String?;
     }
     return null;
   }

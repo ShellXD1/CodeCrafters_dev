@@ -18,7 +18,8 @@ class RecetaDetalladaView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de la receta', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
+        title: Text('Detalles de la receta',
+            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         // Otras acciones del app bar
       ),
       body: Cuerpo(recipe: recipe),
@@ -29,28 +30,38 @@ class RecetaDetalladaView extends StatelessWidget {
 Widget Cuerpo({required Recipe recipe}) {
   return Center(
     child: Container(
-      padding: EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          RecetaDes(recipe),
-          SizedBox(height: 20),
-          Text(
-            'Ingredientes:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Chivo'),
+        padding: EdgeInsets.all(12),
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              RecetaDes(recipe),
+              SizedBox(height: 20),
+              Text(
+                'Lista de Ingredientes:',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Chivo'),
+              ),
+              SizedBox(height: 5),
+              IngredientesWidget(ingredient: recipe.ingredient),
+              SizedBox(height: 20),
+              Text(
+                'Lista de Preparación:',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Chivo'),
+              ),
+              SizedBox(height: 5),
+              PreparacionWidget(process: recipe.process),
+            ],
           ),
-          SizedBox(height: 5),
-          IngredientesWidget(ingredient: recipe.ingredient),
-          SizedBox(height: 20),
-          Text(
-            'Preparación:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Chivo'),
-          ),
-          SizedBox(height: 5),
-          PreparacionWidget(process: recipe.process),
-        ],
-      ),
-    ),
+        )),
   );
 }
 
@@ -87,7 +98,9 @@ class IngredientesWidget extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Lista de Ingredientes", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Chivo')),
+                      Text("Ingredientes",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: 'Chivo')),
                       SizedBox(height: 16),
                       Text(ingredient),
                     ],
@@ -112,7 +125,7 @@ class IngredientesWidget extends StatelessWidget {
         padding: EdgeInsets.all(12),
         color: Color.fromARGB(255, 158, 224, 96),
         child: Text(
-          "Lista de ingredientes aqui",
+          "Ingredientes",
           style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),
@@ -139,7 +152,9 @@ class PreparacionWidget extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Instrucciones de preparación", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Chivo')),
+                      Text("Preparación",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: 'Chivo')),
                       SizedBox(height: 16),
                       Text(process),
                     ],
@@ -164,7 +179,7 @@ class PreparacionWidget extends StatelessWidget {
         padding: EdgeInsets.all(12),
         color: Color.fromARGB(255, 158, 224, 96),
         child: Text(
-          "Mostrar instrucciones de preparación",
+          "Preparación",
           style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),

@@ -19,11 +19,11 @@ class MReceta {
 
   // Método para obtrner nombre de receta
   Future<String?> obtenerNombreRecetaPorId(int idReceta) async {
-    return await _repository.obtenerNombreRecetaPorId(idReceta);
+    return await _repository.obtenerNombreReceta(idReceta);
   }
 
   // Método para obtener imagen de receta
   Future<String?> obtenerImagenRecetaPorId(int idReceta) async {
-    return await _repository.obtenerImagenRecetaPorId(idReceta);
+    return await _repository.obtenerImagenReceta(idReceta);
   }
 }

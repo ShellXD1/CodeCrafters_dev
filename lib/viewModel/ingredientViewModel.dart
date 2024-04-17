@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/Model/M_Ingrediente.dart';
+import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 
-class Ingredient {
-  final String name;
-  final int quantity;
+class IngredienteViewModel extends ChangeNotifier{
+  final MIngrediente _mIngredientes;
 
-  Ingredient({required this.name, required this.quantity});
-}
+  IngredienteViewModel(this._mIngredientes);
 
-class IngredientViewModel extends ChangeNotifier {
-  List<Ingredient> _ingredient = [
-    Ingredient(name: 'Jitomate', quantity: 3),
-    Ingredient(name: 'Dientes de ajo', quantity: 3),
-    Ingredient(name: 'Cebolla', quantity: 3),
-    Ingredient(name: 'Cebollin', quantity: 7),
-    Ingredient(name: 'Jalapeño', quantity: 1),
-    Ingredient(name: 'Tomatillo', quantity: 1),
-  ];
 
-  List<Ingredient> get ingredient => _ingredient;
+  List<Ingrediente> _ingredientes = [];
+  List<Ingrediente> get ingredientes => _ingredientes;
+
+  // Método para obtener los ingredientes
+  Future<void> obtenerIngredientes() async {
+    _ingredientes = await _mIngredientes.obtenerIngredientes();
+    notifyListeners();
+  }
+
+  // Método para agregar la cantidad de un ingrediente a la lista
+  void agregarCantidadIngrediente(Ingrediente ingrediente, int cantidad) {
+    int index = _ingredientes.indexWhere((i) => i.id == ingrediente.id);
+    if (index != -1) {
+      _ingredientes[index].cantidad += cantidad;
+    } else {
+      // Si el ingrediente no está en la lista, lo agregamos con la cantidad especificada
+      ingrediente.cantidad = cantidad;
+      _ingredientes.add(ingrediente);
+    }
+    // Actualizamos en la base de datos
+    _mIngredientes.agregarCantidadIngrediente(ingrediente as int, cantidad);
+    notifyListeners();
+  }
+
+  // Método para quitar la cantidad de un ingrediente de la lista
+  void quitarCantidadIngrediente(Ingrediente ingrediente, int cantidad) {
+    int index = _ingredientes.indexWhere((i) => i.id == ingrediente.id);
+    if (index != -1) {
+      _ingredientes[index].cantidad -= cantidad;
+      if (_ingredientes[index].cantidad <= 0) {
+        _ingredientes.removeAt(index);
+      }
+      // Actualizamos en la base de datos
+      _mIngredientes.quitarCantidadIngrediente(ingrediente as int, cantidad);
+      notifyListeners();
+    }
+  }
 }
 

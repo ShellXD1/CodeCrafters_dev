@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/Model/M_Receta.dart';
-import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/Model/recetadb.dart';
 
 class RecetasViewModel extends ChangeNotifier {
@@ -10,9 +9,6 @@ class RecetasViewModel extends ChangeNotifier {
 
   List<Receta> _recetas = [];
   List<Receta> get recetas => _recetas;
-
-  List<Ingrediente> _ingredientes = [];
-  List<Ingrediente> get ingredientes => _ingredientes;
 
   // Método para obtener las recetas
   Future<void> obtenerRecetas() async {

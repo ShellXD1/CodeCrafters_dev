@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/Model/M_Ingrediente.dart';
 import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 
-class IngredienteViewModel extends ChangeNotifier{
+class IngredienteViewModel extends ChangeNotifier {
   final MIngrediente _mIngredientes;
 
   IngredienteViewModel(this._mIngredientes);
-
 
   List<Ingrediente> _ingredientes = [];
   List<Ingrediente> get ingredientes => _ingredientes;
@@ -46,4 +45,3 @@ class IngredienteViewModel extends ChangeNotifier{
     }
   }
 }
-

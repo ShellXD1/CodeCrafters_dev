@@ -5,7 +5,6 @@ import 'package:proyecto_tsp_dev/Model/M_Receta.dart';
 import 'package:proyecto_tsp_dev/view/home.dart';
 import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
@@ -35,12 +34,12 @@ void main() async {
   */
 
 class MyApp extends StatelessWidget {
-  final RecipeViewModel recipeViewModel;
+  final RecetasViewModel recetasViewModel;
   final IngredienteViewModel ingredientViewModel;
 
   const MyApp(
       {Key? key,
-      required this.recipeViewModel,
+      required this.recetasViewModel,
       required this.ingredientViewModel})
       : super(key: key);
 
@@ -54,9 +53,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(
-            recipeViewModel: recipeViewModel,
+            recetasViewModel: recetasViewModel,
             ingredientViewModel: ingredientViewModel),
-        '/recetas': (context) => RecetasView(recipeViewModel: recipeViewModel),
+        '/recetas': (context) => RecetasView(recetasViewModel: recetasViewModel),
         '/ingredientes': (context) =>
             IngredientesView(ingredientViewModel: ingredientViewModel),
       },

@@ -6,7 +6,7 @@ import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 
 class HomeScreen extends StatelessWidget {
   final RecetasViewModel recetasViewModel;
-  final IngredientViewModel ingredientViewModel;
+  final IngredienteViewModel ingredientViewModel;
 
   const HomeScreen(
       {Key? key,
@@ -18,7 +18,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
+        title: Text('Inicio',
+            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
           icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
@@ -50,7 +51,6 @@ class HomeScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
                 ),
-                
                 Text(
                   'Ingredientes por terminarse:',
                   textAlign: TextAlign.center,
@@ -86,7 +86,11 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontFamily: 'Chivo',
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
@@ -111,7 +115,11 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontFamily: 'Chivo',
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),

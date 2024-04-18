@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 
 class IngredientesView extends StatelessWidget {
-  final IngredientViewModel ingredientViewModel;
+  final IngredienteViewModel ingredientViewModel;
 
-  const IngredientesView({Key? key, required this.ingredientViewModel}) : super(key: key);
+  const IngredientesView({Key? key, required this.ingredientViewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ingredientes', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
+        title: Text('Ingredientes',
+            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
-          icon: Icon(Icons.home, size: 40.0), // Mantenemos el ícono de inicio como estaba
+          icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
-            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
-            Navigator.pop(context); // Regresar a la pantalla de inicio
+            print(
+                "Botón de la casita presionado (regresar a la pantalla de inicio)");
+            Navigator.pop(context);
           },
         ),
       ),
@@ -38,18 +41,24 @@ class IngredientesView extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     children: [
-                      for (var ingredient in ingredientViewModel.ingredient)
+                      // Utiliza la lista de ingredientes del view model
+                      for (var ingredient in ingredientViewModel.ingredientes)
                         IngredientCard(
-                          quantity: ingredient.quantity,
-                          name: ingredient.name,
+                          quantity: ingredient.cantidad,
+                          name: ingredient.nombre,
                           onTap: () {
-                            final TextEditingController _quantityController = TextEditingController(text: ingredient.quantity.toString());
+                            final TextEditingController _quantityController =
+                                TextEditingController(
+                                    text: ingredient.cantidad.toString());
 
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Modificar Cantidad', style: TextStyle( fontFamily: 'Chivo'),),
+                                  title: Text(
+                                    'Modificar Cantidad',
+                                    style: TextStyle(fontFamily: 'Chivo'),
+                                  ),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -59,20 +68,29 @@ class IngredientesView extends StatelessWidget {
                                       ),
                                       SizedBox(height: 10.0),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           ElevatedButton(
                                             onPressed: () {
-                                              int currentValue = int.tryParse(_quantityController.text) ?? ingredient.quantity;
-                                              _quantityController.text = (currentValue - 1).toString();
+                                              int currentValue = int.tryParse(
+                                                      _quantityController
+                                                          .text) ??
+                                                  ingredient.cantidad;
+                                              _quantityController.text =
+                                                  (currentValue - 1).toString();
                                             },
                                             child: Icon(Icons.remove),
                                           ),
                                           SizedBox(width: 10.0),
                                           ElevatedButton(
                                             onPressed: () {
-                                              int currentValue = int.tryParse(_quantityController.text) ?? ingredient.quantity;
-                                              _quantityController.text = (currentValue + 1).toString();
+                                              int currentValue = int.tryParse(
+                                                      _quantityController
+                                                          .text) ??
+                                                  ingredient.cantidad;
+                                              _quantityController.text =
+                                                  (currentValue + 1).toString();
                                             },
                                             child: Icon(Icons.add),
                                           ),
@@ -85,16 +103,25 @@ class IngredientesView extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('Cancelar', style: TextStyle( fontFamily: 'Chivo'),),
+                                      child: Text(
+                                        'Cancelar',
+                                        style: TextStyle(fontFamily: 'Chivo'),
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         // Aquí puedes hacer lo que necesites con la nueva cantidad
-                                        int newQuantity = int.tryParse(_quantityController.text) ?? ingredient.quantity;
-                                        print('Nueva cantidad para ${ingredient.name}: $newQuantity');
+                                        int newQuantity = int.tryParse(
+                                                _quantityController.text) ??
+                                            ingredient.cantidad;
+                                        print(
+                                            'Nueva cantidad para ${ingredient.nombre}: $newQuantity');
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('Guardar', style: TextStyle( fontFamily: 'Chivo'),),
+                                      child: Text(
+                                        'Guardar',
+                                        style: TextStyle(fontFamily: 'Chivo'),
+                                      ),
                                     ),
                                   ],
                                 );
@@ -102,7 +129,6 @@ class IngredientesView extends StatelessWidget {
                             );
                           },
                         ),
-
                     ],
                   ),
                 ),
@@ -112,84 +138,101 @@ class IngredientesView extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-  color: Color(0xFF9EE060),
-  child: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: <Widget>[
-      ElevatedButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return AgregarIngredienteWidget(
-                onIngredientAdded: (name, quantity) {
-                  // Lógica para agregar el ingrediente aquí
-                  print('Nombre del ingrediente: $name, Cantidad: $quantity');
-                  // Puedes actualizar el estado de la lista de ingredientes aquí
-                },
-              );
-            },
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF9EE060),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          padding: EdgeInsets.all(20.0),
-        ),
-        child: Text(
-          'Agregar Ingrediente',
-          style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
-        ),
-      ),
-      Row(
-        children: <Widget>[
-          Expanded(
-            child: ElevatedButton(
+        color: Color(0xFF9EE060),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ElevatedButton(
               onPressed: () {
-                // Acción al presionar el botón "Recetas"
-                print("Botón 'Recetas' presionado");
-                Navigator.popUntil(context, ModalRoute.withName('/')); // Regresar a la pantalla de inicio
-                Navigator.pushNamed(context, '/recetas'); // Navegar a la pantalla de recetas
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AgregarIngredienteWidget(
+                      onIngredientAdded: (name, quantity) {
+                        // Lógica para agregar el ingrediente aquí
+                        print(
+                            'Nombre del ingrediente: $name, Cantidad: $quantity');
+                        // Puedes actualizar el estado de la lista de ingredientes aquí
+                      },
+                    );
+                  },
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF9EE060),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
                 ),
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(20.0),
               ),
               child: Text(
-                'Recetas',
-                style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                // Acción al presionar el botón "Ingredientes"
-                print("Botón 'Ingredientes' presionado");
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF9EE060),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
+                'Agregar Ingrediente',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontFamily: 'Chivo',
+                  color: Colors.black,
                 ),
-                padding: EdgeInsets.all(16.0),
-              ),
-              child: Text(
-                'Ingredientes',
-                style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black,),
               ),
             ),
-          ),
-        ],
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Acción al presionar el botón "Recetas"
+                      print("Botón 'Recetas' presionado");
+                      Navigator.popUntil(
+                          context,
+                          ModalRoute.withName(
+                              '/')); // Regresar a la pantalla de inicio
+                      Navigator.pushNamed(context,
+                          '/recetas'); // Navegar a la pantalla de recetas
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF9EE060),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      padding: EdgeInsets.all(16.0),
+                    ),
+                    child: Text(
+                      'Recetas',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontFamily: 'Chivo',
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Acción al presionar el botón "Ingredientes"
+                      print("Botón 'Ingredientes' presionado");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF9EE060),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      padding: EdgeInsets.all(16.0),
+                    ),
+                    child: Text(
+                      'Ingredientes',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontFamily: 'Chivo',
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ],
-  ),
-),
     );
   }
 }
@@ -249,14 +292,17 @@ class IngredientCard extends StatelessWidget {
 class AgregarIngredienteWidget extends StatefulWidget {
   final Function(String name, int quantity) onIngredientAdded;
 
-  const AgregarIngredienteWidget({Key? key, required this.onIngredientAdded}) : super(key: key);
+  const AgregarIngredienteWidget({Key? key, required this.onIngredientAdded})
+      : super(key: key);
 
   @override
-  _AgregarIngredienteWidgetState createState() => _AgregarIngredienteWidgetState();
+  _AgregarIngredienteWidgetState createState() =>
+      _AgregarIngredienteWidgetState();
 }
 
 class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
-  String _selectedIngredient = 'Seleccione un ingrediente'; // Valor predeterminado
+  String _selectedIngredient =
+      'Seleccione un ingrediente'; // Valor predeterminado
   int _quantity = 0;
 
   @override
@@ -294,7 +340,8 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
                     child: Text(value),
                   );
                 }).toList(),
-                decoration: InputDecoration(labelText: 'Selecciona un ingrediente'),
+                decoration:
+                    InputDecoration(labelText: 'Selecciona un ingrediente'),
               ),
               SizedBox(height: 10.0),
               TextFormField(
@@ -311,7 +358,8 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
                 onPressed: () {
                   if (_selectedIngredient != 'Seleccione un ingrediente') {
                     widget.onIngredientAdded(_selectedIngredient, _quantity);
-                    Navigator.pop(context); // Cerrar el widget de agregar ingrediente
+                    Navigator.pop(
+                        context); // Cerrar el widget de agregar ingrediente
                   } else {
                     // Puedes mostrar un mensaje de error o manejar la situación de otra manera
                   }

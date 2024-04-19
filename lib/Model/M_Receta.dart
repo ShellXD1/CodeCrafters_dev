@@ -1,6 +1,7 @@
 import 'package:proyecto_tsp_dev/Model/DR_Receta.dart';
 import 'package:proyecto_tsp_dev/Model/recetadb.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite;
+import 'package:sqflite_common/sqlite_api.dart';
 
 class MReceta {
   final DRReceta _repository;

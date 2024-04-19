@@ -4,7 +4,9 @@ import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart'; // Importa Re
 class RecetasView extends StatefulWidget {
   final RecetasViewModel recetasViewModel; // Usa RecetasViewModel
 
-  const RecetasView({Key? key, required this.recetasViewModel}) : super(key: key);
+  const RecetasView(
+      {Key? key, required this.recetasViewModel, required database})
+      : super(key: key);
 
   @override
   _RecetasViewState createState() => _RecetasViewState();
@@ -22,11 +24,13 @@ class _RecetasViewState extends State<RecetasView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recetas', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
+        title: Text('Recetas',
+            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
           icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
-            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
+            print(
+                "Botón de la casita presionado (regresar a la pantalla de inicio)");
             Navigator.pop(context); // Regresar a la pantalla de inicio
           },
         ),
@@ -79,7 +83,8 @@ class _RecetasViewState extends State<RecetasView> {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
                 ),
               ),
             ),
@@ -88,8 +93,12 @@ class _RecetasViewState extends State<RecetasView> {
                 onPressed: () {
                   // Acción al presionar el botón "Ingredientes"
                   print("Botón 'Ingredientes' presionado");
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Regresar a la pantalla de inicio
-                  Navigator.pushNamed(context, '/ingredientes'); // Navegar a la pantalla de ingredientes
+                  Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(
+                          '/')); // Regresar a la pantalla de inicio
+                  Navigator.pushNamed(context,
+                      '/ingredientes'); // Navegar a la pantalla de ingredientes
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),
@@ -100,7 +109,8 @@ class _RecetasViewState extends State<RecetasView> {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
                 ),
               ),
             ),

@@ -73,8 +73,10 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            RecetasView(recetasViewModel: recetasViewModel)),
+                        builder: (context) => RecetasView(
+                              recetasViewModel: recetasViewModel,
+                              database: null,
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(

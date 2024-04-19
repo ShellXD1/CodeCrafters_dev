@@ -1,64 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:proyecto_tsp_dev/Model/M_Ingrediente.dart';
 import 'package:proyecto_tsp_dev/Model/M_Receta.dart';
-import 'package:proyecto_tsp_dev/view/home.dart';
-import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
-import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite;
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart' as path;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {
-  final database = await openDatabase('proyecto_tsp_dev/Model/Recetario.sqlite3');
-  final _mIngredientes = MIngrediente(database);
-  final _mRecetas = MReceta(database);
-  final recetasViewModel = RecetasViewModel(_mRecetas);
-  final ingredienteViewModel = IngredienteViewModel(_mIngredientes);
+  sqflite.sqfliteFfiInit();
 
-  // Ejecuta la aplicación
+  final databasePath = await sqflite.getDatabasesPath();
+  final database = await sqflite.openDatabase(
+    path.join(databasePath, 'nombre_de_tu_base_de_datos.db'),
+    version: 1,
+    onCreate: (db, version) {
+      // Aquí puedes crear la estructura de tu base de datos si es necesario
+    },
+  );
+
+  final recetasViewModel = RecetasViewModel(
+      MReceta(database)); // Crear una instancia de RecetasViewModel
+
   runApp(MyApp(
-    recetasViewModel: recetasViewModel,
-    ingredientViewModel: ingredienteViewModel,
-  ));
+      database: database,
+      recetasViewModel:
+          recetasViewModel)); // Pasar la instancia de RecetasViewModel a MyApp
 }
-  /*
-  final MIngrediente _mIngredientes = new MIngrediente();
-
-  final RecipeViewModel recipeViewModel = RecipeViewModel();
-  final IngredienteViewModel ingredientViewModel = IngredienteViewModel(_mIngredientes);
-
-  runApp(MyApp(
-    recipeViewModel: recipeViewModel,
-    ingredientViewModel: ingredientViewModel,
-  ));
-  */
 
 class MyApp extends StatelessWidget {
-  final RecetasViewModel recetasViewModel;
-  final IngredienteViewModel ingredientViewModel;
+  final Database database;
+  final RecetasViewModel recetasViewModel; // Agrega esta línea
 
   const MyApp(
-      {Key? key,
-      required this.recetasViewModel,
-      required this.ingredientViewModel})
+      {Key? key, required this.database, required this.recetasViewModel})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Recetario Inteligente',
+      title: 'Tu Aplicación',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomeScreen(
-            recetasViewModel: recetasViewModel,
-            ingredientViewModel: ingredientViewModel),
-        '/recetas': (context) => RecetasView(recetasViewModel: recetasViewModel),
-        '/ingredientes': (context) =>
-            IngredientesView(ingredientViewModel: ingredientViewModel),
-      },
+      home: RecetasView(
+          database: database,
+          recetasViewModel:
+              recetasViewModel), // Pasa la instancia de RecetasViewModel
     );
   }
 }

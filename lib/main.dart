@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/Model/M_Receta.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
-import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart'; // Importa la clase RecetasViewModel
 import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite;
-// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {
-  sqflite.sqfliteFfiInit();
+  // Inicializar sqflite_common_ffi
+  final String databasePath = path.join('Model', 'Recetario.sqlite3');
+  sqflite.databaseFactory = databaseFactoryFfi;
 
-  final databasePath = await sqflite.getDatabasesPath();
+  // Ruta de la base de datos
   final database = await sqflite.openDatabase(
-    path.join(databasePath, 'nombre_de_tu_base_de_datos.db'),
+    databasePath,
     version: 1,
-    onCreate: (db, version) {
-      // Aquí puedes crear la estructura de tu base de datos si es necesario
-    },
   );
 
-  final recetasViewModel = RecetasViewModel(
-      MReceta(database)); // Crear una instancia de RecetasViewModel
+  // Crear una instancia de MReceta con la base de datos
+  final mReceta = MReceta(database);
+  // Crear una instancia de RecetasViewModel con MReceta
+  final recetasViewModel = RecetasViewModel(mReceta);
 
-  runApp(MyApp(
-      database: database,
-      recetasViewModel:
-          recetasViewModel)); // Pasar la instancia de RecetasViewModel a MyApp
+  runApp(MyApp(database: database, recetasViewModel: recetasViewModel));
 }
 
 class MyApp extends StatelessWidget {
   final Database database;
-  final RecetasViewModel recetasViewModel; // Agrega esta línea
+  final RecetasViewModel recetasViewModel;
 
   const MyApp(
       {Key? key, required this.database, required this.recetasViewModel})
@@ -43,10 +40,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RecetasView(
-          database: database,
-          recetasViewModel:
-              recetasViewModel), // Pasa la instancia de RecetasViewModel
+      home: RecetasView(database: database, recetasViewModel: recetasViewModel),
     );
   }
 }

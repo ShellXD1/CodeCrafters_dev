@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart'; // Importa RecetasViewModel
 
 class RecetasView extends StatefulWidget {
-  final RecetasViewModel recetasViewModel; // Usa RecetasViewModel
+  final RecetasViewModel?
+      recetasViewModel; // RecetasViewModel ahora es opcional
+  final dynamic
+      database; // Asegúrate de utilizar este database donde sea necesario
 
-  const RecetasView(
-      {Key? key, required this.recetasViewModel, required database})
+  const RecetasView({Key? key, this.recetasViewModel, required this.database})
       : super(key: key);
 
   @override
@@ -16,8 +18,10 @@ class _RecetasViewState extends State<RecetasView> {
   @override
   void initState() {
     super.initState();
-    // Cargar las recetas al iniciar la pantalla
-    widget.recetasViewModel.obtenerRecetas();
+    // Verificar si se proporcionó un RecetasViewModel antes de cargar las recetas
+    if (widget.recetasViewModel != null) {
+      widget.recetasViewModel!.obtenerRecetas();
+    }
   }
 
   @override
@@ -39,7 +43,6 @@ class _RecetasViewState extends State<RecetasView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Mostrar la lista de recetas
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
@@ -47,19 +50,29 @@ class _RecetasViewState extends State<RecetasView> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            // Usar ListView.builder para mostrar las recetas
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: widget.recetasViewModel.recetas.length,
-              itemBuilder: (context, index) {
-                final receta = widget.recetasViewModel.recetas[index];
-                return ListTile(
-                  title: Text(receta.nombre),
-                  // Puedes mostrar más detalles de la receta aquí
-                );
-              },
-            ),
+            // Mostrar las recetas solo si se proporcionó un RecetasViewModel
+            if (widget.recetasViewModel != null)
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: widget.recetasViewModel!.recetas.length,
+                itemBuilder: (context, index) {
+                  final receta = widget.recetasViewModel!.recetas[index];
+                  return ListTile(
+                    title: Text(receta.nombre),
+                    // Puedes mostrar más detalles de la receta aquí
+                  );
+                },
+              ),
+            // Mostrar un mensaje si no se proporcionó un RecetasViewModel
+            if (widget.recetasViewModel == null)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'No se ha proporcionado un ViewModel de recetas.',
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
           ],
         ),
       ),

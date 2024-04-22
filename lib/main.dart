@@ -10,18 +10,22 @@ import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart'; // Importa
 import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite;
 import 'package:path/path.dart' as path;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart' as sqflite;
 
 void main() async {
-  // Inicializar sqflite_common_ffi
-  final String databasePath = path.join('lib/', 'Model/', 'Recetario.sqlite3');
-  sqflite.databaseFactory = databaseFactoryFfi;
+  // Obtener el directorio de documentos de la aplicación
+  WidgetsFlutterBinding.ensureInitialized();
+  final directory = await getApplicationDocumentsDirectory();
+  final String databasePath = path.join(directory.path, 'Recetario.sqlite3');
 
-  // Ruta de la base de datos
+  // Abrir la base de datos
   final database = await sqflite.openDatabase(
     databasePath,
     version: 1,
   );
 
+  WidgetsFlutterBinding.ensureInitialized();
   // Crear una instancia de MReceta con la base de datos
   final mReceta = MReceta(database);
   // Crear una instancia de MReceta con la base de datos

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:proyecto_tsp_dev/Model/M_Ingrediente.dart';
 import 'package:proyecto_tsp_dev/Model/M_Receta.dart';
@@ -19,6 +22,11 @@ void main() async {
   final directory = await getApplicationDocumentsDirectory();
   final String databasePath = path.join(directory.path, 'Recetario.sqlite3');
 
+  // Copia el archivo desde los recursos a la ubicación local
+  ByteData data = await rootBundle.load('assets/Recetario.sqlite3');
+  List<int> bytes = data.buffer.asUint8List();
+  await File(databasePath).writeAsBytes(bytes);
+
   // Abrir la base de datos
   final database = await sqflite.openDatabase(
     databasePath,
@@ -27,16 +35,19 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   // Crear una instancia de MReceta con la base de datos
+  print("Entre aqui we" + databasePath);
   final mReceta = MReceta(database);
+  print("Entre aqui we, en receta");
   // Crear una instancia de MReceta con la base de datos
   final mIngrediente = MIngrediente(database);
+  print("Entre aqui we, en ingrediente");
   // Crear una instancia de RecetasViewModel con MReceta
   final recetasViewModel = RecetasViewModel(mReceta);
   // Crear una instancia de IngredientViewModel con MReceta
   final ingredienteViewModel = IngredienteViewModel(mIngrediente);
 
   runApp(MyApp(database: database, recetasViewModel: recetasViewModel, ingredientViewModel: ingredienteViewModel));
-}
+} // El Shell se la come entera
 
 class MyApp extends StatelessWidget {
   final Database database;

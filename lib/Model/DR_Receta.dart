@@ -1,5 +1,5 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite;
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 import 'package:proyecto_tsp_dev/Model/recetadb.dart';
 
 class DRReceta {
@@ -7,8 +7,11 @@ class DRReceta {
 
   DRReceta(this._database);
 
+
   // Obtener la lista de recetas
   Future<List<Receta>> getRecetas() async {
+    List<Map<String, dynamic>> tables = await _database.rawQuery("SELECT name FROM sqlite_master WHERE type='table';");
+    print("Tablas en la base de datos: $tables");
     List<Map<String, dynamic>> recetasMap = await _database.query('Recetas');
     return recetasMap
         .map((e) => Receta(
@@ -17,17 +20,16 @@ class DRReceta {
             imagen: e['imagen_receta'],
             preparacion: e['Preparacion_receta']))
         .toList();
-  }
+  } // Pito
 
   // Agregar una nueva receta
   Future<void> addReceta(Receta receta) async {
     await _database.insert('Recetas', receta.toMap());
   }
 
-// Obtener nombre de una receta por su ID
+  // Obtener nombre de una receta por su ID
   Future<String?> obtenerNombreReceta(int idReceta) async {
-    final result = await _database
-        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    final result = await _database.query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['nombre_receta'] as String?;
     }
@@ -36,8 +38,7 @@ class DRReceta {
 
   // Obtener imagen de una receta por su ID
   Future<String?> obtenerImagenReceta(int idReceta) async {
-    final result = await _database
-        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    final result = await _database.query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['imagen_receta'] as String?;
     }
@@ -46,8 +47,7 @@ class DRReceta {
 
   // Obtener preparación de la receta por su ID
   Future<String?> obtenerPreparacionReceta(int idReceta) async {
-    final result = await _database
-        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    final result = await _database.query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['Preparacion_receta'] as String?;
     }

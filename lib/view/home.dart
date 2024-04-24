@@ -3,6 +3,7 @@ import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/view/ingredientes.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 
 class HomeScreen extends StatelessWidget {
   final RecetasViewModel recetasViewModel;
@@ -11,7 +12,8 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen(
       {Key? key,
       required this.recetasViewModel,
-      required this.ingredientViewModel})
+      required this.ingredientViewModel,
+      required Database database})
       : super(key: key);
 
   @override

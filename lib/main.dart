@@ -46,7 +46,10 @@ void main() async {
   // Crear una instancia de IngredientViewModel con MReceta
   final ingredienteViewModel = IngredienteViewModel(mIngrediente);
 
-  runApp(MyApp(database: database, recetasViewModel: recetasViewModel, ingredientViewModel: ingredienteViewModel));
+  runApp(MyApp(
+      database: database,
+      recetasViewModel: recetasViewModel,
+      ingredientViewModel: ingredienteViewModel));
 } // El Shell se la come entera
 
 class MyApp extends StatelessWidget {
@@ -55,7 +58,10 @@ class MyApp extends StatelessWidget {
   final IngredienteViewModel ingredientViewModel;
 
   const MyApp(
-      {Key? key, required this.database, required this.recetasViewModel, required this.ingredientViewModel})
+      {Key? key,
+      required this.database,
+      required this.recetasViewModel,
+      required this.ingredientViewModel})
       : super(key: key);
 
   @override
@@ -65,7 +71,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RecetasView(database: database, recetasViewModel: recetasViewModel),
+      home: HomeScreen(
+          database: database,
+          recetasViewModel: recetasViewModel,
+          ingredientViewModel: ingredientViewModel),
+      //RecetasView(database: database, recetasViewModel: recetasViewModel),
+      routes: {
+        '/ingredientes': (context) =>
+            IngredientesView(ingredientViewModel: ingredientViewModel),
+      },
     );
   }
 }

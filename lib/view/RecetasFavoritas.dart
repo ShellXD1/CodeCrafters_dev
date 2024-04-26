@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
-import 'AllRecetas.dart';
 
-class RecetasView extends StatefulWidget {
+class RecetasFavoritasView extends StatefulWidget {
   final RecetasViewModel? recetasViewModel;
   final dynamic database;
 
-  const RecetasView({Key? key, this.recetasViewModel, required this.database})
+  const RecetasFavoritasView({Key? key, this.recetasViewModel, required this.database})
       : super(key: key);
 
   @override
   _RecetasViewState createState() => _RecetasViewState();
 }
 
-class _RecetasViewState extends State<RecetasView> {
+class _RecetasViewState extends State<RecetasFavoritasView> {
   @override
   void initState() {
     super.initState();
@@ -50,7 +49,7 @@ class _RecetasViewState extends State<RecetasView> {
           },
         ),
         actions: [
-           PopupMenuButton(
+          PopupMenuButton(
             icon: Icon(Icons.menu, size: 40.0), // Icono para el botón de menú
             itemBuilder: (context) => [
               PopupMenuItem(
@@ -159,10 +158,14 @@ class _RecetasViewState extends State<RecetasView> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
-                  // Puedes agregar aquí una acción adicional al presionar el botón
-                },
+                      // Acción al presionar el botón "Recetas"
+                      print("Botón 'Recetas' presionado");
+                      Navigator.popUntil(
+                          context,
+                          ModalRoute.withName(
+                              '/')); // Regresar a la pantalla de inicio
+                      Navigator.pushNamed(context,'/recetas'); // Navegar a la pantalla de recetas
+                    },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),
                   shape: RoundedRectangleBorder(

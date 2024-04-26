@@ -15,6 +15,9 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
+import 'package:proyecto_tsp_dev/view/AllRecetas.dart';
+import 'package:proyecto_tsp_dev/view/RecetasFavoritas.dart';
+
 
 void main() async {
   // Obtener el directorio de documentos de la aplicación
@@ -79,8 +82,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/ingredientes': (context) =>
             IngredientesView(ingredientViewModel: ingredientViewModel, database:database),
-         '/recetas': (context) =>
+        '/recetas': (context) =>
             RecetasView(recetasViewModel: recetasViewModel, database: database,),
+        '/allRecetas': (context) => AllRecetasView(recetasViewModel: recetasViewModel, database: database,),
+        '/RecetasFavoritas': (context) => RecetasFavoritasView(recetasViewModel: recetasViewModel, database: database,),
       },
     );
   }

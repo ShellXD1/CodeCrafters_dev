@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 
 class IngredientesView extends StatelessWidget {
   final IngredienteViewModel ingredientViewModel;
 
-  const IngredientesView({Key? key, required this.ingredientViewModel})
+  const IngredientesView({Key? key, required this.ingredientViewModel, required Database database})
       : super(key: key);
 
   @override
@@ -185,8 +186,7 @@ class IngredientesView extends StatelessWidget {
                           context,
                           ModalRoute.withName(
                               '/')); // Regresar a la pantalla de inicio
-                      Navigator.pushNamed(context,
-                          '/recetas'); // Navegar a la pantalla de recetas
+                      Navigator.pushNamed(context,'/recetas'); // Navegar a la pantalla de recetas
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF9EE060),

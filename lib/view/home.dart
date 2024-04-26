@@ -8,12 +8,13 @@ import 'package:sqflite_common/sqlite_api.dart';
 class HomeScreen extends StatelessWidget {
   final RecetasViewModel recetasViewModel;
   final IngredienteViewModel ingredientViewModel;
+  final Database database;
 
   const HomeScreen(
       {Key? key,
       required this.recetasViewModel,
       required this.ingredientViewModel,
-      required Database database})
+      required this.database})
       : super(key: key);
 
   @override
@@ -107,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => IngredientesView(
-                            ingredientViewModel: ingredientViewModel)),
+                            ingredientViewModel: ingredientViewModel, database: database,)),
                   );
                 },
                 style: ElevatedButton.styleFrom(

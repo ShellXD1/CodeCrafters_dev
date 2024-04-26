@@ -78,7 +78,9 @@ class MyApp extends StatelessWidget {
       //RecetasView(database: database, recetasViewModel: recetasViewModel),
       routes: {
         '/ingredientes': (context) =>
-            IngredientesView(ingredientViewModel: ingredientViewModel),
+            IngredientesView(ingredientViewModel: ingredientViewModel, database:database),
+         '/recetas': (context) =>
+            RecetasView(recetasViewModel: recetasViewModel, database: database,),
       },
     );
   }

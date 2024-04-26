@@ -32,4 +32,7 @@ flutter:
     - assets/recetas/spaghetti.png
     - assets/recetas/huarache.png
     - assets/Recetario.sqlite3
+    - assets/recetas/Quesadilla_Atun.png
+    - assets/recetas/Lentejas.png
+    - assets/recetas/Tortilla_Patatas.png
   

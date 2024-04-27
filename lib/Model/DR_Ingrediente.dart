@@ -13,10 +13,10 @@ class DRIngrediente {
         await _database.query('Ingredientes');
     return ingredientesMap
         .map((e) => Ingrediente(
-            id: e['id_ing'],
+            id: e['id_ingrediente'],
             nombre: e['nombre_ing'],
             imagen: e['imagen_ing'],
-            cantidad: e['cantidad'],
+            cantidad: e['Cantidad'],
             medida: e['medida']))
         .toList();
   }

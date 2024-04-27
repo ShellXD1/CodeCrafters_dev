@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
-import 'AllRecetas.dart';
 
 class RecetasView extends StatefulWidget {
   final RecetasViewModel? recetasViewModel;

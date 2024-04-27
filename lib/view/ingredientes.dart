@@ -2,14 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 
-class IngredientesView extends StatelessWidget {
-  final IngredienteViewModel ingredientViewModel;
+class IngredientesView extends StatefulWidget {
+  final IngredienteViewModel? ingredientViewModel;
+  final dynamic database;
 
-  const IngredientesView({Key? key, required this.ingredientViewModel, required Database database})
+  const IngredientesView({Key? key, required this.ingredientViewModel, required this.database})
       : super(key: key);
 
   @override
+  _IngredientesViewState createState() => _IngredientesViewState();
+}
+
+class _IngredientesViewState extends State<IngredientesView> {
+  @override
+  void initState() {
+    super.initState();
+    // Verificar si se proporcionó un RecetasViewModel antes de cargar las recetas
+    if (widget.ingredientViewModel != null) {
+      widget.ingredientViewModel!.obtenerIngredientes();
+    }
+  }
+
+  bool _ingredientesCargados = false;
+
+  @override
   Widget build(BuildContext context) {
+    if (!_ingredientesCargados) {
+      // Si las recetas no están cargadas, obtenerlas
+      if (widget.ingredientViewModel != null) {
+        widget.ingredientViewModel!.obtenerIngredientes().then((_) {
+          // Marcar como cargadas una vez que se hayan obtenido las recetas
+          setState(() {
+            _ingredientesCargados = true;
+          });
+        });
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Ingredientes',
@@ -24,120 +53,68 @@ class IngredientesView extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 20.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Ingredientes:',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24.0, fontFamily: 'Chivo'),
-                ),
-                SizedBox(height: 10.0),
-                Container(
-                  padding: EdgeInsets.all(10.0),
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    children: [
-                      // Utiliza la lista de ingredientes del view model
-                      for (var ingredient in ingredientViewModel.ingredientes)
-                        IngredientCard(
-                          quantity: ingredient.cantidad,
-                          name: ingredient.nombre,
-                          onTap: () {
-                            final TextEditingController _quantityController =
-                                TextEditingController(
-                                    text: ingredient.cantidad.toString());
-
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    'Modificar Cantidad',
-                                    style: TextStyle(fontFamily: 'Chivo'),
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextFormField(
-                                        controller: _quantityController,
-                                        keyboardType: TextInputType.number,
-                                      ),
-                                      SizedBox(height: 10.0),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              int currentValue = int.tryParse(
-                                                      _quantityController
-                                                          .text) ??
-                                                  ingredient.cantidad;
-                                              _quantityController.text =
-                                                  (currentValue - 1).toString();
-                                            },
-                                            child: Icon(Icons.remove),
-                                          ),
-                                          SizedBox(width: 10.0),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              int currentValue = int.tryParse(
-                                                      _quantityController
-                                                          .text) ??
-                                                  ingredient.cantidad;
-                                              _quantityController.text =
-                                                  (currentValue + 1).toString();
-                                            },
-                                            child: Icon(Icons.add),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        'Cancelar',
-                                        style: TextStyle(fontFamily: 'Chivo'),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        // Aquí puedes hacer lo que necesites con la nueva cantidad
-                                        int newQuantity = int.tryParse(
-                                                _quantityController.text) ??
-                                            ingredient.cantidad;
-                                        print(
-                                            'Nueva cantidad para ${ingredient.nombre}: $newQuantity');
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        'Guardar',
-                                        style: TextStyle(fontFamily: 'Chivo'),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          'Mis Ingredientes',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
+      // Mostrar un indicador de carga mientras se obtienen los ingredientes
+      if (!_ingredientesCargados)
+        Center(child: CircularProgressIndicator()),
+      // Mostrar los ingredientes una vez que estén cargados
+      if (_ingredientesCargados && widget.ingredientViewModel != null)
+        GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 2, // Número de columnas en el grid
+          crossAxisSpacing: 1.0, // Espaciado entre columnas
+          mainAxisSpacing: 1.0, // Espaciado entre filas
+          children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
+            return Center(
+              child: Container(
+                width: 150, // Ancho deseado para la tarjeta de ingrediente
+                height: 150, // Alto deseado para la tarjeta de ingrediente
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          ingrediente.nombre,
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Cantidad: ${ingrediente.cantidad}',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      // Mostrar un mensaje si no se proporcionó un ViewModel de ingredientes
+      if (_ingredientesCargados && widget.ingredientViewModel == null)
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'No se ha proporcionado un ViewModel de ingredientes.',
+            style: TextStyle(fontSize: 18.0),
+          ),
+        ),
+    ],
+  ),
+),
       bottomNavigationBar: Container(
         color: Color(0xFF9EE060),
         child: Column(

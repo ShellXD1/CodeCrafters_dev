@@ -64,7 +64,7 @@ class _RecetasViewState extends State<AllRecetasView> {
             onSelected: (value) {
               if (value == 'ver_todas') {
                 // Navegar a la pantalla AllRecetasView usando la ruta previamente definida
-                Navigator.pushNamed(context, '/allRecetas'); // Utiliza la ruta definida en MaterialApp
+                print("Ver todas las seleccionado");
               } else if (value == 'ver_favoritas') {
                 // Acción al seleccionar "Ver recetas favoritas"
                 Navigator.pushNamed(context, '/RecetasFavoritas');

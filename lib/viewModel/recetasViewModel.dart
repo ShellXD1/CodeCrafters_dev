@@ -34,4 +34,9 @@ class RecetasViewModel extends ChangeNotifier {
     final imagen = await _mRecetas.obtenerImagenRecetaPorId(idReceta);
     return {'imagen': imagen};
   }
+
+  // Función para obtener las recetas disponibles a partir de los ingredientes disponibles
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+    return await _mRecetas.getRecetasDisponibles(ingredientesDisponibles);
+  }
 }

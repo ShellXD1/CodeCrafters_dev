@@ -40,177 +40,181 @@ class _IngredientesViewState extends State<IngredientesView> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ingredientes',
-            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
-        leading: IconButton(
-          icon: Icon(Icons.home, size: 40.0),
-          onPressed: () {
-            print(
-                "Botón de la casita presionado (regresar a la pantalla de inicio)");
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Text(
-          'Mis Ingredientes',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
-      // Mostrar un indicador de carga mientras se obtienen los ingredientes
-      if (!_ingredientesCargados)
-        Center(child: CircularProgressIndicator()),
-      // Mostrar los ingredientes una vez que estén cargados
-      if (_ingredientesCargados && widget.ingredientViewModel != null)
-        GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 2, // Número de columnas en el grid
-          crossAxisSpacing: 1.0, // Espaciado entre columnas
-          mainAxisSpacing: 1.0, // Espaciado entre filas
-          children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
-            return Center(
-              child: Container(
-                width: 150, // Ancho deseado para la tarjeta de ingrediente
-                height: 150, // Alto deseado para la tarjeta de ingrediente
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          ingrediente.nombre,
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Cantidad: ${ingrediente.cantidad}',
-                          style: TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      // Mostrar un mensaje si no se proporcionó un ViewModel de ingredientes
-      if (_ingredientesCargados && widget.ingredientViewModel == null)
+  appBar: AppBar(
+    title: Text(
+      'Ingredientes',
+      style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo'),
+    ),
+    leading: IconButton(
+      icon: Icon(Icons.home, size: 40.0),
+      onPressed: () {
+        print(
+            "Botón de la casita presionado (regresar a la pantalla de inicio)");
+        Navigator.pop(context);
+      },
+    ),
+  ),
+  body: Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'No se ha proporcionado un ViewModel de ingredientes.',
-            style: TextStyle(fontSize: 18.0),
+            'Mis Ingredientes',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
-    ],
+        // Mostrar un indicador de carga mientras se obtienen los ingredientes
+        if (!_ingredientesCargados)
+          Center(child: CircularProgressIndicator()),
+        // Mostrar los ingredientes una vez que estén cargados
+        if (_ingredientesCargados && widget.ingredientViewModel != null)
+          Expanded(
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2, // Número de columnas en el grid
+              crossAxisSpacing: 1.0, // Espaciado entre columnas
+              mainAxisSpacing: 1.0, // Espaciado entre filas
+              children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
+                return Center(
+                  child: Container(
+                    width: 150, // Ancho deseado para la tarjeta de ingrediente
+                    height: 150, // Alto deseado para la tarjeta de ingrediente
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              ingrediente.nombre,
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Cantidad: ${ingrediente.cantidad}',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        // Mostrar un mensaje si no se proporcionó un ViewModel de ingredientes
+        if (_ingredientesCargados && widget.ingredientViewModel == null)
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'No se ha proporcionado un ViewModel de ingredientes.',
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+      ],
+    ),
   ),
-),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AgregarIngredienteWidget(
-                      onIngredientAdded: (name, quantity) {
-                        // Lógica para agregar el ingrediente aquí
-                        print(
-                            'Nombre del ingrediente: $name, Cantidad: $quantity');
-                        // Puedes actualizar el estado de la lista de ingredientes aquí
-                      },
-                    );
+  bottomNavigationBar: Container(
+    color: Color(0xFF9EE060),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return AgregarIngredienteWidget(
+                  onIngredientAdded: (name, quantity) {
+                    // Lógica para agregar el ingrediente aquí
+                    print(
+                        'Nombre del ingrediente: $name, Cantidad: $quantity');
+                    // Puedes actualizar el estado de la lista de ingredientes aquí
                   },
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF9EE060),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF9EE060),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+            padding: EdgeInsets.all(20.0),
+          ),
+          child: Text(
+            'Agregar Ingrediente',
+            style: TextStyle(
+              fontSize: 25.0,
+              fontFamily: 'Chivo',
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Acción al presionar el botón "Recetas"
+                  print("Botón 'Recetas' presionado");
+                  Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(
+                          '/')); // Regresar a la pantalla de inicio
+                  Navigator.pushNamed(context,'/recetas'); // Navegar a la pantalla de recetas
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9EE060),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  padding: EdgeInsets.all(16.0),
                 ),
-                padding: EdgeInsets.all(20.0),
-              ),
-              child: Text(
-                'Agregar Ingrediente',
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: 'Chivo',
-                  color: Colors.black,
+                child: Text(
+                  'Recetas',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontFamily: 'Chivo',
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Acción al presionar el botón "Recetas"
-                      print("Botón 'Recetas' presionado");
-                      Navigator.popUntil(
-                          context,
-                          ModalRoute.withName(
-                              '/')); // Regresar a la pantalla de inicio
-                      Navigator.pushNamed(context,'/recetas'); // Navegar a la pantalla de recetas
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF9EE060),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      padding: EdgeInsets.all(16.0),
-                    ),
-                    child: Text(
-                      'Recetas',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontFamily: 'Chivo',
-                        color: Colors.black,
-                      ),
-                    ),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Acción al presionar el botón "Ingredientes"
+                  print("Botón 'Ingredientes' presionado");
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9EE060),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  padding: EdgeInsets.all(16.0),
+                ),
+                child: Text(
+                  'Ingredientes',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontFamily: 'Chivo',
+                    color: Colors.black,
                   ),
                 ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Acción al presionar el botón "Ingredientes"
-                      print("Botón 'Ingredientes' presionado");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF9EE060),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      padding: EdgeInsets.all(16.0),
-                    ),
-                    child: Text(
-                      'Ingredientes',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontFamily: 'Chivo',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
-      ),
-    );
+      ],
+    ),
+  ),
+);
   }
 }
 

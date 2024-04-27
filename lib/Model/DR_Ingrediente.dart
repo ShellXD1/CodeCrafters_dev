@@ -80,4 +80,16 @@ class DRIngrediente {
       WHERE id_ing = ?
     ''', [cantidad, idIngrediente]);
   }
+
+  // Obtener recetas disponibles a partir de los ingredientes disponibles
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+    final List<Map<String, dynamic>> recetasDisponibles = await _database.rawQuery('''
+      SELECT r.* FROM Recetas r
+      INNER JOIN Receta_Ingrediente ri ON r.id_receta = ri.id_receta
+      WHERE ri.nombre_ingrediente IN (${ingredientesDisponibles.map((e) => "'$e'").join(',')})
+      GROUP BY r.id_receta
+      HAVING COUNT(DISTINCT ri.nombre_ingrediente) = ${ingredientesDisponibles.length}
+    ''');
+    return recetasDisponibles;
+  }
 }

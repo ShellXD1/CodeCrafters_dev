@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
-import 'package:sqflite_common/sqlite_api.dart';
 
 class IngredientesView extends StatefulWidget {
   final IngredienteViewModel? ingredientViewModel;
@@ -19,7 +19,7 @@ class _IngredientesViewState extends State<IngredientesView> {
     super.initState();
     // Verificar si se proporcionó un RecetasViewModel antes de cargar las recetas
     if (widget.ingredientViewModel != null) {
-      widget.ingredientViewModel!.obtenerIngredientes();
+      widget.ingredientViewModel!.obtenerIngredientesNoVacios();
     }
   }
 
@@ -135,7 +135,10 @@ class _IngredientesViewState extends State<IngredientesView> {
                     print(
                         'Nombre del ingrediente: $name, Cantidad: $quantity');
                     // Puedes actualizar el estado de la lista de ingredientes aquí
-                  }, ingredientNames: [],
+                      setState(() {
+                        
+                      });
+                  }, ingredientViewModel: widget.ingredientViewModel, database: widget.database,
                 );
               },
             );
@@ -271,23 +274,37 @@ class IngredientCard extends StatelessWidget {
 }
 
 class AgregarIngredienteWidget extends StatefulWidget {
+  final IngredienteViewModel? ingredientViewModel;
   final Function(String name, int quantity) onIngredientAdded;
-  final List<String> ingredientNames; // Lista de nombres de ingredientes
+  final dynamic database;
 
   const AgregarIngredienteWidget({
     Key? key,
-    required this.onIngredientAdded,
-    required this.ingredientNames,
+    required this.onIngredientAdded, this.ingredientViewModel, this.database,
   }) : super(key: key);
 
   @override
-  _AgregarIngredienteWidgetState createState() =>
-      _AgregarIngredienteWidgetState();
+  _AgregarIngredienteWidgetState createState() => _AgregarIngredienteWidgetState();
 }
 
 class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
-  String _selectedIngredient = ''; // Valor predeterminado
+  String? _selectedIngredient; // Cambiado a nullable para manejar un valor inicial nulo
   int _quantity = 0;
+  bool _ingredientesCargados = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Verificar si se proporcionó un RecetasViewModel antes de cargar las recetas
+    if (widget.ingredientViewModel != null) {
+      widget.ingredientViewModel!.obtenerIngredientesVacios().then((_) {
+        // Marcar como cargadas una vez que se hayan obtenido las recetas
+        setState(() {
+          _ingredientesCargados = true;
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,51 +318,61 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(color: Colors.blueGrey, width: 2.0),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButtonFormField<String>(
-                value: _selectedIngredient,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedIngredient = newValue!;
-                  });
-                },
-                items: widget.ingredientNames.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                decoration:
-                    InputDecoration(labelText: 'Selecciona un ingrediente'),
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Cantidad'),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  setState(() {
-                    _quantity = int.tryParse(value) ?? 0;
-                  });
-                },
-              ),
-              SizedBox(height: 10.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_selectedIngredient.isNotEmpty) {
-                    widget.onIngredientAdded(_selectedIngredient, _quantity);
-                    Navigator.pop(
-                        context); // Cerrar el widget de agregar ingrediente
-                  } else {
-                    // Puedes mostrar un mensaje de error o manejar la situación de otra manera
-                  }
-                },
-                child: Text('Agregar'),
-              ),
-            ],
-          ),
+          child: _ingredientesCargados
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: _selectedIngredient,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedIngredient = newValue;
+                        });
+                      },
+                      items: widget.ingredientViewModel!.ingredientes
+                          .map((Ingrediente ingrediente) {
+                        return DropdownMenuItem<String>(
+                          value: ingrediente.nombre,
+                          child: Text(ingrediente.nombre),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        labelText: 'Selecciona un ingrediente',
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Cantidad'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        setState(() {
+                          _quantity = int.tryParse(value) ?? 0;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_selectedIngredient != null &&
+                            _selectedIngredient!.isNotEmpty) {
+                          widget.ingredientViewModel?.agregarCantidadIngredienteNombre(_selectedIngredient!, _quantity);
+                          widget.onIngredientAdded(_selectedIngredient!, _quantity); // Notificar al padre que se agregó un ingrediente
+                          Navigator.pop(context);
+                          // Redireccionar a la misma pantalla para recargar
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database)),
+                          );
+                        } else {
+                          // Handle error or empty selection
+                        }
+                      },
+                      child: Text('Agregar'),
+                    ),
+                  ],
+                )
+              : CircularProgressIndicator(), // Muestra un indicador de carga mientras se cargan los ingredientes
         ),
       ),
     );

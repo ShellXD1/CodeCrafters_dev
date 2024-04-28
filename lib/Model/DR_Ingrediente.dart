@@ -36,7 +36,7 @@ Future<List<Ingrediente>> getIngredientesNoVacios() async {
 
 Future<List<Ingrediente>> getIngredientesVacios() async {
   List<Map<String, dynamic>> ingredientesMap =
-      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad == 0');
+      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad <= 0');
   return ingredientesMap
       .map((e) => Ingrediente(
           id: e['id_ingrediente'],
@@ -97,6 +97,16 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
     ''', [cantidad, idIngrediente]);
   }
 
+  // Método para agregar cantidad a un ingrediente por nombre
+  Future<void> agregarCantidadIngredienteNombre(
+      String nombreIngrediente, int cantidad) async {
+    await _database.rawUpdate('''
+      UPDATE Ingredientes
+      SET cantidad = cantidad + ?
+      WHERE nombre_ing = ?
+    ''', [cantidad, nombreIngrediente]);
+  }
+
   // Método para quitar cantidad a un ingrediente
   Future<void> quitarCantidadIngrediente(
       int idIngrediente, int cantidad) async {
@@ -105,6 +115,16 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
       SET cantidad = GREATEST(0, cantidad - ?)
       WHERE id_ing = ?
     ''', [cantidad, idIngrediente]);
+  }
+
+  // Método para quitar cantidad a un ingrediente por Nombre
+  Future<void> quitarCantidadIngredienteNombre(
+      String nombreIngrediente, int cantidad) async {
+    await _database.rawUpdate('''
+      UPDATE Ingredientes
+      SET cantidad = GREATEST(0, cantidad - ?)
+      WHERE nombre_ing = ?
+    ''', [cantidad, nombreIngrediente]);
   }
 
   // Obtener recetas disponibles a partir de los ingredientes disponibles

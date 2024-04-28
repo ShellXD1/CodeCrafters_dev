@@ -23,7 +23,7 @@ class IngredienteViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  // Método para obtener los ingredientes no vacios
+  // Método para obtener los ingredientes vacios
   Future<void> obtenerIngredientesVacios() async {
     _ingredientes = await _mIngredientes.obtenerIngredientesVacios();
     notifyListeners();
@@ -41,6 +41,17 @@ class IngredienteViewModel extends ChangeNotifier{
     }
     // Actualizamos en la base de datos
     _mIngredientes.agregarCantidadIngrediente(ingrediente as int, cantidad);
+    notifyListeners();
+  }
+
+  // Método para agregar la cantidad de un ingrediente a la lista por nombre
+  void agregarCantidadIngredienteNombre(String nombreIngrediente, int cantidad) {
+    int index = _ingredientes.indexWhere((i) => i.nombre == nombreIngrediente);
+    if (index != -1) {
+      _ingredientes[index].cantidad += cantidad;
+    }
+    // Actualizamos en la base de datos
+    _mIngredientes.agregarCantidadIngredienteNombre(nombreIngrediente, cantidad);
     notifyListeners();
   }
 

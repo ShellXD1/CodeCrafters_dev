@@ -34,6 +34,12 @@ class MIngrediente {
     await _repository.agregarCantidadIngrediente(idIngrediente, cantidad);
   }
 
+  // Método para agregar la cantidad de un ingrediente por Nombre
+  Future<void> agregarCantidadIngredienteNombre(
+      String nombreIngrediente, int cantidad) async {
+    await _repository.agregarCantidadIngredienteNombre(nombreIngrediente, cantidad);
+  }
+
   // Método para quitar la cantidad de un ingrediente
   Future<void> quitarCantidadIngrediente(
       int idIngrediente, int cantidad) async {

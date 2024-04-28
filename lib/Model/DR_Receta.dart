@@ -18,7 +18,8 @@ class DRReceta {
             id: e['id_receta'],
             nombre: e['nombre_receta'],
             imagen: e['imagen_receta'],
-            preparacion: e['Preparacion_receta']))
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos']))
         .toList();
   } // Pito
 
@@ -52,5 +53,17 @@ class DRReceta {
       return result.first['Preparacion_receta'] as String?;
     }
     return null;
+  }
+
+  // Obtener recetas disponibles a partir de los ingredientes disponibles
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+    final List<Map<String, dynamic>> recetasDisponibles = await _database.rawQuery('''
+      SELECT r.* FROM Recetas r
+      INNER JOIN Receta_Ingrediente ri ON r.id_receta = ri.id_receta
+      WHERE ri.nombre_ingrediente IN (${ingredientesDisponibles.map((e) => "'$e'").join(',')})
+      GROUP BY r.id_receta
+      HAVING COUNT(DISTINCT ri.nombre_ingrediente) = ${ingredientesDisponibles.length}
+    ''');
+    return recetasDisponibles;
   }
 }

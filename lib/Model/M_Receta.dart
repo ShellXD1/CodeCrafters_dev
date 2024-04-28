@@ -27,4 +27,9 @@ class MReceta {
   Future<String?> obtenerImagenRecetaPorId(int idReceta) async {
     return await _repository.obtenerImagenReceta(idReceta);
   }
+  
+  // Método para obtener las recetas disponibles a partir de los ingredientes disponibles
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+    return await _repository.getRecetasDisponibles(ingredientesDisponibles);
+  }
 }

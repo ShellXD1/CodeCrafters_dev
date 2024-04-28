@@ -21,6 +21,32 @@ class DRIngrediente {
         .toList();
   }
 
+Future<List<Ingrediente>> getIngredientesNoVacios() async {
+  List<Map<String, dynamic>> ingredientesMap =
+      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad > 0');
+  return ingredientesMap
+      .map((e) => Ingrediente(
+          id: e['id_ingrediente'],
+          nombre: e['nombre_ing'],
+          imagen: e['imagen_ing'],
+          cantidad: e['Cantidad'],
+          medida: e['medida']))
+      .toList();
+}
+
+Future<List<Ingrediente>> getIngredientesVacios() async {
+  List<Map<String, dynamic>> ingredientesMap =
+      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad == 0');
+  return ingredientesMap
+      .map((e) => Ingrediente(
+          id: e['id_ingrediente'],
+          nombre: e['nombre_ing'],
+          imagen: e['imagen_ing'],
+          cantidad: e['Cantidad'],
+          medida: e['medida']))
+      .toList();
+}
+
   // Obtener la lista de ingredientes para una receta específica
   Future<List<Ingrediente>> getIngredientesPorReceta(int idReceta) async {
     List<Map<String, dynamic>> listaIngredientesMap =

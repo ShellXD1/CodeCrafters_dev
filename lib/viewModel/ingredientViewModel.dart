@@ -17,6 +17,18 @@ class IngredienteViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
+  // Método para obtener los ingredientes no vacios
+  Future<void> obtenerIngredientesNoVacios() async {
+    _ingredientes = await _mIngredientes.obtenerIngredientesNoVacios();
+    notifyListeners();
+  }
+
+  // Método para obtener los ingredientes no vacios
+  Future<void> obtenerIngredientesVacios() async {
+    _ingredientes = await _mIngredientes.obtenerIngredientesVacios();
+    notifyListeners();
+  }
+
   // Método para agregar la cantidad de un ingrediente a la lista
   void agregarCantidadIngrediente(Ingrediente ingrediente, int cantidad) {
     int index = _ingredientes.indexWhere((i) => i.id == ingrediente.id);

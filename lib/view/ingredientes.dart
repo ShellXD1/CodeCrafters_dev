@@ -30,7 +30,7 @@ class _IngredientesViewState extends State<IngredientesView> {
     if (!_ingredientesCargados) {
       // Si las recetas no están cargadas, obtenerlas
       if (widget.ingredientViewModel != null) {
-        widget.ingredientViewModel!.obtenerIngredientes().then((_) {
+        widget.ingredientViewModel!.obtenerIngredientesNoVacios().then((_) {
           // Marcar como cargadas una vez que se hayan obtenido las recetas
           setState(() {
             _ingredientesCargados = true;
@@ -135,7 +135,7 @@ class _IngredientesViewState extends State<IngredientesView> {
                     print(
                         'Nombre del ingrediente: $name, Cantidad: $quantity');
                     // Puedes actualizar el estado de la lista de ingredientes aquí
-                  },
+                  }, ingredientNames: [],
                 );
               },
             );
@@ -272,9 +272,13 @@ class IngredientCard extends StatelessWidget {
 
 class AgregarIngredienteWidget extends StatefulWidget {
   final Function(String name, int quantity) onIngredientAdded;
+  final List<String> ingredientNames; // Lista de nombres de ingredientes
 
-  const AgregarIngredienteWidget({Key? key, required this.onIngredientAdded})
-      : super(key: key);
+  const AgregarIngredienteWidget({
+    Key? key,
+    required this.onIngredientAdded,
+    required this.ingredientNames,
+  }) : super(key: key);
 
   @override
   _AgregarIngredienteWidgetState createState() =>
@@ -282,8 +286,7 @@ class AgregarIngredienteWidget extends StatefulWidget {
 }
 
 class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
-  String _selectedIngredient =
-      'Seleccione un ingrediente'; // Valor predeterminado
+  String _selectedIngredient = ''; // Valor predeterminado
   int _quantity = 0;
 
   @override
@@ -309,13 +312,7 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
                     _selectedIngredient = newValue!;
                   });
                 },
-                items: <String>[
-                  'Seleccione un ingrediente', // Valor predeterminado
-                  'Ingrediente 1',
-                  'Ingrediente 2',
-                  'Ingrediente 3',
-                  // Agrega más ingredientes según sea necesario
-                ].map<DropdownMenuItem<String>>((String value) {
+                items: widget.ingredientNames.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -337,7 +334,7 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
               SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
-                  if (_selectedIngredient != 'Seleccione un ingrediente') {
+                  if (_selectedIngredient.isNotEmpty) {
                     widget.onIngredientAdded(_selectedIngredient, _quantity);
                     Navigator.pop(
                         context); // Cerrar el widget de agregar ingrediente

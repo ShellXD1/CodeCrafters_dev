@@ -13,6 +13,16 @@ class MIngrediente {
     return _repository.getIngredientes();
   }
 
+  // Método para obtener la lista de ingredientes no vacios
+  Future<List<Ingrediente>> obtenerIngredientesNoVacios() async {
+    return _repository.getIngredientesNoVacios();
+  }
+
+  // Método para obtener la lista de ingredientes vacios
+  Future<List<Ingrediente>> obtenerIngredientesVacios() async {
+    return _repository.getIngredientesVacios();
+  }
+
   // Método para obtener la lista de ingredientes para una receta específica
   Future<List<Ingrediente>> obtenerIngredientesPorReceta(int idReceta) async {
     return _repository.getIngredientesPorReceta(idReceta);

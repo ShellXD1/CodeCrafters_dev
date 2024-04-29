@@ -17,6 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:proyecto_tsp_dev/view/AllRecetas.dart';
 import 'package:proyecto_tsp_dev/view/RecetasFavoritas.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() async {
@@ -24,6 +25,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final directory = await getApplicationDocumentsDirectory();
   final String databasePath = path.join(directory.path, 'Recetario.sqlite3');
+
+  final prefs = await SharedPreferences.getInstance();
+  bool isValidated = prefs.getBool('validation') ?? false;
+
+  if (isValidated == false){
+    // Copia el archivo desde los recursos a la ubicación local
+    ByteData data = await rootBundle.load('assets/Recetario.sqlite3');
+    List<int> bytes = data.buffer.asUint8List();
+    await File(databasePath).writeAsBytes(bytes);
+    prefs.setBool('validation', true);
+  }
+
 
   // Copia el archivo desde los recursos a la ubicación local
   ByteData data = await rootBundle.load('assets/Recetario.sqlite3');

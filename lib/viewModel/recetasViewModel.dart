@@ -45,5 +45,23 @@ class RecetasViewModel extends ChangeNotifier {
       List<String> ingredientesDisponibles) async {
     return await _mRecetas.getRecetasDisponibles(ingredientesDisponibles);
   }
-}
 
+  Future<Map<String, dynamic>?> getRecipeDetails(int recipeIndex) async {
+    // Verificar si el índice es válido
+    if (recipeIndex < 0 || recipeIndex >= recetas.length) {
+      return null;
+    }
+    // Obtener la receta correspondiente al índice
+    Receta receta = recetas[recipeIndex];
+    // Construir un mapa con los detalles de la receta
+    Map<String, dynamic> recipeDetails = {
+      'imagen': receta.imagen,
+      'ingredientes': receta.ingredientes,
+      'preparacion': receta.preparacion,
+    };
+    // Simular un retraso de 1 segundo para imitar una llamada asíncrona a una API o base de datos
+    await Future.delayed(Duration(seconds: 1));
+    // Devolver los detalles de la receta
+    return recipeDetails;
+  }
+}

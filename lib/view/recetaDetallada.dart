@@ -1,42 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/viewModel/recipeViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
 class RecetaDetalladaView extends StatelessWidget {
-  final RecipeViewModel recipeViewModel;
+  final RecetasViewModel recetasViewModel;
   final int recipeIndex;
 
   const RecetaDetalladaView({
     Key? key,
-    required this.recipeViewModel,
+    required this.recetasViewModel,
     required this.recipeIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Obtén la receta correspondiente al índice
-    final Recipe recipe = recipeViewModel.recipes[recipeIndex];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Detalles de la receta',
             style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         // Otras acciones del app bar
       ),
-      body: Cuerpo(recipe: recipe),
+      body: FutureBuilder(
+        future: recetasViewModel.getRecipeDetails(recipeIndex),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return Cuerpo(recipeDetails: snapshot.data);
+          }
+        },
+      ),
     );
   }
 }
 
-Widget Cuerpo({required Recipe recipe}) {
-  return Center(
-    child: Container(
+class Cuerpo extends StatelessWidget {
+  final Map<String, dynamic>? recipeDetails;
+
+  const Cuerpo({Key? key, this.recipeDetails}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (recipeDetails == null) {
+      return Center(
+        child: Text('No se encontraron detalles de la receta'),
+      );
+    }
+
+    final List<String> ingredientes = recipeDetails!['ingredientes'];
+    final String preparacion = recipeDetails!['preparacion'];
+
+    return Center(
+      child: Container(
         padding: EdgeInsets.all(12),
         child: Align(
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              RecetaDes(recipe),
+              RecetaDes(recipeDetails!['imagen']),
               SizedBox(height: 20),
               Text(
                 'Lista de Ingredientes:',
@@ -47,7 +74,7 @@ Widget Cuerpo({required Recipe recipe}) {
                     fontFamily: 'Chivo'),
               ),
               SizedBox(height: 5),
-              IngredientesWidget(ingredient: recipe.ingredient),
+              IngredientesWidget(ingredientes: ingredientes),
               SizedBox(height: 20),
               Text(
                 'Lista de Preparación:',
@@ -58,19 +85,21 @@ Widget Cuerpo({required Recipe recipe}) {
                     fontFamily: 'Chivo'),
               ),
               SizedBox(height: 5),
-              PreparacionWidget(process: recipe.process),
+              PreparacionWidget(preparacion: preparacion),
             ],
           ),
-        )),
-  );
+        ),
+      ),
+    );
+  }
 }
 
-Widget RecetaDes(Recipe recipe) {
+Widget RecetaDes(String imagen) {
   return Container(
     height: 200,
     width: 250,
     child: Image.asset(
-      'assets/recetas/${recipe.image}',
+      'assets/recetas/$imagen',
       fit: BoxFit.cover,
       height: 150.0,
     ),
@@ -78,9 +107,9 @@ Widget RecetaDes(Recipe recipe) {
 }
 
 class IngredientesWidget extends StatelessWidget {
-  final String ingredient;
+  final List<String> ingredientes;
 
-  const IngredientesWidget({Key? key, required this.ingredient})
+  const IngredientesWidget({Key? key, required this.ingredientes})
       : super(key: key);
 
   @override
@@ -102,7 +131,7 @@ class IngredientesWidget extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(fontFamily: 'Chivo')),
                       SizedBox(height: 16),
-                      Text(ingredient),
+                      Text(ingredientes.join('\n')),
                     ],
                   ),
                   Positioned(
@@ -134,9 +163,10 @@ class IngredientesWidget extends StatelessWidget {
 }
 
 class PreparacionWidget extends StatelessWidget {
-  final String process;
+  final String preparacion;
 
-  const PreparacionWidget({Key? key, required this.process}) : super(key: key);
+  const PreparacionWidget({Key? key, required this.preparacion})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -156,7 +186,7 @@ class PreparacionWidget extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(fontFamily: 'Chivo')),
                       SizedBox(height: 16),
-                      Text(process),
+                      Text(preparacion),
                     ],
                   ),
                   Positioned(

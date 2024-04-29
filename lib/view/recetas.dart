@@ -9,7 +9,7 @@ class RecetasView extends StatefulWidget {
       : super(key: key);
       
         get ingredientesDisponibles => null;
-      
+
   @override
   _RecetasViewState createState() => _RecetasViewState();
 }
@@ -43,113 +43,173 @@ class _RecetasViewState extends State<RecetasView> {
             Navigator.pushReplacementNamed(context, '/');
           },
         ),
-        // Resto del AppBar omitido por brevedad...
+        actions: [
+          PopupMenuButton(
+            icon: Icon(Icons.menu, size: 40.0),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text(
+                  'Ver todas las recetas',
+                  style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo'),
+                ),
+                value: 'ver_todas',
+              ),
+              PopupMenuItem(
+                child: Text(
+                  'Ver recetas favoritas',
+                  style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo'),
+                ),
+                value: 'ver_favoritas',
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 'ver_todas') {
+                Navigator.pushNamed(context, '/allRecetas');
+              } else if (value == 'ver_favoritas') {
+                Navigator.pushNamed(context, '/RecetasFavoritas');
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Mis Recetas',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-            if (!_recetasCargadas)
-              Center(child: CircularProgressIndicator()),
-            if (_recetasCargadas && widget.recetasViewModel != null)
-              FutureBuilder<List<Map<String, dynamic>>>(
-                future: widget.recetasViewModel!
-                    .getRecetasDisponibles(widget.ingredientesDisponibles ?? []),
-                builder: (context, snapshot) {
-                  // Resto del FutureBuilder omitido por brevedad...
-                  return Column(
-                    children: snapshot.data!.map<Widget>((recetaInfo) {
-                      return GestureDetector(
-                        onTap: () {
-                          // Navegar a la pantalla de detalles de la receta
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RecetaDetallesView(recetaInfo: recetaInfo),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 300, // Ancho deseado para la tarjeta
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (recetaInfo['imagen'] != null)
-                                    Image.asset(
-                                      recetaInfo['imagen'],
-                                      width: 200, // Ancho de la imagen
-                                      height: 100, // Alto de la imagen
-                                      fit: BoxFit.cover,
-                                    ),
-                                  SizedBox(height: 8), // Espaciado entre la imagen y el texto
-                                  Text(
-                                    recetaInfo['nombre_receta'] ?? 'Receta sin nombre',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          'Mis Recetas',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+      // Mostrar un indicador de carga mientras se obtienen las recetas
+      if (!_recetasCargadas)
+        Center(child: CircularProgressIndicator()),
+      // Mostrar las recetas una vez que estén cargadas
+      if (_recetasCargadas && widget.recetasViewModel != null)
+        FutureBuilder<List<Map<String, dynamic>>>(
+          future: widget.recetasViewModel!
+              .getRecetasDisponibles(widget.ingredientesDisponibles ?? []),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              if (snapshot.hasData && snapshot.data != null) {
+                final List<Map<String, dynamic>> recetasDisponibles =
+                    snapshot.data!;
+
+                if (recetasDisponibles.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No se encontraron recetas disponibles.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
+                }
+
+                return Column(
+                  children: recetasDisponibles.map((recetaInfo) {
+                    final String nombreReceta = recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
+                    final String imagenRecetaPath = recetaInfo['imagen'] ?? '';
+
+                    return Container(
+                      width: 300, // Ancho deseado para la tarjeta
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (imagenRecetaPath.isNotEmpty)
+                                Image.asset(
+                                  imagenRecetaPath,
+                                  width: 200, // Ancho de la imagen
+                                  height: 100, // Alto de la imagen
+                                  fit: BoxFit.cover,
+                                ),
+                              SizedBox(height: 8), // Espaciado entre la imagen y el texto
+                              Text(
+                                nombreReceta,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                      );
-                    }).toList(),
-                  );
+                      ),
+                    );
+                  }).toList(),
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    'No se encontraron recetas disponibles.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              }
+            }
+          },
+        ),
+      // Mostrar un mensaje si no se proporcionó un RecetasViewModel
+      if (_recetasCargadas && widget.recetasViewModel == null)
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'No se ha proporcionado un ViewModel de recetas.',
+            style: TextStyle(fontSize: 18.0),
+          ),
+        ),
+    ],
+  ),
+),
+
+      bottomNavigationBar: Container(
+        color: Color(0xFF9EE060),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Acción al presionar el botón "Recetas"
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9EE060),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  padding: EdgeInsets.all(16.0),
+                ),
+                child: Text(
+                  'Recetas',
+                  style: TextStyle(
+                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                ),
               ),
-            // Resto de la UI omitida por brevedad...
-          ],
-        ),
-      ),
-      // Resto del Scaffold omitido por brevedad...
-    );
-  }
-}
-
-class RecetaDetallesView extends StatelessWidget {
-  final Map<String, dynamic> recetaInfo;
-
-  const RecetaDetallesView({Key? key, required this.recetaInfo}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Aquí puedes construir la pantalla de detalles de la receta usando la información de `recetaInfo`
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          recetaInfo['nombre_receta'] ?? 'Detalles de la Receta',
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (recetaInfo['imagen'] != null)
-              Image.asset(
-                recetaInfo['imagen'],
-                width: 200,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
-            SizedBox(height: 16),
-            Text(
-              'Descripción de la receta aquí...',
-              style: TextStyle(fontSize: 18),
             ),
-            // Agrega más información de la receta según necesites
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.pushNamed(context, '/ingredientes');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9EE060),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  padding: EdgeInsets.all(16.0),
+                ),
+                child: Text(
+                  'Ingredientes',
+                  style: TextStyle(
+                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                ),
+              ),
+            ),
           ],
         ),
       ),

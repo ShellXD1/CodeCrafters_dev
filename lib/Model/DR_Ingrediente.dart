@@ -92,8 +92,8 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
       int idIngrediente, int cantidad) async {
     await _database.rawUpdate('''
       UPDATE Ingredientes
-      SET cantidad = cantidad + ?
-      WHERE id_ing = ?
+      SET cantidad =  ?
+      WHERE id_ingrediente = ?
     ''', [cantidad, idIngrediente]);
   }
 
@@ -109,12 +109,12 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
 
   // Método para quitar cantidad a un ingrediente
   Future<void> quitarCantidadIngrediente(
-      int idIngrediente, int cantidad) async {
+      int idIngrediente) async {
     await _database.rawUpdate('''
       UPDATE Ingredientes
-      SET cantidad = GREATEST(0, cantidad - ?)
-      WHERE id_ing = ?
-    ''', [cantidad, idIngrediente]);
+      SET cantidad = 0
+      WHERE id_ingrediente = ?
+    ''', [idIngrediente]);
   }
 
   // Método para quitar cantidad a un ingrediente por Nombre

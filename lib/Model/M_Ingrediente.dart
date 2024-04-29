@@ -43,7 +43,7 @@ class MIngrediente {
   // Método para quitar la cantidad de un ingrediente
   Future<void> quitarCantidadIngrediente(
       int idIngrediente, int cantidad) async {
-    await _repository.quitarCantidadIngrediente(idIngrediente, cantidad);
+    await _repository.quitarCantidadIngrediente(idIngrediente);
   }
 
   // Método para obtener la lista de ingredientes por preparación

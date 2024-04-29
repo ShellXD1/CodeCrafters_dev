@@ -40,7 +40,7 @@ class IngredienteViewModel extends ChangeNotifier{
       _ingredientes.add(ingrediente);
     }
     // Actualizamos en la base de datos
-    _mIngredientes.agregarCantidadIngrediente(ingrediente as int, cantidad);
+    _mIngredientes.agregarCantidadIngrediente(ingrediente.id, cantidad);
     notifyListeners();
   }
 
@@ -64,7 +64,7 @@ class IngredienteViewModel extends ChangeNotifier{
         _ingredientes.removeAt(index);
       }
       // Actualizamos en la base de datos
-      _mIngredientes.quitarCantidadIngrediente(ingrediente as int, cantidad);
+      _mIngredientes.quitarCantidadIngrediente(ingrediente.id, cantidad);
       notifyListeners();
     }
   }

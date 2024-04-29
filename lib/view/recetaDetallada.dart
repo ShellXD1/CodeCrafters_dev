@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/View/recetaDetallada.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
 class RecetaDetalladaView extends StatelessWidget {
@@ -52,7 +53,9 @@ class Cuerpo extends StatelessWidget {
       );
     }
 
-    final List<String> ingredientes = recipeDetails!['ingredientes'];
+    final dynamic ingredientesData = recipeDetails!['ingredientes'];
+    final List<String> ingredientes = (ingredientesData != null && ingredientesData is List<String>) ? ingredientesData : [];
+
     final String preparacion = recipeDetails!['preparacion'];
 
     return Center(
@@ -69,9 +72,10 @@ class Cuerpo extends StatelessWidget {
                 'Lista de Ingredientes:',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Chivo'),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Chivo'
+                ),
               ),
               SizedBox(height: 5),
               IngredientesWidget(ingredientes: ingredientes),
@@ -80,82 +84,15 @@ class Cuerpo extends StatelessWidget {
                 'Lista de Preparación:',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Chivo'),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Chivo'
+                ),
               ),
               SizedBox(height: 5),
               PreparacionWidget(preparacion: preparacion),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-Widget RecetaDes(String imagen) {
-  return Container(
-    height: 200,
-    width: 250,
-    child: Image.asset(
-      'assets/recetas/$imagen',
-      fit: BoxFit.cover,
-      height: 150.0,
-    ),
-  );
-}
-
-class IngredientesWidget extends StatelessWidget {
-  final List<String> ingredientes;
-
-  const IngredientesWidget({Key? key, required this.ingredientes})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Color.fromARGB(255, 158, 224, 96),
-              content: Stack(
-                alignment: AlignmentDirectional.topEnd,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("Ingredientes",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Chivo')),
-                      SizedBox(height: 16),
-                      Text(ingredientes.join('\n')),
-                    ],
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        color: Color.fromARGB(255, 158, 224, 96),
-        child: Text(
-          "Ingredientes",
-          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),
     );
@@ -210,6 +147,42 @@ class PreparacionWidget extends StatelessWidget {
         color: Color.fromARGB(255, 158, 224, 96),
         child: Text(
           "Preparación",
+          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
+        ),
+      ),
+    );
+  }
+}
+
+Widget RecetaDes(String imagen) {
+  return Container(
+    height: 200,
+    width: 250,
+    child: Image.asset(
+      '$imagen',
+      fit: BoxFit.cover,
+      height: 150.0,
+    ),
+  );
+}
+
+class IngredientesWidget extends StatelessWidget {
+  final List<String> ingredientes;
+
+  const IngredientesWidget({Key? key, required this.ingredientes})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        // Implement your dialog here
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        color: Color.fromARGB(255, 158, 224, 96),
+        child: Text(
+          "Ingredientes",
           style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),

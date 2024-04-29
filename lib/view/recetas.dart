@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+import 'recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
 
 class RecetasView extends StatefulWidget {
   final RecetasViewModel? recetasViewModel;
@@ -73,99 +74,114 @@ class _RecetasViewState extends State<RecetasView> {
         ],
       ),
       body: SingleChildScrollView(
-  child: Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          'Mis Recetas',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 16), // Espaciado entre el texto y el indicador de carga
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Mis Recetas',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16), // Espaciado entre el texto y el indicador de carga
 
-        // Mostrar un indicador de carga mientras se obtienen las recetas
-        if (!_recetasCargadas)
-          CircularProgressIndicator(),
+              // Mostrar un indicador de carga mientras se obtienen las recetas
+              if (!_recetasCargadas)
+                CircularProgressIndicator(),
 
-        // Mostrar las recetas una vez que estén cargadas
-        if (_recetasCargadas && widget.recetasViewModel != null)
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: widget.recetasViewModel!.getRecetasDisponibles(widget.ingredientesDisponibles ?? []),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                if (snapshot.hasData && snapshot.data != null) {
-                  final List<Map<String, dynamic>> recetasDisponibles = snapshot.data!;
+              // Mostrar las recetas una vez que estén cargadas
+              if (_recetasCargadas && widget.recetasViewModel != null)
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future: widget.recetasViewModel!
+                      .getRecetasDisponibles(widget.ingredientesDisponibles ?? []),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        final List<Map<String, dynamic>> recetasDisponibles = snapshot.data!;
 
-                  if (recetasDisponibles.isEmpty) {
-                    return Text(
-                      'No se encontraron recetas disponibles.',
-                      style: TextStyle(fontSize: 16),
-                    );
-                  }
+                        if (recetasDisponibles.isEmpty) {
+                          return Text(
+                            'No se encontraron recetas disponibles.',
+                            style: TextStyle(fontSize: 16),
+                          );
+                        }
 
-                  return Column(
-                    children: recetasDisponibles.map((recetaInfo) {
-                      final String nombreReceta = recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
-                      final String imagenRecetaPath = recetaInfo['imagen_receta'] ?? '';
+                        return Column(
+                          children: recetasDisponibles.map((recetaInfo) {
+                            final String nombreReceta = recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
+                            final String imagenRecetaPath = recetaInfo['imagen_receta'] ?? '';
+                            final int recipeIndex = recetaInfo['index'] ?? 0;
 
-                      return Container(
-                        width: 300, // Ancho deseado para la tarjeta
-                        margin: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center, // Centra contenido verticalmente
-                              children: [
-                                if (imagenRecetaPath.isNotEmpty)
-                                  Image.asset(
-                                    imagenRecetaPath,
-                                    width: 200, // Ancho de la imagen
-                                    height: 100, // Alto de la imagen
-                                    fit: BoxFit.cover,
+                            return GestureDetector(
+                              onTap: () {
+                                // Navegar a la pantalla de detalles de la receta
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RecetaDetalladaView(
+                                      recetasViewModel: widget.recetasViewModel!,
+                                      recipeIndex: recipeIndex,
+                                    ),
                                   ),
-                                SizedBox(height: 8), // Espaciado entre la imagen y el texto
-                                Text(
-                                  nombreReceta,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                );
+                              },
+                              child: Container(
+                                width: 300, // Ancho deseado para la tarjeta
+                                margin: EdgeInsets.symmetric(vertical: 10.0),
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        if (imagenRecetaPath.isNotEmpty)
+                                          Image.asset(
+                                            '$imagenRecetaPath',
+                                            width: 200,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          nombreReceta,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                } else {
-                  return Text(
-                    'No se encontraron recetas disponibles.',
-                    style: TextStyle(fontSize: 16),
-                  );
-                }
-              }
-            },
-          ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      } else {
+                        return Text(
+                          'No se encontraron recetas disponibles.',
+                          style: TextStyle(fontSize: 16),
+                        );
+                      }
+                    }
+                  },
+                ),
 
-        // Mostrar un mensaje si no se proporcionó un RecetasViewModel
-        if (_recetasCargadas && widget.recetasViewModel == null)
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'No se ha proporcionado un ViewModel de recetas.',
-              style: TextStyle(fontSize: 18.0),
-            ),
+              // Mostrar un mensaje si no se proporcionó un RecetasViewModel
+              if (_recetasCargadas && widget.recetasViewModel == null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'No se ha proporcionado un ViewModel de recetas.',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                ),
+            ],
           ),
-      ],
-    ),
-  ),
-),
-
+        ),
+      ),
       bottomNavigationBar: Container(
         color: Color(0xFF9EE060),
         child: Row(
@@ -184,8 +200,7 @@ class _RecetasViewState extends State<RecetasView> {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(
-                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
                 ),
               ),
             ),
@@ -204,8 +219,7 @@ class _RecetasViewState extends State<RecetasView> {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(
-                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
                 ),
               ),
             ),

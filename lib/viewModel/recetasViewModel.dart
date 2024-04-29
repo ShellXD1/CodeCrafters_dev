@@ -51,16 +51,20 @@ class RecetasViewModel extends ChangeNotifier {
     if (recipeIndex < 0 || recipeIndex >= recetas.length) {
       return null;
     }
+
     // Obtener la receta correspondiente al índice
     Receta receta = recetas[recipeIndex];
+
     // Construir un mapa con los detalles de la receta
     Map<String, dynamic> recipeDetails = {
-      'imagen': receta.imagen,
+      'imagen': receta.imagen, // URL de la imagen de la receta
       'ingredientes': receta.ingredientes,
       'preparacion': receta.preparacion,
     };
+
     // Simular un retraso de 1 segundo para imitar una llamada asíncrona a una API o base de datos
     await Future.delayed(Duration(seconds: 1));
+
     // Devolver los detalles de la receta
     return recipeDetails;
   }

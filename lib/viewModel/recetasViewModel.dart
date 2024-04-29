@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/Model/M_Receta.dart';
+import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/Model/recetadb.dart';
 
 class RecetasViewModel extends ChangeNotifier {
@@ -67,5 +68,13 @@ class RecetasViewModel extends ChangeNotifier {
 
     // Devolver los detalles de la receta
     return recipeDetails;
+  }
+
+   // Método para obtener los ingredientes por preparación
+  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(int idPreparacion) async {
+    // Aquí deberías realizar la consulta a la base de datos o a tu modelo para obtener los ingredientes por la preparación con el id proporcionado
+    // Supongamos que la consulta devuelve una lista de ingredientes como List<String>
+    List<Ingrediente> ingredientes = await _mRecetas.obtenerIngredientesPorPreparacion(idPreparacion);
+    return ingredientes;
   }
 }

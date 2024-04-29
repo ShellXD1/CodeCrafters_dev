@@ -71,7 +71,7 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
       int idPreparacion) async {
     final List<Map<String, dynamic>> ingredientesPorPreparacion =
         await _database.rawQuery('''
-      SELECT Ingredientes.id_ing, Ingredientes.nombre_ing, Ingredientes.cantidad
+      SELECT Ingredientes.id_ingrediente, Ingredientes.nombre_ing, Ingredientes.cantidad
       FROM Ingredientes
       INNER JOIN Lista_ingredientes ON Ingredientes.id_ing = Lista_ingredientes.id_ing
       WHERE Lista_ingredientes.id_pre = ?

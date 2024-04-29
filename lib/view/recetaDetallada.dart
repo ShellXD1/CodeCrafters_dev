@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/View/recetaDetallada.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
@@ -32,7 +33,7 @@ class RecetaDetalladaView extends StatelessWidget {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return Cuerpo(recipeDetails: snapshot.data);
+            return Cuerpo(recipeDetails: snapshot.data, recipeIndex: recipeIndex, recetasViewModel: recetasViewModel,);
           }
         },
       ),
@@ -42,8 +43,10 @@ class RecetaDetalladaView extends StatelessWidget {
 
 class Cuerpo extends StatelessWidget {
   final Map<String, dynamic>? recipeDetails;
+  final RecetasViewModel recetasViewModel;
+  final int recipeIndex;
 
-  const Cuerpo({Key? key, this.recipeDetails}) : super(key: key);
+  const Cuerpo({Key? key, this.recipeDetails, required this.recetasViewModel, required this.recipeIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,7 @@ class Cuerpo extends StatelessWidget {
     }
 
     final dynamic ingredientesData = recipeDetails!['ingredientes'];
-    final List<String> ingredientes = (ingredientesData != null && ingredientesData is List<String>) ? ingredientesData : [];
+    final List<Ingrediente> ingredientes = (ingredientesData != null && ingredientesData is List<Ingrediente>) ? ingredientesData : [];
 
     final String preparacion = recipeDetails!['preparacion'];
 
@@ -104,6 +107,7 @@ class PreparacionWidget extends StatelessWidget {
 
   const PreparacionWidget({Key? key, required this.preparacion})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -113,31 +117,33 @@ class PreparacionWidget extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               backgroundColor: Color.fromARGB(255, 158, 224, 96),
-              content: Stack(
-                alignment: AlignmentDirectional.topEnd,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("Preparación",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Chivo')),
-                      SizedBox(height: 16),
-                      Text(preparacion),
-                    ],
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Preparación",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontFamily: 'Chivo'),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 16),
+                    // Texto de la preparación
+                    Text(
+                      preparacion,
+                      textAlign: TextAlign.justify, // Alinea el texto justificado
+                    ),
+                  ],
+                ),
               ),
+              actions: <Widget>[
+                // Botón para cerrar el diálogo
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cerrar'),
+                ),
+              ],
             );
           },
         );
@@ -154,6 +160,7 @@ class PreparacionWidget extends StatelessWidget {
   }
 }
 
+
 Widget RecetaDes(String imagen) {
   return Container(
     height: 200,
@@ -167,7 +174,7 @@ Widget RecetaDes(String imagen) {
 }
 
 class IngredientesWidget extends StatelessWidget {
-  final List<String> ingredientes;
+  final List<Ingrediente> ingredientes;
 
   const IngredientesWidget({Key? key, required this.ingredientes})
       : super(key: key);
@@ -176,7 +183,35 @@ class IngredientesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        // Implement your dialog here
+        // Mostrar un diálogo con la lista de ingredientes
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Ingredientes"),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // Mostrar cada ingrediente en un ListTile
+                    for (Ingrediente ingrediente in ingredientes)
+                      ListTile(
+                        title: Text(ingrediente.nombre),
+                      ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                // Botón para cerrar el diálogo
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cerrar'),
+                ),
+              ],
+            );
+          },
+        );
       },
       child: Container(
         padding: EdgeInsets.all(12),

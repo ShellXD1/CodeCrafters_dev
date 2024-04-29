@@ -1,4 +1,5 @@
 import 'package:proyecto_tsp_dev/Model/DR_Receta.dart';
+import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/Model/recetadb.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite;
 import 'package:sqflite_common/sqlite_api.dart';
@@ -32,5 +33,11 @@ class MReceta {
   Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
     // Llama al método correspondiente en el repositorio
     return await _repository.getRecetasDisponibles(ingredientesDisponibles);
+  }
+
+   // Método para obtener la lista de ingredientes por preparación
+  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
+      int idPreparacion) async {
+    return await _repository.obtenerIngredientesPorPreparacion(idPreparacion);
   }
 }

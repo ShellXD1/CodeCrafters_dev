@@ -1,3 +1,4 @@
+import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:proyecto_tsp_dev/Model/recetadb.dart';
@@ -63,7 +64,7 @@ class DRReceta {
     List<String> ingredientesDisponibles,
   ) async {
     final List<Map<String, dynamic>> recetasDisponibles = await _database.rawQuery('''
-    SELECT r.nombre_receta, r.imagen_receta
+    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
     FROM Recetas r
     WHERE NOT EXISTS (
         SELECT *
@@ -72,7 +73,30 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Recetas disponibles: $recetasDisponibles');
+    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
+
+
+  // Método para obtener la lista de ingredientes por preparación
+  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
+      int idPreparacion) async {
+    final List<Map<String, dynamic>> ingredientesPorPreparacion =
+        await _database.rawQuery('''
+      SELECT Ingredientes.id_ingrediente, Ingredientes.nombre_ing, Ingredientes.Cantidad
+      FROM Ingredientes
+      INNER JOIN Lista_ingredientes ON Ingredientes.id_ingrediente = Lista_ingredientes.id_ingrediente
+      WHERE Lista_ingredientes.id_receta = ?
+    ''', [idPreparacion]);
+
+    return ingredientesPorPreparacion
+        .map((ingrediente) => Ingrediente(
+            id: ingrediente['id_ing'],
+            nombre: ingrediente['nombre_ing'],
+            imagen: ingrediente['imagen_ing'],
+            cantidad: ingrediente['cantidad'],
+            medida: ingrediente['medida']))
+        .toList();
+  }
+
 }

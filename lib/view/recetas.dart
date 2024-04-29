@@ -112,8 +112,7 @@ class _RecetasViewState extends State<RecetasView> {
                           children: recetasDisponibles.map((recetaInfo) {
                             final String nombreReceta = recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
                             final String imagenRecetaPath = recetaInfo['imagen_receta'] ?? '';
-                            final int recipeIndex = recetaInfo['index'] ?? 0;
-
+                            final int recipeIndex = (recetaInfo['id_receta'])-1 ?? 0;
                             return GestureDetector(
                               onTap: () {
                                 // Navegar a la pantalla de detalles de la receta

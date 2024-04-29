@@ -30,6 +30,7 @@ class MReceta {
   
   // Método para obtener las recetas disponibles a partir de los ingredientes disponibles
   Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+    // Llama al método correspondiente en el repositorio
     return await _repository.getRecetasDisponibles(ingredientesDisponibles);
   }
 }

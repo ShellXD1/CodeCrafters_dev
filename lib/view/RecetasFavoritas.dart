@@ -45,7 +45,7 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
           icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
             print("Botón de la casita presionado (regresar a la pantalla de inicio)");
-            Navigator.pop(context); // Regresar a la pantalla de inicio
+            Navigator.pushReplacementNamed(context, '/'); // Navegar directamente a la pantalla de inicio y reemplazar la ruta actual
           },
         ),
         actions: [

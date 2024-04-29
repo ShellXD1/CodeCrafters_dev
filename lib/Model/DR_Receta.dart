@@ -7,10 +7,10 @@ class DRReceta {
 
   DRReceta(this._database);
 
-
   // Obtener la lista de recetas
   Future<List<Receta>> getRecetas() async {
-    List<Map<String, dynamic>> tables = await _database.rawQuery("SELECT name FROM sqlite_master WHERE type='table';");
+    List<Map<String, dynamic>> tables = await _database
+        .rawQuery("SELECT name FROM sqlite_master WHERE type='table';");
     print("Tablas en la base de datos: $tables");
     List<Map<String, dynamic>> recetasMap = await _database.query('Recetas');
     return recetasMap
@@ -30,7 +30,8 @@ class DRReceta {
 
   // Obtener nombre de una receta por su ID
   Future<String?> obtenerNombreReceta(int idReceta) async {
-    final result = await _database.query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['nombre_receta'] as String?;
     }
@@ -39,7 +40,8 @@ class DRReceta {
 
   // Obtener imagen de una receta por su ID
   Future<String?> obtenerImagenReceta(int idReceta) async {
-    final result = await _database.query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['imagen_receta'] as String?;
     }
@@ -48,7 +50,8 @@ class DRReceta {
 
   // Obtener preparación de la receta por su ID
   Future<String?> obtenerPreparacionReceta(int idReceta) async {
-    final result = await _database.query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
     if (result.isNotEmpty) {
       return result.first['Preparacion_receta'] as String?;
     }
@@ -56,14 +59,23 @@ class DRReceta {
   }
 
   // Obtener recetas disponibles a partir de los ingredientes disponibles
-  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(
+    List<String> ingredientesDisponibles,
+  ) async {
     final List<Map<String, dynamic>> recetasDisponibles = await _database.rawQuery('''
-      SELECT r.* FROM Recetas r
-      INNER JOIN Receta_Ingrediente ri ON r.id_receta = ri.id_receta
-      WHERE ri.nombre_ingrediente IN (${ingredientesDisponibles.map((e) => "'$e'").join(',')})
-      GROUP BY r.id_receta
-      HAVING COUNT(DISTINCT ri.nombre_ingrediente) = ${ingredientesDisponibles.length}
+      SELECT DISTINCT r.nombre_receta, r.imagen_receta
+      FROM Recetas r
+      WHERE r.id_receta IN (
+          SELECT li.id_receta
+          FROM Lista_Ingredientes li
+          WHERE li.id_ingrediente IN (
+              SELECT i.id_ingrediente
+              FROM Ingredientes i
+              WHERE li.cantidad_ingrediente >= i.Cantidad
+          )
+      );
     ''');
+    print('Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 }

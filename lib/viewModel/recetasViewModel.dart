@@ -10,10 +10,15 @@ class RecetasViewModel extends ChangeNotifier {
   List<Receta> _recetas = [];
   List<Receta> get recetas => _recetas;
 
+  bool _recetasCargadas =
+      false; // Variable para rastrear si las recetas se han cargado
+  bool get recetasCargadas => _recetasCargadas;
+
   // Método para obtener las recetas
   Future<void> obtenerRecetas() async {
     _recetas = await _mRecetas.obtenerRecetas();
-    notifyListeners();
+    _recetasCargadas = true; // Marcar las recetas como cargadas
+    notifyListeners(); // Notificar a los oyentes del cambio en el estado
   }
 
   // Método para obtener el nombre y la imagen de una receta por su ID
@@ -36,7 +41,9 @@ class RecetasViewModel extends ChangeNotifier {
   }
 
   // Función para obtener las recetas disponibles a partir de los ingredientes disponibles
-  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(
+      List<String> ingredientesDisponibles) async {
     return await _mRecetas.getRecetasDisponibles(ingredientesDisponibles);
   }
 }
+

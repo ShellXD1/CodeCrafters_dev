@@ -37,12 +37,6 @@ void main() async {
     prefs.setBool('validation', true);
   }
 
-
-  // Copia el archivo desde los recursos a la ubicación local
-  ByteData data = await rootBundle.load('assets/Recetario.sqlite3');
-  List<int> bytes = data.buffer.asUint8List();
-  await File(databasePath).writeAsBytes(bytes);
-
   // Abrir la base de datos
   final database = await sqflite.openDatabase(
     databasePath,

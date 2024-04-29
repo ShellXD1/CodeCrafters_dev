@@ -63,17 +63,14 @@ class DRReceta {
     List<String> ingredientesDisponibles,
   ) async {
     final List<Map<String, dynamic>> recetasDisponibles = await _database.rawQuery('''
-      SELECT DISTINCT r.nombre_receta, r.imagen_receta
-      FROM Recetas r
-      WHERE r.id_receta IN (
-          SELECT li.id_receta
-          FROM Lista_Ingredientes li
-          WHERE li.id_ingrediente IN (
-              SELECT i.id_ingrediente
-              FROM Ingredientes i
-              WHERE li.cantidad_ingrediente >= i.Cantidad
-          )
-      );
+    SELECT r.nombre_receta, r.imagen_receta
+    FROM Recetas r
+    WHERE NOT EXISTS (
+        SELECT *
+        FROM Lista_Ingredientes li
+        LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
+        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        );
     ''');
     print('Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;

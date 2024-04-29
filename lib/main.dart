@@ -61,7 +61,7 @@ void main() async {
       database: database,
       recetasViewModel: recetasViewModel,
       ingredientViewModel: ingredienteViewModel));
-} // El Shell se la come entera
+} 
 
 class MyApp extends StatelessWidget {
   final Database database;

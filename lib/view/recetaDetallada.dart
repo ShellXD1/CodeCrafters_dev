@@ -57,7 +57,7 @@ class Cuerpo extends StatelessWidget {
     }
 
     final dynamic ingredientesData = recipeDetails!['ingredientes'];
-    final List<Ingrediente> ingredientes = (ingredientesData != null && ingredientesData is List<Ingrediente>) ? ingredientesData : [];
+    final List<Ingrediente> ingredientes = (ingredientesData != null && ingredientesData is List<Ingrediente>) ? List<Ingrediente>.from(ingredientesData) : [];
 
     final String preparacion = recipeDetails!['preparacion'];
 
@@ -183,34 +183,38 @@ class IngredientesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
+        print(ingredientes);
         // Mostrar un diálogo con la lista de ingredientes
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Ingredientes"),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Mostrar cada ingrediente en un ListTile
-                    for (Ingrediente ingrediente in ingredientes)
-                      ListTile(
-                        title: Text(ingrediente.nombre),
-                      ),
-                  ],
+  return AlertDialog(
+    backgroundColor: Color.fromARGB(255, 158, 224, 96),
+    title: Text("Ingredientes"),
+    content: SingleChildScrollView(
+      child: ingredientes.isNotEmpty
+        ? Column(
+            children: [
+              // Mostrar cada ingrediente en un ListTile
+              for (Ingrediente ingrediente in ingredientes)
+                ListTile(
+                  title: Text(ingrediente.nombre),
                 ),
-              ),
-              actions: <Widget>[
-                // Botón para cerrar el diálogo
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cerrar'),
-                ),
-              ],
-            );
-          },
+            ],
+          )
+        : Text("No hay ingredientes disponibles"),
+    ),
+    actions: <Widget>[
+      // Botón para cerrar el diálogo
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text('Cerrar'),
+      ),
+    ],
+  );
+},
         );
       },
       child: Container(

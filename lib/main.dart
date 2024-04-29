@@ -28,7 +28,7 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   bool isValidated = prefs.getBool('validation') ?? false;
-
+  
   if (isValidated == false){
     // Copia el archivo desde los recursos a la ubicación local
     ByteData data = await rootBundle.load('assets/Recetario.sqlite3');
@@ -36,6 +36,7 @@ void main() async {
     await File(databasePath).writeAsBytes(bytes);
     prefs.setBool('validation', true);
   }
+
 
   // Abrir la base de datos
   final database = await sqflite.openDatabase(

@@ -14,15 +14,21 @@ class IngredientesView extends StatefulWidget {
 }
 
 class _IngredientesViewState extends State<IngredientesView> {
+  bool _ingredientesCargados = false;
+
   @override
   void initState() {
     super.initState();
     if (widget.ingredientViewModel != null) {
-      widget.ingredientViewModel!.obtenerIngredientesNoVacios();
+      widget.ingredientViewModel!.obtenerIngredientesNoVacios().then((_) {
+        setState(() {
+          _ingredientesCargados = true;
+        });
+      });
     }
   }
 
-  void _showIngredientDetailDialog(Ingrediente ingrediente) {
+   void _showIngredientDetailDialog(Ingrediente ingrediente) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -112,20 +118,9 @@ class _IngredientesViewState extends State<IngredientesView> {
     );
   }
 
-  bool _ingredientesCargados = false;
 
   @override
   Widget build(BuildContext context) {
-    if (!_ingredientesCargados) {
-      if (widget.ingredientViewModel != null) {
-        widget.ingredientViewModel!.obtenerIngredientesNoVacios().then((_) {
-          setState(() {
-            _ingredientesCargados = true;
-          });
-        });
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -141,61 +136,59 @@ class _IngredientesViewState extends State<IngredientesView> {
         ),
       ),
       body: _ingredientesCargados
-          ? Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Mis Ingredientes',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Mis Ingredientes',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Expanded(
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 1.0,
-                      mainAxisSpacing: 1.0,
-                      children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
-                        return GestureDetector(
-                          onTap: () {
-                            _showIngredientDetailDialog(ingrediente);
-                          },
-                          child: Center(
-                            child: Container(
-                              width: 150,
-                              height: 150,
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        ingrediente.nombre,
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Cantidad: ${ingrediente.cantidad}',
-                                        style: TextStyle(fontSize: 16),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
+                ),
+                Expanded(
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 1.0,
+                    mainAxisSpacing: 1.0,
+                    children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
+                      return GestureDetector(
+                        onTap: () {
+                          _showIngredientDetailDialog(ingrediente);
+                        },
+                        child: Center(
+                          child: Container(
+                            width: 150,
+                            height: 150,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      ingrediente.nombre,
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'Cantidad: ${ingrediente.cantidad}',
+                                      style: TextStyle(fontSize: 16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        );
-                      }).toList(),
-                    ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                ],
-              ),
+                ),
+              ],
             )
           : Center(child: CircularProgressIndicator()),
       bottomNavigationBar: Container(

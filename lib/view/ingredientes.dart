@@ -23,6 +23,95 @@ class _IngredientesViewState extends State<IngredientesView> {
     }
   }
 
+  void _showIngredientDetailDialog(Ingrediente ingrediente) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      final _cantidadController = TextEditingController(text: ingrediente.cantidad.toString());
+
+      return AlertDialog(
+        title: Text('Detalles del Ingrediente'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nombre: ${ingrediente.nombre}'),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _cantidadController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Cantidad',
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        int currentCantidad = int.parse(_cantidadController.text);
+                        if (currentCantidad > 0) {
+                          _cantidadController.text = (currentCantidad - 1).toString();
+                        }
+                      },
+                      icon: Icon(Icons.remove),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        int currentCantidad = int.parse(_cantidadController.text);
+                        _cantidadController.text = (currentCantidad + 1).toString();
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancelar'),
+          ),
+
+          TextButton(
+            onPressed: () {
+              widget.ingredientViewModel?.quitarCantidadIngrediente(ingrediente, 0);
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database)),
+              );
+            },
+            child: Text('Eliminar'),
+          ),
+
+          TextButton(
+            onPressed: () {
+              int newCantidad = int.parse(_cantidadController.text);
+              widget.ingredientViewModel?.agregarCantidadIngrediente(ingrediente, newCantidad);
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database)),
+              );
+            },
+            child: Text('Aceptar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
   bool _ingredientesCargados = false;
 
   @override
@@ -77,28 +166,34 @@ class _IngredientesViewState extends State<IngredientesView> {
               crossAxisSpacing: 1.0, // Espaciado entre columnas
               mainAxisSpacing: 1.0, // Espaciado entre filas
               children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
-                return Center(
-                  child: Container(
-                    width: 150, // Ancho deseado para la tarjeta de ingrediente
-                    height: 150, // Alto deseado para la tarjeta de ingrediente
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              ingrediente.nombre,
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Cantidad: ${ingrediente.cantidad}',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                return GestureDetector(
+                  onTap: () {
+                    // Mostrar el diálogo de detalles del ingrediente cuando se selecciona
+                    _showIngredientDetailDialog(ingrediente);
+                  },
+                  child: Center(
+                    child: Container(
+                      width: 150, // Ancho deseado para la tarjeta de ingrediente
+                      height: 150, // Alto deseado para la tarjeta de ingrediente
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                ingrediente.nombre,
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Cantidad: ${ingrediente.cantidad}',
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -136,7 +231,6 @@ class _IngredientesViewState extends State<IngredientesView> {
                         'Nombre del ingrediente: $name, Cantidad: $quantity');
                     // Puedes actualizar el estado de la lista de ingredientes aquí
                       setState(() {
-                        
                       });
                   }, ingredientViewModel: widget.ingredientViewModel, database: widget.database,
                 );

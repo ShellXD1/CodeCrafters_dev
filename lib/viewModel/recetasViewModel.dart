@@ -70,11 +70,52 @@ class RecetasViewModel extends ChangeNotifier {
     return recipeDetails;
   }
 
-   // Método para obtener los ingredientes por preparación
-  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(int idPreparacion) async {
+  // Método para obtener los ingredientes por preparación
+  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
+      int idPreparacion) async {
     // Aquí deberías realizar la consulta a la base de datos o a tu modelo para obtener los ingredientes por la preparación con el id proporcionado
     // Supongamos que la consulta devuelve una lista de ingredientes como List<String>
-    List<Ingrediente> ingredientes = await _mRecetas.obtenerIngredientesPorPreparacion(idPreparacion);
+    List<Ingrediente> ingredientes =
+        await _mRecetas.obtenerIngredientesPorPreparacion(idPreparacion);
     return ingredientes;
+  }
+
+  // Métodos para marcar una receta como favorita
+  Future<void> marcarRecetaComoFavorita(int idReceta) async {
+    await _mRecetas.marcarRecetaComoFavorita(idReceta);
+    notifyListeners();
+  }
+
+  // Método para eliminar una receta de favoritos
+  Future<void> eliminarRecetaDeFavoritos(int idReceta) async {
+    await _mRecetas.eliminarRecetaDeFavoritos(idReceta);
+    notifyListeners();
+  }
+
+  // Método para verificar si una receta es favorita
+  Future<bool> esRecetaFavorita(int idReceta) async {
+    return await _mRecetas.esRecetaFavorita(idReceta);
+  }
+
+  // Método para obtener las recetas favoritas
+  Future<void> obtenerRecetasFavoritas() async {
+    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritas();
+    // Actualizar la lista de recetas favoritas en el ViewModel
+    _recetas = recetasFavoritas;
+    notifyListeners(); // Notificar a los oyentes del cambio en el estado
+  }
+
+  // Método para alternar el estado de favorito de una receta
+  Future<void> toggleFavorita(int recetaId) async {
+    // Verificar si la receta ya es favorita
+    final bool esFavorita = await esRecetaFavorita(recetaId);
+
+    // Si es favorita, eliminarla de favoritos; de lo contrario, marcarla como favorita
+    if (esFavorita) {
+      await eliminarRecetaDeFavoritos(recetaId);
+    } else {
+      await marcarRecetaComoFavorita(recetaId);
+    }
+    notifyListeners(); // Notificar a los oyentes del cambio en el estado
   }
 }

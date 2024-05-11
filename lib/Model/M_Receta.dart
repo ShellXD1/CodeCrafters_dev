@@ -28,16 +28,37 @@ class MReceta {
   Future<String?> obtenerImagenRecetaPorId(int idReceta) async {
     return await _repository.obtenerImagenReceta(idReceta);
   }
-  
+
   // Método para obtener las recetas disponibles a partir de los ingredientes disponibles
-  Future<List<Map<String, dynamic>>> getRecetasDisponibles(List<String> ingredientesDisponibles) async {
+  Future<List<Map<String, dynamic>>> getRecetasDisponibles(
+      List<String> ingredientesDisponibles) async {
     // Llama al método correspondiente en el repositorio
     return await _repository.getRecetasDisponibles(ingredientesDisponibles);
   }
 
-   // Método para obtener la lista de ingredientes por preparación
+  // Método para obtener la lista de ingredientes por preparación
   Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
       int idPreparacion) async {
     return await _repository.obtenerIngredientesPorPreparacion(idPreparacion);
+  }
+
+  // Método para marcar una receta como favorita
+  Future<void> marcarRecetaComoFavorita(int idReceta) async {
+    await _repository.marcarRecetaComoFavorita(idReceta);
+  }
+
+  // Método para eliminar una receta de favoritos
+  Future<void> eliminarRecetaDeFavoritos(int idReceta) async {
+    await _repository.eliminarRecetaDeFavoritos(idReceta);
+  }
+
+  // Método para verificar si una receta es favorita
+  Future<bool> esRecetaFavorita(int idReceta) async {
+    return await _repository.esRecetaFavorita(idReceta);
+  }
+
+  // Método para obtener las recetas favoritas
+  Future<List<Receta>> obtenerRecetaFavoritas() async {
+    return await _repository.getRecetaFavoritas();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
-import 'package:proyecto_tsp_dev/View/recetaDetallada.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
 class RecetaDetalladaView extends StatelessWidget {

@@ -46,12 +46,9 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   // Crear una instancia de MReceta con la base de datos
-  print("Entre aqui we" + databasePath);
   final mReceta = MReceta(database);
-  print("Entre aqui we, en receta");
   // Crear una instancia de MReceta con la base de datos
   final mIngrediente = MIngrediente(database);
-  print("Entre aqui we, en ingrediente");
   // Crear una instancia de RecetasViewModel con MReceta
   final recetasViewModel = RecetasViewModel(mReceta);
   // Crear una instancia de IngredientViewModel con MReceta
@@ -89,10 +86,10 @@ class MyApp extends StatelessWidget {
       //RecetasView(database: database, recetasViewModel: recetasViewModel),
       routes: {
         '/ingredientes': (context) =>
-            IngredientesView(ingredientViewModel: ingredientViewModel, database:database),
+            IngredientesView(ingredientViewModel: ingredientViewModel, database:database, recetasViewModel: recetasViewModel,),
         '/recetas': (context) =>
-            RecetasView(recetasViewModel: recetasViewModel, database: database,),
-        '/allRecetas': (context) => AllRecetasView(recetasViewModel: recetasViewModel, database: database,),
+            RecetasView(recetasViewModel: recetasViewModel, database: database, ingredientesViewModel: ingredientViewModel,),
+        '/allRecetas': (context) => AllRecetasView(recetasViewModel: recetasViewModel, database: database, ingredienteViewModel: ingredientViewModel,),
         '/RecetasFavoritas': (context) => RecetasFavoritasView(recetasViewModel: recetasViewModel, database: database,),
       },
     );

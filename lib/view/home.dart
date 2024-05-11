@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int? _selectedIndex = null;
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio',
@@ -64,73 +65,48 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RecetasView(
-                              recetasViewModel: recetasViewModel,
-                              database: null,
-                            )),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Recetas',
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontFamily: 'Chivo',
-                    color: Colors.black,
+      //Desde este punto esta el navigationBar, no se logro implementar cierta persistencia, por lo cual es importante copiar este y pegarlo
+      //en las vistas que se creen
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Recetas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Ingredientes',
+          ),
+        ],
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecetasView(
+                    recetasViewModel: recetasViewModel,
+                    database: null, ingredientesViewModel: ingredientViewModel, // Assuming you don't need database here
                   ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Ingredientes"
-                  print("Botón 'Ingredientes' presionado");
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => IngredientesView(
-                            ingredientViewModel: ingredientViewModel, database: database,)),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                ),
-                child: Text(
-                  'Ingredientes',
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontFamily: 'Chivo',
-                    color: Colors.black,
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IngredientesView(
+                    ingredientViewModel: ingredientViewModel,
+                    database: database, recetasViewModel: recetasViewModel,
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
+              );
+              break;
+          }
+        },
       ),
+      
     );
   }
 }

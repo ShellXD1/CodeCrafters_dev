@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
+import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
 class IngredientesView extends StatefulWidget {
-  final IngredienteViewModel? ingredientViewModel;
+  final IngredienteViewModel ingredientViewModel;
+  final RecetasViewModel recetasViewModel;
   final dynamic database;
 
-  const IngredientesView({Key? key, required this.ingredientViewModel, required this.database})
+  const IngredientesView({Key? key, required this.ingredientViewModel, required this.database, required this.recetasViewModel})
       : super(key: key);
 
   @override
@@ -95,7 +98,7 @@ class _IngredientesViewState extends State<IngredientesView> {
                 Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database)),
+                  MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database, recetasViewModel: widget.recetasViewModel,)),
                 );
               },
               child: Text('Eliminar'),
@@ -107,7 +110,7 @@ class _IngredientesViewState extends State<IngredientesView> {
                 Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database)),
+                  MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database, recetasViewModel: widget.recetasViewModel,)),
                 );
               },
               child: Text('Aceptar'),
@@ -121,6 +124,7 @@ class _IngredientesViewState extends State<IngredientesView> {
 
   @override
   Widget build(BuildContext context) {
+    int _selectedIndex = 1; // Este indice permite que el bottomNavigationBar distinga en que lugar esta
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -191,7 +195,73 @@ class _IngredientesViewState extends State<IngredientesView> {
               ],
             )
           : Center(child: CircularProgressIndicator()),
-      bottomNavigationBar: Container(
+        
+        //Aqui deberia ir el
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                // Al presionar el botón, se muestra el widget para agregar un ingrediente
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => AgregarIngredienteWidget(
+                    onIngredientAdded: (String name, int quantity) {  }, 
+                    ingredientViewModel: widget.ingredientViewModel, 
+                    recetasViewModel: widget.recetasViewModel,), // Aquí invocamos el widget para agregar un ingrediente
+                );
+              },
+              icon: Icon(Icons.add), // Ícono del botón
+              label: Text('Agregar ingrediente'), // Texto del botón
+              backgroundColor: Color.fromARGB(255, 224, 200, 110), // Cambia el color del botón a azul
+        ),
+
+      //Desde este punto esta el navigationBar, no se logro implementar cierta persistencia, por lo cual es importante copiar este y pegarlo
+      //en las vistas que se creen
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Recetas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Ingredientes',
+          ),
+        ],
+        onTap: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecetasView(
+                    recetasViewModel: widget.recetasViewModel,
+                    database: null, ingredientesViewModel: widget.ingredientViewModel, // Assuming you don't need database here
+                  ),
+                ),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IngredientesView(
+                    ingredientViewModel: widget.ingredientViewModel,
+                    database: widget.database, recetasViewModel: widget.recetasViewModel,
+                  ),
+                ),
+              );
+              break;
+          }
+        },
+      ),
+
+
+
+      /*bottomNavigationBar: Container(
         color: Color(0xFF9EE060),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -280,21 +350,28 @@ class _IngredientesViewState extends State<IngredientesView> {
             ),
           ],
         ),
-      ),
+      ),*/
+
+
+
+
+
+
     );
   }
 }
 
 class AgregarIngredienteWidget extends StatefulWidget {
-  final IngredienteViewModel? ingredientViewModel;
+  final RecetasViewModel recetasViewModel;
+  final IngredienteViewModel ingredientViewModel;
   final Function(String name, int quantity) onIngredientAdded;
   final dynamic database;
 
   const AgregarIngredienteWidget({
     Key? key,
     required this.onIngredientAdded,
-    this.ingredientViewModel,
-    this.database,
+    required this.ingredientViewModel,
+    this.database, required this.recetasViewModel,
   }) : super(key: key);
 
   @override
@@ -373,7 +450,7 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
                           Navigator.pop(context);
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database)),
+                            MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database, recetasViewModel: widget.recetasViewModel,)),
                           );
                         } else {
                           // Handle error or empty selection

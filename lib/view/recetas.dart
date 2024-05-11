@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
-import 'recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
+import 'package:proyecto_tsp_dev/view/recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
 
+// Clase RecetasView
 class RecetasView extends StatefulWidget {
   final RecetasViewModel? recetasViewModel;
   final dynamic database;
 
   const RecetasView({Key? key, this.recetasViewModel, required this.database})
       : super(key: key);
-      
-        get ingredientesDisponibles => null;
+
+  get ingredientesDisponibles => null;
 
   @override
   _RecetasViewState createState() => _RecetasViewState();
 }
 
+// Logica para mostrar las recetas
 class _RecetasViewState extends State<RecetasView> {
   bool _recetasCargadas = false;
 
@@ -30,6 +32,7 @@ class _RecetasViewState extends State<RecetasView> {
     }
   }
 
+  // Carga las recetas
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,23 +86,25 @@ class _RecetasViewState extends State<RecetasView> {
                 'Mis Recetas',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 16), // Espaciado entre el texto y el indicador de carga
+              SizedBox(
+                  height:
+                      16), // Espaciado entre el texto y el indicador de carga
 
               // Mostrar un indicador de carga mientras se obtienen las recetas
-              if (!_recetasCargadas)
-                CircularProgressIndicator(),
+              if (!_recetasCargadas) CircularProgressIndicator(),
 
               // Mostrar las recetas una vez que estén cargadas
               if (_recetasCargadas && widget.recetasViewModel != null)
                 FutureBuilder<List<Map<String, dynamic>>>(
-                  future: widget.recetasViewModel!
-                      .getRecetasDisponibles(widget.ingredientesDisponibles ?? []),
+                  future: widget.recetasViewModel!.getRecetasDisponibles(
+                      widget.ingredientesDisponibles ?? []),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     } else {
                       if (snapshot.hasData && snapshot.data != null) {
-                        final List<Map<String, dynamic>> recetasDisponibles = snapshot.data!;
+                        final List<Map<String, dynamic>> recetasDisponibles =
+                            snapshot.data!;
 
                         if (recetasDisponibles.isEmpty) {
                           return Text(
@@ -110,51 +115,23 @@ class _RecetasViewState extends State<RecetasView> {
 
                         return Column(
                           children: recetasDisponibles.map((recetaInfo) {
-                            final String nombreReceta = recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
-                            final String imagenRecetaPath = recetaInfo['imagen_receta'] ?? '';
-                            final int recipeIndex = (recetaInfo['id_receta'])-1 ?? 0;
-                            return GestureDetector(
-                              onTap: () {
-                                // Navegar a la pantalla de detalles de la receta
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => RecetaDetalladaView(
-                                      recetasViewModel: widget.recetasViewModel!,
-                                      recipeIndex: recipeIndex,
-                                    ),
-                                  ),
-                                );
+                            final String nombreReceta =
+                                recetaInfo['nombre_receta'] ??
+                                    'Receta sin nombre';
+                            final String imagenRecetaPath =
+                                recetaInfo['imagen_receta'] ?? '';
+                            final int recipeIndex = recetaInfo['id_receta'] ??
+                                0; // Corregido el índice de la receta
+
+                            return RecetaItem(
+                              recetaInfo: recetaInfo,
+                              recetasViewModel: widget.recetasViewModel,
+                              onFavoritoPressed: () {
+                                setState(() {
+                                  // Actualizar la lista de recetas para que el cambio de favoritos se refleje
+                                  _actualizarRecetas();
+                                });
                               },
-                              child: Container(
-                                width: 300, // Ancho deseado para la tarjeta
-                                margin: EdgeInsets.symmetric(vertical: 10.0),
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        if (imagenRecetaPath.isNotEmpty)
-                                          Image.asset(
-                                            '$imagenRecetaPath',
-                                            width: 200,
-                                            height: 100,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          nombreReceta,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
                             );
                           }).toList(),
                         );
@@ -199,7 +176,8 @@ class _RecetasViewState extends State<RecetasView> {
                 ),
                 child: Text(
                   'Recetas',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
                 ),
               ),
             ),
@@ -218,13 +196,167 @@ class _RecetasViewState extends State<RecetasView> {
                 ),
                 child: Text(
                   'Ingredientes',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // Método para actualizar las recetas
+  void _actualizarRecetas() {
+    setState(() {
+      _recetasCargadas = false;
+    });
+    widget.recetasViewModel!.obtenerRecetas().then((_) {
+      setState(() {
+        _recetasCargadas = true;
+      });
+    });
+  }
+}
+
+// Clase para mostrar la tarjeta de una receta
+class RecetaItem extends StatefulWidget {
+  final Map<String, dynamic> recetaInfo;
+  final RecetasViewModel? recetasViewModel;
+  final VoidCallback? onFavoritoPressed;
+
+  const RecetaItem({
+    Key? key,
+    required this.recetaInfo,
+    this.recetasViewModel,
+    this.onFavoritoPressed,
+  }) : super(key: key);
+
+  @override
+  _RecetaItemState createState() => _RecetaItemState();
+}
+
+// Clase para manejar el estado de la tarjeta de una receta
+class _RecetaItemState extends State<RecetaItem> {
+  late Future<bool> _futureEsFavorita;
+
+  // Método para obtener el estado de favoritos
+  @override
+  void initState() {
+    super.initState();
+    // Obtener el estado de favoritos una vez inicializado el widget
+    _futureEsFavorita = _obtenerEsFavorita();
+  }
+
+  // Método para obtener el estado de favoritos
+  Future<bool> _obtenerEsFavorita() async {
+    // Obtener el índice de la receta
+    int recipeIndex = widget.recetaInfo['id_receta'] ?? 0;
+    // Obtener el estado de favoritos desde el ViewModel
+    return widget.recetasViewModel!.esRecetaFavorita(recipeIndex);
+  }
+
+  // Método para mostrar la tarjeta de una receta
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _futureEsFavorita,
+      builder: (context, snapshot) {
+        bool recetaEsFavorita = snapshot.data ?? false;
+        final String nombreReceta =
+            widget.recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
+        final String imagenRecetaPath =
+            widget.recetaInfo['imagen_receta'] ?? '';
+        final int recipeIndex = (widget.recetaInfo['id_receta']) - 1 ?? 0;
+        // Mostrar la tarjeta de una receta
+        return GestureDetector(
+          onTap: () {
+            // Navegar a la pantalla de detalles de la receta
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RecetaDetalladaView(
+                  recetasViewModel: widget.recetasViewModel!,
+                  recipeIndex: recipeIndex,
+                ),
+              ),
+            );
+          },
+          child: Container(
+            width: 300,
+            margin: EdgeInsets.symmetric(vertical: 10.0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (imagenRecetaPath.isNotEmpty)
+                      Image.asset(
+                        '$imagenRecetaPath',
+                        width: 200,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          nombreReceta,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        BotonFavoritos(
+                          esFavorita: recetaEsFavorita,
+                          onPressed: () async {
+                            // Cambiar el estado de favoritos cuando se presiona el botón
+                            int recipeIndex =
+                                widget.recetaInfo['id_receta'] ?? 0;
+                            await widget.recetasViewModel!
+                                .toggleFavorita(recipeIndex);
+                            // Actualizar el estado de favoritos
+                            setState(() {
+                              _futureEsFavorita = _obtenerEsFavorita();
+                            });
+                            // Llamar a la función proporcionada, si existe
+                            widget.onFavoritoPressed?.call();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// Clase para mostrar el botón de favoritos
+class BotonFavoritos extends StatelessWidget {
+  final bool esFavorita;
+  final VoidCallback onPressed;
+
+  // Constructor
+  const BotonFavoritos({
+    Key? key,
+    required this.esFavorita,
+    required this.onPressed,
+  }) : super(key: key);
+
+  // Cuerpo del botón
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: esFavorita ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+      onPressed: onPressed,
     );
   }
 }

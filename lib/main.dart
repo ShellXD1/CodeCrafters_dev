@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
         '/recetas': (context) =>
             RecetasView(recetasViewModel: recetasViewModel, database: database, ingredientesViewModel: ingredientViewModel,),
         '/allRecetas': (context) => AllRecetasView(recetasViewModel: recetasViewModel, database: database, ingredienteViewModel: ingredientViewModel,),
-        '/RecetasFavoritas': (context) => RecetasFavoritasView(recetasViewModel: recetasViewModel, database: database,),
+        '/RecetasFavoritas': (context) => RecetasFavoritasView(recetasViewModel: recetasViewModel, database: database, ingredienteViewModel: ingredientViewModel,),
       },
     );
   }

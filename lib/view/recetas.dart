@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+<<<<<<< HEAD
 import 'package:proyecto_tsp_dev/view/recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
+=======
+import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
+import 'recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
+>>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
 
 // Clase RecetasView
 class RecetasView extends StatefulWidget {
-  final RecetasViewModel? recetasViewModel;
+  final RecetasViewModel recetasViewModel;
+  final IngredienteViewModel ingredientesViewModel;
   final dynamic database;
 
-  const RecetasView({Key? key, this.recetasViewModel, required this.database})
+  const RecetasView({Key? key, required this.recetasViewModel, required this.database, required this.ingredientesViewModel})
       : super(key: key);
+<<<<<<< HEAD
 
   get ingredientesDisponibles => null;
+=======
+        get ingredientesDisponibles => null;
+>>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
 
   @override
   _RecetasViewState createState() => _RecetasViewState();
@@ -158,22 +169,32 @@ class _RecetasViewState extends State<RecetasView> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+      //Desde este punto esta el navigationBar, no se logro implementar cierta persistencia, por lo cual es importante copiar este y pegarlo
+      //en las vistas que se creen
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Recetas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Ingredientes',
+          ),
+        ],
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecetasView(
+                    recetasViewModel: widget.recetasViewModel,
+                    database: widget.database, ingredientesViewModel: widget.ingredientesViewModel, // Assuming you don't need database here
                   ),
-                  padding: EdgeInsets.all(16.0),
                 ),
+<<<<<<< HEAD
                 child: Text(
                   'Recetas',
                   style: TextStyle(
@@ -191,9 +212,20 @@ class _RecetasViewState extends State<RecetasView> {
                   backgroundColor: Color(0xFF9EE060),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
+=======
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IngredientesView(
+                    ingredientViewModel: widget.ingredientesViewModel,
+                    database: widget.database, recetasViewModel: widget.recetasViewModel,
+>>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
                   ),
-                  padding: EdgeInsets.all(16.0),
                 ),
+<<<<<<< HEAD
                 child: Text(
                   'Ingredientes',
                   style: TextStyle(
@@ -203,6 +235,12 @@ class _RecetasViewState extends State<RecetasView> {
             ),
           ],
         ),
+=======
+              );
+              break;
+          }
+        },
+>>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
       ),
     );
   }

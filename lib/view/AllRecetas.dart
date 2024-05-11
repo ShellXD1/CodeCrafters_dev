@@ -1,47 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_tsp_dev/view/ingredientes.dart';
+import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
+import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
-import 'package:proyecto_tsp_dev/view/recetaDetallada.dart'; // Asegúrate de importar correctamente RecetaDetalladaView
+import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 
 class AllRecetasView extends StatefulWidget {
-  final RecetasViewModel? recetasViewModel;
+  final RecetasViewModel recetasViewModel;
+  final IngredienteViewModel ingredienteViewModel;
   final dynamic database;
 
-  const AllRecetasView({Key? key, this.recetasViewModel, required this.database})
+  const AllRecetasView({Key? key, required this.recetasViewModel, required this.database, required this.ingredienteViewModel})
       : super(key: key);
 
   @override
-  _AllRecetasViewState createState() => _AllRecetasViewState();
+  _RecetasViewState createState() => _RecetasViewState();
 }
 
-class _AllRecetasViewState extends State<AllRecetasView> {
-  bool _recetasCargadas = false;
-
+class _RecetasViewState extends State<AllRecetasView> {
   @override
   void initState() {
     super.initState();
+    // Verificar si se proporcionó un RecetasViewModel antes de cargar las recetas
     if (widget.recetasViewModel != null) {
-      widget.recetasViewModel!.obtenerRecetas().then((_) {
-        setState(() {
-          _recetasCargadas = true;
-        });
-      });
+      widget.recetasViewModel!.obtenerRecetas();
     }
   }
 
-  @override
+  bool _recetasCargadas = false;
+
+   @override
   Widget build(BuildContext context) {
+    if (!_recetasCargadas) {
+      // Si las recetas no están cargadas, obtenerlas
+      if (widget.recetasViewModel != null) {
+        widget.recetasViewModel!.obtenerRecetas().then((_) {
+          // Marcar como cargadas una vez que se hayan obtenido las recetas
+          setState(() {
+            _recetasCargadas = true;
+          });
+        });
+      }
+    }
+
+     int _selectedIndex = 0; // Este indice permite que el bottomNavigationBar distinga en que lugar esta
     return Scaffold(
       appBar: AppBar(
         title: Text('Recetas', style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
         leading: IconButton(
           icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/');
+            print("Botón de la casita presionado (regresar a la pantalla de inicio)");
+            Navigator.pushReplacementNamed(context, '/'); // Navegar directamente a la pantalla de inicio y reemplazar la ruta actual
           },
         ),
         actions: [
           PopupMenuButton(
-            icon: Icon(Icons.menu, size: 40.0),
+            icon: Icon(Icons.menu, size: 40.0), // Icono para el botón de menú
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: Text('Ver todas las recetas', style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo')),
@@ -55,10 +70,12 @@ class _AllRecetasViewState extends State<AllRecetasView> {
             onSelected: (value) {
               if (value == 'ver_todas') {
                 // Navegar a la pantalla AllRecetasView usando la ruta previamente definida
-                Navigator.pushNamed(context, '/allRecetas');
+                print("Ver todas las seleccionado");
               } else if (value == 'ver_favoritas') {
                 // Acción al seleccionar "Ver recetas favoritas"
                 Navigator.pushNamed(context, '/RecetasFavoritas');
+                print("Ver recetas favoritas seleccionado");
+                // Puedes agregar aquí la navegación o la lógica correspondiente
               }
             },
           ),
@@ -93,7 +110,7 @@ class _AllRecetasViewState extends State<AllRecetasView> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => RecetaDetalladaView(
-                            recetasViewModel: widget.recetasViewModel!,
+                            recetasViewModel: widget.recetasViewModel,
                             recipeIndex: index, // Pasa el índice de la receta seleccionada
                           ),
                         ),
@@ -154,55 +171,54 @@ class _AllRecetasViewState extends State<AllRecetasView> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                  Navigator.pushNamed(context, '/recetas');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+
+
+
+      //Desde este punto esta el navigationBar, no se logro implementar cierta persistencia, por lo cual es importante copiar este y pegarlo
+      //en las vistas que se creen
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Recetas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Ingredientes',
+          ),
+        ],
+        onTap: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecetasView(
+                    recetasViewModel: widget.recetasViewModel,
+                    database: null, ingredientesViewModel: widget.ingredienteViewModel, // Assuming you don't need database here
                   ),
-                  padding: EdgeInsets.all(16.0),
                 ),
-                child: Text(
-                  'Recetas',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Ingredientes"
-                  print("Botón 'Ingredientes' presionado");
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                  Navigator.pushNamed(context, '/ingredientes');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IngredientesView(
+                    ingredientViewModel: widget.ingredienteViewModel,
+                    database: widget.database, recetasViewModel: widget.recetasViewModel,
                   ),
-                  padding: EdgeInsets.all(16.0),
                 ),
-                child: Text(
-                  'Ingredientes',
-                  style: TextStyle(fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
-                ),
-              ),
-            ),
-          ],
-        ),
+              );
+              break;
+          }
+        },
       ),
-    );
+);
   }
 }

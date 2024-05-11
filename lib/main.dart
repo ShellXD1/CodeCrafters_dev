@@ -19,7 +19,6 @@ import 'package:proyecto_tsp_dev/view/AllRecetas.dart';
 import 'package:proyecto_tsp_dev/view/RecetasFavoritas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() async {
   // Obtener el directorio de documentos de la aplicación
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,15 +27,14 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   bool isValidated = prefs.getBool('validation') ?? false;
-  
-  if (isValidated == false){
+
+  if (isValidated == false) {
     // Copia el archivo desde los recursos a la ubicación local
     ByteData data = await rootBundle.load('assets/Recetario.sqlite3');
     List<int> bytes = data.buffer.asUint8List();
     await File(databasePath).writeAsBytes(bytes);
     prefs.setBool('validation', true);
   }
-
 
   // Abrir la base de datos
   final database = await sqflite.openDatabase(
@@ -46,12 +44,9 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   // Crear una instancia de MReceta con la base de datos
-  print("Entre aqui we" + databasePath);
   final mReceta = MReceta(database);
-  print("Entre aqui we, en receta");
   // Crear una instancia de MReceta con la base de datos
   final mIngrediente = MIngrediente(database);
-  print("Entre aqui we, en ingrediente");
   // Crear una instancia de RecetasViewModel con MReceta
   final recetasViewModel = RecetasViewModel(mReceta);
   // Crear una instancia de IngredientViewModel con MReceta
@@ -61,7 +56,7 @@ void main() async {
       database: database,
       recetasViewModel: recetasViewModel,
       ingredientViewModel: ingredienteViewModel));
-} 
+}
 
 class MyApp extends StatelessWidget {
   final Database database;
@@ -88,12 +83,26 @@ class MyApp extends StatelessWidget {
           ingredientViewModel: ingredientViewModel),
       //RecetasView(database: database, recetasViewModel: recetasViewModel),
       routes: {
-        '/ingredientes': (context) =>
-            IngredientesView(ingredientViewModel: ingredientViewModel, database:database),
-        '/recetas': (context) =>
-            RecetasView(recetasViewModel: recetasViewModel, database: database,),
-        '/allRecetas': (context) => AllRecetasView(recetasViewModel: recetasViewModel, database: database,),
-        '/RecetasFavoritas': (context) => RecetasFavoritasView(recetasViewModel: recetasViewModel, database: database,),
+        '/ingredientes': (context) => IngredientesView(
+              ingredientViewModel: ingredientViewModel,
+              database: database,
+              recetasViewModel: recetasViewModel,
+            ),
+        '/recetas': (context) => RecetasView(
+              recetasViewModel: recetasViewModel,
+              database: database,
+              ingredientesViewModel: ingredientViewModel,
+            ),
+        '/allRecetas': (context) => AllRecetasView(
+              recetasViewModel: recetasViewModel,
+              database: database,
+              ingredienteViewModel: ingredientViewModel,
+            ),
+        '/RecetasFavoritas': (context) => RecetasFavoritasView(
+              recetasViewModel: recetasViewModel,
+              database: database,
+              ingredientViewModel: ingredientViewModel,
+            ),
       },
     );
   }

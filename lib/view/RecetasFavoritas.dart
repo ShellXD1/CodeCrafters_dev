@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/view/ingredientes.dart';
 import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
-import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
 // Clase RecetasFavoritasView
 class RecetasFavoritasView extends StatefulWidget {
-  final RecetasViewModel recetasViewModel;
-  final IngredienteViewModel ingredienteViewModel;
+  final RecetasViewModel? recetasViewModel;
   final dynamic database;
 
-<<<<<<< HEAD
   const RecetasFavoritasView(
-      {Key? key, this.recetasViewModel, required this.database})
-=======
-  const RecetasFavoritasView({Key? key, required this.recetasViewModel, required this.database, required this.ingredienteViewModel})
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
+      {Key? key, this.recetasViewModel, required this.database, required IngredienteViewModel ingredientViewModel})
       : super(key: key);
 
   @override
@@ -114,30 +107,20 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                 itemCount: widget.recetasViewModel!.recetas.length,
                 itemBuilder: (context, index) {
                   final receta = widget.recetasViewModel!.recetas[index];
-<<<<<<< HEAD
                   return Center(
                     child: GestureDetector(
                       onTap: () {
-                        // Llama a la función para manejar la navegación a la pantalla de detalles
-                        _navigateToRecipeDetails(receta.id);
-                      },
-=======
-                  
-                  return GestureDetector(
-                    onTap: () {
-                      // Navegar a la pantalla de detalles de la receta seleccionada
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecetaDetalladaView(
-                            recetasViewModel: widget.recetasViewModel,
-                            recipeIndex: index, // Pasa el índice de la receta seleccionada
+                        // Navegar a la pantalla de detalles de la receta
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecetaDetalladaView(
+                              recetasViewModel: widget.recetasViewModel!,
+                              recipeIndex: index,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: Center(
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
+                        );
+                      },
                       child: Container(
                         width: 300, // Ancho deseado para la tarjeta
                         child: Card(
@@ -147,7 +130,6 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 FutureBuilder<Map<String, String?>>(
-<<<<<<< HEAD
                                   future: widget.recetasViewModel!
                                       .obtenerImagenReceta(receta.id),
                                   builder: (context, snapshot) {
@@ -171,23 +153,6 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                                       } else {
                                         return Icon(Icons
                                             .error); // Manejar el error de carga de la imagen
-=======
-                                  future: widget.recetasViewModel!.obtenerImagenReceta(receta.id),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen
-                                    } else {
-                                      if (snapshot.hasData && snapshot.data != null) {
-                                        final rutaImagen = snapshot.data!['imagen'];
-                                        return Image.asset(
-                                          rutaImagen!,
-                                          width: 200, // Ancho deseado de la imagen
-                                          height: 100, // Alto deseado de la imagen
-                                          fit: BoxFit.cover, // Ajuste de la imagen
-                                        );
-                                      } else {
-                                        return Icon(Icons.error); // Manejar el error de carga de la imagen
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
                                       }
                                     }
                                   },
@@ -195,13 +160,9 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                                 SizedBox(height: 8),
                                 Text(
                                   receta.nombre,
-<<<<<<< HEAD
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
-=======
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
                                 ),
                               ],
                             ),
@@ -224,7 +185,6 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
           ],
         ),
       ),
-<<<<<<< HEAD
       bottomNavigationBar: Container(
         color: Color(0xFF9EE060),
         child: Row(
@@ -245,34 +205,9 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                   backgroundColor: Color(0xFF9EE060),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
-=======
-       //Desde este punto esta el navigationBar, no se logro implementar cierta persistencia, por lo cual es importante copiar este y pegarlo
-      //en las vistas que se creen
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 158, 224, 96),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Recetas',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.food_bank),
-            label: 'Ingredientes',
-          ),
-        ],
-        onTap: (int index) {
-          switch (index) {
-            case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RecetasView(
-                    recetasViewModel: widget.recetasViewModel,
-                    database: widget.database, ingredientesViewModel: widget.ingredienteViewModel, // Assuming you don't need database here
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
                   ),
+                  padding: EdgeInsets.all(16.0),
                 ),
-<<<<<<< HEAD
                 child: Text(
                   'Recetas',
                   style: TextStyle(
@@ -296,20 +231,9 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                   backgroundColor: Color(0xFF9EE060),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
-=======
-              );
-              break;
-            case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => IngredientesView(
-                    ingredientViewModel: widget.ingredienteViewModel,
-                    database: widget.database, recetasViewModel: widget.recetasViewModel,
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
                   ),
+                  padding: EdgeInsets.all(16.0),
                 ),
-<<<<<<< HEAD
                 child: Text(
                   'Ingredientes',
                   style: TextStyle(
@@ -319,19 +243,7 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
             ),
           ],
         ),
-=======
-              );
-              break;
-          }
-        },
->>>>>>> 2822faa4a3444ca0fc81e45b4a0a21026fd2f027
       ),
     );
-  }
-
-  // Función para manejar la navegación a la pantalla de detalles de la receta
-  void _navigateToRecipeDetails(int recipeId) {
-    // Usar Navigator para navegar a la pantalla de detalles de la receta
-    Navigator.pushNamed(context, '/recipeDetails', arguments: recipeId);
   }
 }

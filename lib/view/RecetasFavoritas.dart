@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/view/ingredientes.dart';
+import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
@@ -100,41 +101,56 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
                 itemCount: widget.recetasViewModel!.recetas.length,
                 itemBuilder: (context, index) {
                   final receta = widget.recetasViewModel!.recetas[index];
-                  return Center(
-                    child: Container(
-                      width: 300, // Ancho deseado para la tarjeta
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FutureBuilder<Map<String, String?>>(
-                                future: widget.recetasViewModel!.obtenerImagenReceta(receta.id),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen
-                                  } else {
-                                    if (snapshot.hasData && snapshot.data != null) {
-                                      final rutaImagen = snapshot.data!['imagen'];
-                                      return Image.asset(
-                                        rutaImagen!,
-                                        width: 200, // Ancho deseado de la imagen
-                                        height: 100, // Alto deseado de la imagen
-                                        fit: BoxFit.cover, // Ajuste de la imagen
-                                      );
+                  
+                  return GestureDetector(
+                    onTap: () {
+                      // Navegar a la pantalla de detalles de la receta seleccionada
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecetaDetalladaView(
+                            recetasViewModel: widget.recetasViewModel,
+                            recipeIndex: index, // Pasa el índice de la receta seleccionada
+                          ),
+                        ),
+                      );
+                    },
+                    child: Center(
+                      child: Container(
+                        width: 300, // Ancho deseado para la tarjeta
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FutureBuilder<Map<String, String?>>(
+                                  future: widget.recetasViewModel!.obtenerImagenReceta(receta.id),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen
                                     } else {
-                                      return Icon(Icons.error); // Manejar el error de carga de la imagen
+                                      if (snapshot.hasData && snapshot.data != null) {
+                                        final rutaImagen = snapshot.data!['imagen'];
+                                        return Image.asset(
+                                          rutaImagen!,
+                                          width: 200, // Ancho deseado de la imagen
+                                          height: 100, // Alto deseado de la imagen
+                                          fit: BoxFit.cover, // Ajuste de la imagen
+                                        );
+                                      } else {
+                                        return Icon(Icons.error); // Manejar el error de carga de la imagen
+                                      }
                                     }
-                                  }
-                                },
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                receta.nombre,
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                                  },
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  receta.nombre,
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

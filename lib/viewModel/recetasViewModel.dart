@@ -118,4 +118,35 @@ class RecetasViewModel extends ChangeNotifier {
     }
     notifyListeners(); // Notificar a los oyentes del cambio en el estado
   }
+
+  // Método dinamico para obtener las recetas favoritas
+  Future<List<Map<String, dynamic>>> getRecetasFavoritas() async {
+    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritas();
+    // Mapear las recetas favoritas a un formato de lista de mapas
+    List<Map<String, dynamic>> recetasFavoritasMap =
+        recetasFavoritas.map((receta) {
+      return {
+        'id_receta': receta.id,
+        'nombre_receta': receta.nombre,
+        'imagen_receta': receta.imagen,
+        // Añade otros campos de la receta según sea necesario
+      };
+    }).toList();
+    return recetasFavoritasMap;
+  }
+
+  // Método dinamico para obtener todas las recetas
+  Future<List<Map<String, dynamic>>> getRecetas() async {
+    List<Receta> recetas = await _mRecetas.obtenerRecetas();
+    // Mapear las recetas a un formato de lista de mapas
+    List<Map<String, dynamic>> recetasMap = recetas.map((receta) {
+      return {
+        'id_receta': receta.id,
+        'nombre_receta': receta.nombre,
+        'imagen_receta': receta.imagen,
+        // Añade otros campos de la receta según sea necesario
+      };
+    }).toList();
+    return recetasMap;
+  }
 }

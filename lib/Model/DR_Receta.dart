@@ -101,7 +101,7 @@ class DRReceta {
   }
 
   // Método para obtener las recetas favoritas
-  Future<List<Receta>> getRecetaFavoritas() async {
+  Future<List<Receta>> obtenerRecetaFavoritas() async {
     List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
       'SELECT * FROM Recetas WHERE favoritos = 1',
     );

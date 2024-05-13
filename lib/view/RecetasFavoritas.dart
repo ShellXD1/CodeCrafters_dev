@@ -1,188 +1,166 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
+import 'package:proyecto_tsp_dev/view/ComponentesView/tarjeta.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+import 'package:proyecto_tsp_dev/view/recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
 
 // Clase RecetasFavoritasView
 class RecetasFavoritasView extends StatefulWidget {
   final RecetasViewModel? recetasViewModel;
   final dynamic database;
+  final IngredienteViewModel? ingredientesViewModel;
+  final IngredienteViewModel? ingredientViewModel;
 
-  const RecetasFavoritasView(
-      {Key? key, this.recetasViewModel, required this.database, required IngredienteViewModel ingredientViewModel})
-      : super(key: key);
+  const RecetasFavoritasView({
+    Key? key,
+    this.recetasViewModel,
+    required this.database,
+    this.ingredientesViewModel,
+    this.ingredientViewModel,
+  }) : super(key: key);
 
   @override
   _RecetasViewState createState() => _RecetasViewState();
 }
 
-// Logica para mostrar las recetas favoritas
+// Logica para mostrar las recetas
 class _RecetasViewState extends State<RecetasFavoritasView> {
+  bool _recetasCargadas = false;
+
   @override
   void initState() {
     super.initState();
-    // Verificar si se proporcionó un RecetasViewModel antes de cargar las recetas
     if (widget.recetasViewModel != null) {
-      widget.recetasViewModel!.obtenerRecetasFavoritas();
+      widget.recetasViewModel!.obtenerRecetasFavoritas().then((_) {
+        setState(() {
+          _recetasCargadas = true;
+        });
+      });
     }
   }
 
-  bool _recetasCargadas = false;
-
-  // Carga las recetas favoritas
+  // Carga las recetas
   @override
   Widget build(BuildContext context) {
-    if (!_recetasCargadas) {
-      // Si las recetas no están cargadas, obtenerlas
-      if (widget.recetasViewModel != null) {
-        widget.recetasViewModel!.obtenerRecetasFavoritas().then((_) {
-          // Marcar como cargadas una vez que se hayan obtenido las recetas
-          setState(() {
-            _recetasCargadas = true;
-          });
-        });
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recetas',
-            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
+        title: Text(
+          'Recetas',
+          style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo'),
+        ),
         leading: IconButton(
           icon: Icon(Icons.home, size: 40.0),
           onPressed: () {
-            print(
-                "Botón de la casita presionado (regresar a la pantalla de inicio)");
-            Navigator.pushReplacementNamed(context,
-                '/'); // Navegar directamente a la pantalla de inicio y reemplazar la ruta actual
+            Navigator.pushReplacementNamed(context, '/');
           },
         ),
         actions: [
           PopupMenuButton(
-            icon: Icon(Icons.menu, size: 40.0), // Icono para el botón de menú
+            icon: Icon(Icons.menu, size: 40.0),
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: Text('Ver todas las recetas',
-                    style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo')),
+                child: Text(
+                  'Ver todas las recetas',
+                  style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo'),
+                ),
                 value: 'ver_todas',
               ),
               PopupMenuItem(
-                child: Text('Ver recetas favoritas',
-                    style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo')),
+                child: Text(
+                  'Ver recetas favoritas',
+                  style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo'),
+                ),
                 value: 'ver_favoritas',
               ),
             ],
             onSelected: (value) {
               if (value == 'ver_todas') {
-                // Navegar a la pantalla AllRecetasView usando la ruta previamente definida
-                Navigator.pushNamed(context,
-                    '/allRecetas'); // Utiliza la ruta definida en MaterialApp
+                Navigator.pushNamed(context, '/allRecetas');
               } else if (value == 'ver_favoritas') {
-                // Acción al seleccionar "Ver recetas favoritas"
-                print("Ver recetas favoritas seleccionado");
-                // Puedes agregar aquí la navegación o la lógica correspondiente
+                Navigator.pushNamed(context, '/RecetasFavoritas');
               }
             },
           ),
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Mis Recetas',
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Recetas favoritas',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-            // Mostrar un indicador de carga mientras se obtienen las recetas
-            if (!_recetasCargadas) Center(child: CircularProgressIndicator()),
-            // Mostrar las recetas una vez que estén cargadas
-            if (_recetasCargadas && widget.recetasViewModel != null)
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: widget.recetasViewModel!.recetas.length,
-                itemBuilder: (context, index) {
-                  final receta = widget.recetasViewModel!.recetas[index];
-                  return Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        // Navegar a la pantalla de detalles de la receta
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RecetaDetalladaView(
-                              recetasViewModel: widget.recetasViewModel!,
-                              recipeIndex: index,
-                            ),
-                          ),
+              SizedBox(
+                  height:
+                      16), // Espaciado entre el texto y el indicador de carga
+
+              // Mostrar un indicador de carga mientras se obtienen las recetas
+              if (!_recetasCargadas) CircularProgressIndicator(),
+
+              // Mostrar las recetas una vez que estén cargadas
+              if (_recetasCargadas && widget.recetasViewModel != null)
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future: widget.recetasViewModel!.getRecetasFavoritas(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        final List<Map<String, dynamic>> recetasFavoritas =
+                            snapshot.data!;
+
+                        if (recetasFavoritas.isEmpty) {
+                          return Text(
+                            'No se encontraron recetas favoritas.',
+                            style: TextStyle(fontSize: 16),
+                          );
+                        }
+
+                        return Column(
+                          children: recetasFavoritas.map((recetaInfo) {
+                            final String nombreReceta =
+                                recetaInfo['nombre_receta'] ??
+                                    'Receta sin nombre';
+                            final String imagenRecetaPath =
+                                recetaInfo['imagen_receta'] ?? '';
+                            final int recipeIndex =
+                                recetaInfo['id_receta'] ?? 0;
+
+                            return RecetaItem(
+                              recetaInfo: recetaInfo,
+                              recetasViewModel: widget.recetasViewModel,
+                              onFavoritoPressed: () {
+                                setState(() {
+                                  _actualizarRecetas();
+                                });
+                              },
+                            );
+                          }).toList(),
                         );
-                      },
-                      child: Container(
-                        width: 300, // Ancho deseado para la tarjeta
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                FutureBuilder<Map<String, String?>>(
-                                  future: widget.recetasViewModel!
-                                      .obtenerImagenReceta(receta.id),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la imagen
-                                    } else {
-                                      if (snapshot.hasData &&
-                                          snapshot.data != null) {
-                                        final rutaImagen =
-                                            snapshot.data!['imagen'];
-                                        return Image.asset(
-                                          rutaImagen!,
-                                          width:
-                                              200, // Ancho deseado de la imagen
-                                          height:
-                                              100, // Alto deseado de la imagen
-                                          fit: BoxFit
-                                              .cover, // Ajuste de la imagen
-                                        );
-                                      } else {
-                                        return Icon(Icons
-                                            .error); // Manejar el error de carga de la imagen
-                                      }
-                                    }
-                                  },
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  receta.nombre,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            // Mostrar un mensaje si no se proporcionó un RecetasViewModel
-            if (_recetasCargadas && widget.recetasViewModel == null)
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'No se ha proporcionado un ViewModel de recetas.',
-                  style: TextStyle(fontSize: 18.0),
+                      } else {
+                        return Text(
+                          'No se encontraron recetas favoritas.',
+                          style: TextStyle(fontSize: 16),
+                        );
+                      }
+                    }
+                  },
                 ),
-              ),
-          ],
+
+              // Mostrar un mensaje si no se proporcionó un RecetasViewModel
+              if (_recetasCargadas && widget.recetasViewModel == null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'No se ha proporcionado un ViewModel de recetas.',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(
@@ -193,13 +171,8 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
               child: ElevatedButton(
                 onPressed: () {
                   // Acción al presionar el botón "Recetas"
-                  print("Botón 'Recetas' presionado");
-                  Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(
-                          '/')); // Regresar a la pantalla de inicio
-                  Navigator.pushNamed(
-                      context, '/recetas'); // Navegar a la pantalla de recetas
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.pushNamed(context, '/recetas');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),
@@ -218,14 +191,8 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // Acción al presionar el botón "Ingredientes"
-                  print("Botón 'Ingredientes' presionado");
-                  Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(
-                          '/')); // Regresar a la pantalla de inicio
-                  Navigator.pushNamed(context,
-                      '/ingredientes'); // Navegar a la pantalla de ingredientes
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.pushNamed(context, '/ingredientes');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF9EE060),
@@ -245,5 +212,17 @@ class _RecetasViewState extends State<RecetasFavoritasView> {
         ),
       ),
     );
+  }
+
+  // Método para actualizar las recetas
+  void _actualizarRecetas() {
+    setState(() {
+      _recetasCargadas = false;
+    });
+    widget.recetasViewModel!.obtenerRecetasFavoritas().then((_) {
+      setState(() {
+        _recetasCargadas = true;
+      });
+    });
   }
 }

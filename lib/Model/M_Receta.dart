@@ -59,6 +59,6 @@ class MReceta {
 
   // Método para obtener las recetas favoritas
   Future<List<Receta>> obtenerRecetaFavoritas() async {
-    return await _repository.getRecetaFavoritas();
+    return await _repository.obtenerRecetaFavoritas();
   }
 }

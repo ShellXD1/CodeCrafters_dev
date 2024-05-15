@@ -22,7 +22,7 @@ class DRReceta {
             preparacion: e['Preparacion_receta'],
             favoritos: e['favoritos']))
         .toList();
-  } // Pito
+  } 
 
   // Agregar una nueva receta
   Future<void> addReceta(Receta receta) async {

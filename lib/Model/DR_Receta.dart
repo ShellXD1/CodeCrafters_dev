@@ -23,7 +23,7 @@ class DRReceta {
             favoritos: e['favoritos'], 
             clasificacion: e['clasificacion'], 
             ingredientes: e['ingredientes'], 
-            infonutricional: e['info_clasificacion']))
+            informacion: e['info_clasificacion']))
         .toList();
   } 
 
@@ -116,8 +116,8 @@ class DRReceta {
               preparacion: e['Preparacion_receta'],
               favoritos: e['favoritos'],
               clasificacion: e['clasificacion'], 
-            ingredientes: e['ingredientes'], 
-            infonutricional: e['info_clasificacion']
+              ingredientes: e['ingredientes'], 
+              informacion: e['info_clasificacion']
             ))
         .toList();
   }

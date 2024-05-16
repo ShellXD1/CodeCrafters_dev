@@ -6,7 +6,7 @@ class Receta {
   int favoritos;
   String clasificacion;
   String ingredientes;
-  String infonutricional;
+  String informacion;
 
   Receta(
       {required this.id,
@@ -16,7 +16,7 @@ class Receta {
       required this.favoritos,
       required this.clasificacion,
       required this.ingredientes,
-      required this.infonutricional});
+      required this.informacion});
 
   
 
@@ -30,7 +30,7 @@ class Receta {
       'favoritos' : favoritos,
       'clasificacion' : clasificacion,
       'ingredientes' : ingredientes,
-      'info_nutricional' : infonutricional
+      'info_nutricional' : informacion
 
     };
   }

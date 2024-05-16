@@ -117,7 +117,7 @@ class DRReceta {
               favoritos: e['favoritos'],
               clasificacion: e['clasificacion'], 
               ingredientes: e['ingredientes'], 
-              informacion: e['info_clasificacion']
+              informacion: e['info_nutricional']
             ))
         .toList();
   }

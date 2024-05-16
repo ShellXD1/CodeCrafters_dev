@@ -36,12 +36,6 @@ class MReceta {
     return await _repository.getRecetasDisponibles(ingredientesDisponibles);
   }
 
-  // Método para obtener la lista de ingredientes por preparación
-  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
-      int idPreparacion) async {
-    return await _repository.obtenerIngredientesPorPreparacion(idPreparacion);
-  }
-
   // Método para marcar una receta como favorita
   Future<void> marcarRecetaComoFavorita(int idReceta) async {
     await _repository.marcarRecetaComoFavorita(idReceta);

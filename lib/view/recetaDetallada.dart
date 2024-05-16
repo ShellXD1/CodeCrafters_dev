@@ -32,7 +32,11 @@ class RecetaDetalladaView extends StatelessWidget {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return Cuerpo(recipeDetails: snapshot.data, recipeIndex: recipeIndex, recetasViewModel: recetasViewModel,);
+            return Cuerpo(
+              recipeDetails: snapshot.data,
+              recipeIndex: recipeIndex,
+              recetasViewModel: recetasViewModel,
+            );
           }
         },
       ),
@@ -45,7 +49,12 @@ class Cuerpo extends StatelessWidget {
   final RecetasViewModel recetasViewModel;
   final int recipeIndex;
 
-  const Cuerpo({Key? key, this.recipeDetails, required this.recetasViewModel, required this.recipeIndex}) : super(key: key);
+  const Cuerpo(
+      {Key? key,
+      this.recipeDetails,
+      required this.recetasViewModel,
+      required this.recipeIndex})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +64,7 @@ class Cuerpo extends StatelessWidget {
       );
     }
 
-    final dynamic ingredientesData = recipeDetails!['ingredientes'];
-    final List<Ingrediente> ingredientes = (ingredientesData != null && ingredientesData is List<Ingrediente>) ? List<Ingrediente>.from(ingredientesData) : [];
-
+    final String ingredientes = recipeDetails!['ingredientes'];
     final String preparacion = recipeDetails!['preparacion'];
 
     return Center(
@@ -74,10 +81,9 @@ class Cuerpo extends StatelessWidget {
                 'Lista de Ingredientes:',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Chivo'
-                ),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Chivo'),
               ),
               SizedBox(height: 5),
               IngredientesWidget(ingredientes: ingredientes),
@@ -86,10 +92,9 @@ class Cuerpo extends StatelessWidget {
                 'Lista de Preparación:',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Chivo'
-                ),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Chivo'),
               ),
               SizedBox(height: 5),
               PreparacionWidget(preparacion: preparacion),
@@ -129,7 +134,8 @@ class PreparacionWidget extends StatelessWidget {
                     // Texto de la preparación
                     Text(
                       preparacion,
-                      textAlign: TextAlign.justify, // Alinea el texto justificado
+                      textAlign:
+                          TextAlign.justify, // Alinea el texto justificado
                     ),
                   ],
                 ),
@@ -159,7 +165,6 @@ class PreparacionWidget extends StatelessWidget {
   }
 }
 
-
 Widget RecetaDes(String imagen) {
   return Container(
     height: 200,
@@ -173,7 +178,7 @@ Widget RecetaDes(String imagen) {
 }
 
 class IngredientesWidget extends StatelessWidget {
-  final List<Ingrediente> ingredientes;
+  final String ingredientes;
 
   const IngredientesWidget({Key? key, required this.ingredientes})
       : super(key: key);
@@ -182,38 +187,39 @@ class IngredientesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        print(ingredientes);
-        // Mostrar un diálogo con la lista de ingredientes
         showDialog(
           context: context,
           builder: (BuildContext context) {
-  return AlertDialog(
-    backgroundColor: Color.fromARGB(255, 158, 224, 96),
-    title: Text("Ingredientes"),
-    content: SingleChildScrollView(
-      child: ingredientes.isNotEmpty
-        ? Column(
-            children: [
-              // Mostrar cada ingrediente en un ListTile
-              for (Ingrediente ingrediente in ingredientes)
-                ListTile(
-                  title: Text(ingrediente.nombre),
+            return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 158, 224, 96),
+              content: SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Ingredientes",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontFamily: 'Chivo'),
+                  ),
+                  SizedBox(height: 16),
+                  //Texto de los ingredientes
+                  Text(
+                    ingredientes,
+                    textAlign: TextAlign.justify, //Alinea el texto justificado
+                  )
+                ],
+              )),
+              actions: <Widget>[
+                // Botón para cerrar el diálogo
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cerrar'),
                 ),
-            ],
-          )
-        : Text("No hay ingredientes disponibles"),
-    ),
-    actions: <Widget>[
-      // Botón para cerrar el diálogo
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text('Cerrar'),
-      ),
-    ],
-  );
-},
+              ],
+            );
+          },
         );
       },
       child: Container(

@@ -20,7 +20,10 @@ class DRReceta {
             nombre: e['nombre_receta'],
             imagen: e['imagen_receta'],
             preparacion: e['Preparacion_receta'],
-            favoritos: e['favoritos']))
+            favoritos: e['favoritos'], 
+            clasificacion: e['clasificacion'], 
+            ingredientes: e['ingredientes'], 
+            infonutricional: e['info_clasificacion']))
         .toList();
   } 
 
@@ -112,6 +115,9 @@ class DRReceta {
               imagen: e['imagen_receta'],
               preparacion: e['Preparacion_receta'],
               favoritos: e['favoritos'],
+              clasificacion: e['clasificacion'], 
+            ingredientes: e['ingredientes'], 
+            infonutricional: e['info_clasificacion']
             ))
         .toList();
   }

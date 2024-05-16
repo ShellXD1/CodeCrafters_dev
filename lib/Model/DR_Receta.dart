@@ -160,4 +160,62 @@ class DRReceta {
     // Si no se encontró un registro o 'favoritos' es distinto de 1, se asume que no es favorita
     return false;
   }
+
+
+  // Obtener recetas disponibles a partir de los ingredientes disponibles y que sean Desayunos
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesDesayunos(
+    List<String> ingredientesDisponibles,
+  ) async {
+    final List<Map<String, dynamic>> recetasDisponibles =
+        await _database.rawQuery('''
+    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    FROM Recetas r
+    WHERE r.clasificacion = 'Desayuno' AND NOT EXISTS (
+        SELECT *
+        FROM Lista_Ingredientes li
+        LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
+        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        );
+    ''');
+    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
+    return recetasDisponibles;
+  }
+
+  // Obtener recetas disponibles a partir de los ingredientes disponibles y que sean Comidas
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesComidas(
+    List<String> ingredientesDisponibles,
+  ) async {
+    final List<Map<String, dynamic>> recetasDisponibles =
+        await _database.rawQuery('''
+    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    FROM Recetas r
+    WHERE r.clasificacion = 'Comida' AND NOT EXISTS (
+        SELECT *
+        FROM Lista_Ingredientes li
+        LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
+        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        );
+    ''');
+    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
+    return recetasDisponibles;
+  }
+
+  // Obtener recetas disponibles a partir de los ingredientes disponibles y que sean Cenas
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesCenas(
+    List<String> ingredientesDisponibles,
+  ) async {
+    final List<Map<String, dynamic>> recetasDisponibles =
+        await _database.rawQuery('''
+    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    FROM Recetas r
+    WHERE r.clasificacion = 'Cena' AND NOT EXISTS (
+        SELECT *
+        FROM Lista_Ingredientes li
+        LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
+        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        );
+    ''');
+    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
+    return recetasDisponibles;
+  }
 }

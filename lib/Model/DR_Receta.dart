@@ -20,12 +20,12 @@ class DRReceta {
             nombre: e['nombre_receta'],
             imagen: e['imagen_receta'],
             preparacion: e['Preparacion_receta'],
-            favoritos: e['favoritos'], 
-            clasificacion: e['clasificacion'], 
-            ingredientes: e['ingredientes'], 
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
             informacion: e['info_nutricional']))
         .toList();
-  } 
+  }
 
   // Agregar una nueva receta
   Future<void> addReceta(Receta receta) async {
@@ -83,24 +83,13 @@ class DRReceta {
   }
 
   // Método para obtener la lista de ingredientes por preparación
-  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
-      int idPreparacion) async {
-    final List<Map<String, dynamic>> ingredientesPorPreparacion =
-        await _database.rawQuery('''
-      SELECT Ingredientes.id_ingrediente, Ingredientes.nombre_ing, Ingredientes.Cantidad
-      FROM Ingredientes
-      INNER JOIN Lista_ingredientes ON Ingredientes.id_ingrediente = Lista_ingredientes.id_ingrediente
-      WHERE Lista_ingredientes.id_receta = ?
-    ''', [idPreparacion]);
-
-    return ingredientesPorPreparacion
-        .map((ingrediente) => Ingrediente(
-            id: ingrediente['id_ing'],
-            nombre: ingrediente['nombre_ing'],
-            imagen: ingrediente['imagen_ing'],
-            cantidad: ingrediente['cantidad'],
-            medida: ingrediente['medida']))
-        .toList();
+  Future<String?> obtenerIngredientesReceta(int idReceta) async {
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    if (result.isNotEmpty) {
+      return result.first['ingredientes'] as String?;
+    }
+    return null;
   }
 
   // Método para obtener las recetas favoritas
@@ -110,15 +99,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'], 
-              ingredientes: e['ingredientes'], 
-              informacion: e['info_clasificacion']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_clasificacion']))
         .toList();
   }
 

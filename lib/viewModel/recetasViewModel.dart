@@ -70,16 +70,6 @@ class RecetasViewModel extends ChangeNotifier {
     return recipeDetails;
   }
 
-  // Método para obtener los ingredientes por preparación
-  Future<List<Ingrediente>> obtenerIngredientesPorPreparacion(
-      int idPreparacion) async {
-    // Aquí deberías realizar la consulta a la base de datos o a tu modelo para obtener los ingredientes por la preparación con el id proporcionado
-    // Supongamos que la consulta devuelve una lista de ingredientes como List<String>
-    List<Ingrediente> ingredientes =
-        await _mRecetas.obtenerIngredientesPorPreparacion(idPreparacion);
-    return ingredientes;
-  }
-
   // Métodos para marcar una receta como favorita
   Future<void> marcarRecetaComoFavorita(int idReceta) async {
     await _mRecetas.marcarRecetaComoFavorita(idReceta);

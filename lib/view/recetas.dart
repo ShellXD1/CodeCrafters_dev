@@ -9,12 +9,12 @@ class RecetasView extends StatefulWidget {
   final RecetasViewModel? recetasViewModel;
   final dynamic database;
 
-  const RecetasView(
-      {Key? key,
-      this.recetasViewModel,
-      required this.database,
-      required IngredienteViewModel ingredientesViewModel})
-      : super(key: key);
+  const RecetasView({
+    Key? key,
+    this.recetasViewModel,
+    required this.database,
+    required IngredienteViewModel ingredientesViewModel,
+  }) : super(key: key);
 
   get ingredientesDisponibles => null;
 
@@ -82,87 +82,123 @@ class _RecetasViewState extends State<RecetasView> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Mis Recetas',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                  height:
-                      16), // Espaciado entre el texto y el indicador de carga
-
-              // Mostrar un indicador de carga mientras se obtienen las recetas
-              if (!_recetasCargadas) CircularProgressIndicator(),
-
-              // Mostrar las recetas una vez que estén cargadas
-              if (_recetasCargadas && widget.recetasViewModel != null)
-                FutureBuilder<List<Map<String, dynamic>>>(
-                  future: widget.recetasViewModel!.getRecetasDisponibles(
-                      widget.ingredientesDisponibles ?? []),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      if (snapshot.hasData && snapshot.data != null) {
-                        final List<Map<String, dynamic>> recetasDisponibles =
-                            snapshot.data!;
-
-                        if (recetasDisponibles.isEmpty) {
-                          return Text(
-                            'No se encontraron recetas disponibles.',
-                            style: TextStyle(fontSize: 16),
-                          );
-                        }
-
-                        return Column(
-                          children: recetasDisponibles.map((recetaInfo) {
-                            final String nombreReceta =
-                                recetaInfo['nombre_receta'] ??
-                                    'Receta sin nombre';
-                            final String imagenRecetaPath =
-                                recetaInfo['imagen_receta'] ?? '';
-                            final int recipeIndex = recetaInfo['id_receta'] ??
-                                0; // Corregido el índice de la receta
-
-                            return RecetaItem(
-                              recetaInfo: recetaInfo,
-                              recetasViewModel: widget.recetasViewModel,
-                              onFavoritoPressed: () {
-                                setState(() {
-                                  // Actualizar la lista de recetas para que el cambio de favoritos se refleje
-                                  _actualizarRecetas();
-                                });
-                              },
-                            );
-                          }).toList(),
-                        );
-                      } else {
-                        return Text(
-                          'No se encontraron recetas disponibles.',
-                          style: TextStyle(fontSize: 16),
-                        );
-                      }
-                    }
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FilterChip(
+                  label: Text('Desayunos'),
+                  backgroundColor: Color(0xFF9EE060),
+                  onSelected: (bool selected) {
+                    // Lógica para filtrar recetas de desayunos
                   },
                 ),
-
-              // Mostrar un mensaje si no se proporcionó un RecetasViewModel
-              if (_recetasCargadas && widget.recetasViewModel == null)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'No se ha proporcionado un ViewModel de recetas.',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
+                FilterChip(
+                  label: Text('Comidas'),
+                  backgroundColor: Color(0xFF9EE060),
+                  onSelected: (bool selected) {
+                    // Lógica para filtrar recetas de comidas
+                  },
                 ),
-            ],
+                FilterChip(
+                  label: Text('Cenas'),
+                  backgroundColor: Color(0xFF9EE060),
+                  onSelected: (bool selected) {
+                    // Lógica para filtrar recetas de cenas
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Mis Recetas',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                        height:
+                            16), // Espaciado entre el texto y el indicador de carga
+
+                    // Mostrar un indicador de carga mientras se obtienen las recetas
+                    if (!_recetasCargadas) CircularProgressIndicator(),
+
+                    // Mostrar las recetas una vez que estén cargadas
+                    if (_recetasCargadas && widget.recetasViewModel != null)
+                      FutureBuilder<List<Map<String, dynamic>>>(
+                        future: widget.recetasViewModel!.getRecetasDisponibles(
+                            widget.ingredientesDisponibles ?? []),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            if (snapshot.hasData && snapshot.data != null) {
+                              final List<Map<String, dynamic>> recetasDisponibles =
+                                  snapshot.data!;
+
+                              if (recetasDisponibles.isEmpty) {
+                                return Text(
+                                  'No se encontraron recetas disponibles.',
+                                  style: TextStyle(fontSize: 16),
+                                );
+                              }
+
+                              return Column(
+                                children: recetasDisponibles.map((recetaInfo) {
+                                  final String nombreReceta =
+                                      recetaInfo['nombre_receta'] ??
+                                          'Receta sin nombre';
+                                  final String imagenRecetaPath =
+                                      recetaInfo['imagen_receta'] ?? '';
+                                  final int recipeIndex =
+                                      recetaInfo['id_receta'] ?? 0;
+
+                                  return RecetaItem(
+                                    recetaInfo: recetaInfo,
+                                    recetasViewModel: widget.recetasViewModel,
+                                    onFavoritoPressed: () {
+                                      setState(() {
+                                        // Actualizar la lista de recetas para que el cambio de favoritos se refleje
+                                        _actualizarRecetas();
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              );
+                            } else {
+                              return Text(
+                                'No se encontraron recetas disponibles.',
+                                style: TextStyle(fontSize: 16),
+                              );
+                            }
+                          }
+                        },
+                      ),
+
+                    // Mostrar un mensaje si no se proporcionó un RecetasViewModel
+                    if (_recetasCargadas && widget.recetasViewModel == null)
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'No se ha proporcionado un ViewModel de recetas.',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         color: Color(0xFF9EE060),

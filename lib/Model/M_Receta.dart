@@ -61,4 +61,25 @@ class MReceta {
   Future<List<Receta>> obtenerRecetaFavoritas() async {
     return await _repository.obtenerRecetaFavoritas();
   }
+
+  // Método para obtener las recetas disponibles a partir de los ingredientes disponibles Y si son Desayunos
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesDesayunos(
+      List<String> ingredientesDisponibles) async {
+    // Llama al método correspondiente en el repositorio
+    return await _repository.getRecetasDisponiblesDesayunos(ingredientesDisponibles);
+  }
+
+  // Método para obtener las recetas disponibles a partir de los ingredientes disponibles Y si son Comidas
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesComidas(
+      List<String> ingredientesDisponibles) async {
+    // Llama al método correspondiente en el repositorio
+    return await _repository.getRecetasDisponiblesComidas(ingredientesDisponibles);
+  }
+
+  // Método para obtener las recetas disponibles a partir de los ingredientes disponibles Y si son Cenas
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesCenas(
+      List<String> ingredientesDisponibles) async {
+    // Llama al método correspondiente en el repositorio
+    return await _repository.getRecetasDisponiblesCenas(ingredientesDisponibles);
+  }
 }

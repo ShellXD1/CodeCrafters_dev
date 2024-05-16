@@ -149,4 +149,21 @@ class RecetasViewModel extends ChangeNotifier {
     }).toList();
     return recetasMap;
   }
+
+  // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Desayunos
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesDesayunos(
+      List<String> ingredientesDisponibles) async {
+    return await _mRecetas.getRecetasDisponiblesDesayunos(ingredientesDisponibles);
+  }
+  // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Comidas
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesComidas(
+      List<String> ingredientesDisponibles) async {
+    return await _mRecetas.getRecetasDisponiblesComidas(ingredientesDisponibles);
+  }
+
+  // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Cenas
+  Future<List<Map<String, dynamic>>> getRecetasDisponiblesCenas(
+      List<String> ingredientesDisponibles) async {
+    return await _mRecetas.getRecetasDisponiblesCenas(ingredientesDisponibles);
+  }
 }

@@ -86,11 +86,16 @@ class _RecetaItemState extends State<RecetaItem> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          nombreReceta,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            nombreReceta,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 3,  // Limita a 3 líneas de texto
                           ),
                         ),
                         BotonFavoritos(

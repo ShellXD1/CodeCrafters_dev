@@ -95,13 +95,13 @@ class MyApp extends StatelessWidget {
             ),
         '/allRecetas': (context) => AllRecetasView(
               recetasViewModel: recetasViewModel,
-              database: database,
+              database: database, ingredientesViewModel: ingredientViewModel,
             ),
         '/RecetasFavoritas': (context) {
           var ingredientesViewModel = null;
           return RecetasFavoritasView(
             recetasViewModel: recetasViewModel,
-            database: database,
+            database: database, ingredientesViewModel: ingredientViewModel,
           );
         },
       },

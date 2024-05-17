@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/view/ComponentesView/tarjeta.dart';
+import 'package:proyecto_tsp_dev/view/ingredientes.dart';
+import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 import 'package:proyecto_tsp_dev/view/recetaDetallada.dart'; // Importa la clase RecetaDetalladaView
 
 // Clase RecetasFavoritasView
 class RecetasFavoritasView extends StatefulWidget {
-  final RecetasViewModel? recetasViewModel;
+  final RecetasViewModel recetasViewModel;
   final dynamic database;
-  final IngredienteViewModel? ingredientesViewModel;
-  final IngredienteViewModel? ingredientViewModel;
+  final IngredienteViewModel ingredientesViewModel;
 
   const RecetasFavoritasView({
     Key? key,
-    this.recetasViewModel,
+    required this.recetasViewModel,
     required this.database,
-    this.ingredientesViewModel,
-    this.ingredientViewModel,
+    required this.ingredientesViewModel,
   }) : super(key: key);
 
   @override
@@ -199,53 +199,47 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Acción al presionar el botón "Recetas"
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                  Navigator.pushNamed(context, '/recetas');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+
+      //Desde este punto esta el navigationBar, no se logro implementar cierta persistencia, por lo cual es importante copiar este y pegarlo
+      //en las vistas que se creen
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Recetas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Ingredientes',
+          ),
+        ],
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecetasView(
+                    recetasViewModel: widget.recetasViewModel,
+                    database: null, ingredientesViewModel: widget.ingredientesViewModel, // Assuming you don't need database here
                   ),
-                  padding: EdgeInsets.all(16.0),
                 ),
-                child: Text(
-                  'Recetas',
-                  style: TextStyle(
-                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                  Navigator.pushNamed(context, '/ingredientes');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9EE060),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IngredientesView(
+                    ingredientViewModel: widget.ingredientesViewModel,
+                    database: widget.database, recetasViewModel: widget.recetasViewModel,
                   ),
-                  padding: EdgeInsets.all(16.0),
                 ),
-                child: Text(
-                  'Ingredientes',
-                  style: TextStyle(
-                      fontSize: 25.0, fontFamily: 'Chivo', color: Colors.black),
-                ),
-              ),
-            ),
-          ],
-        ),
+              );
+              break;
+          }
+        },
       ),
     );
   }

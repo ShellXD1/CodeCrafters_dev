@@ -157,19 +157,4 @@ class RecetasViewModel extends ChangeNotifier {
     return await _mRecetas.getRecetasDisponiblesCenas(ingredientesDisponibles);
   }
 
-  //Metodo para obtener las recetas del desayuno
-  Future<List<Map<String, dynamic>>> getRecetasDesayuno() async {
-    return await _mRecetas.getRecetasDesayuno();
-  }
-
-  //Metodo para obtener las recetas de la comida
-  Future<List<Map<String, dynamic>>> getRecetasComida() async {
-    return await _mRecetas.getRecetasComida();
-  }
-
-  //Metodo para obtener las recetas de la cena
-  Future<List<Map<String, dynamic>>> getRecetasCena() async {
-    return await _mRecetas.getRecetasCena();
-  }
-
 }

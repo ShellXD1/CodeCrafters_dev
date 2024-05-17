@@ -98,30 +98,48 @@ class _RecetasViewState extends State<RecetasView> {
                 FilterChip(
                   label: Text('Desayunos'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'desayunos',
                   onSelected: (bool selected) {
                     setState(() {
-                      _filtroActual = selected ? 'desayunos' : 'todas';
-                      _cargarRecetasFiltradas();
+                      if (selected) {
+                        _filtroActual = 'desayunos';
+                        _cargarRecetasFiltradas();
+                      } else {
+                        _filtroActual = 'todas';
+                        _cargarRecetasFiltradas();
+                      }
                     });
                   },
                 ),
                 FilterChip(
                   label: Text('Comidas'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'comidas',
                   onSelected: (bool selected) {
                     setState(() {
-                      _filtroActual = selected ? 'comidas' : 'todas';
-                      _cargarRecetasFiltradas();
+                      if (selected) {
+                        _filtroActual = 'comidas';
+                        _cargarRecetasFiltradas();
+                      } else {
+                        _filtroActual = 'todas';
+                        _cargarRecetasFiltradas();
+                      }
                     });
                   },
                 ),
                 FilterChip(
                   label: Text('Cenas'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'cenas',
                   onSelected: (bool selected) {
                     setState(() {
-                      _filtroActual = selected ? 'cenas' : 'todas';
-                      _cargarRecetasFiltradas();
+                      if (selected) {
+                        _filtroActual = 'cenas';
+                        _cargarRecetasFiltradas();
+                      } else {
+                        _filtroActual = 'todas';
+                        _cargarRecetasFiltradas();
+                      }
                     });
                   },
                 ),

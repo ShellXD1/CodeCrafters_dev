@@ -106,7 +106,7 @@ class DRReceta {
               favoritos: e['favoritos'],
               clasificacion: e['clasificacion'], 
               ingredientes: e['ingredientes'], 
-              informacion: e['info_clasificacion']
+              informacion: e['info_nutricional']
             ))
         .toList();
   }
@@ -219,4 +219,35 @@ class DRReceta {
     print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
+
+  // Obtener recetas de Desayuno
+  Future<List<Map<String, dynamic>>> getRecetasDesayuno() async {
+    final List<Map<String, dynamic>> recetasDesayuno = await _database.rawQuery('''
+      SELECT nombre_receta, imagen_receta
+      FROM Recetas
+      WHERE clasificacion = 'Desayuno';
+    ''');
+    return recetasDesayuno;
+  }
+
+  // Obtener recetas de Comida
+  Future<List<Map<String, dynamic>>> getRecetasComida() async {
+    final List<Map<String, dynamic>> recetasComida = await _database.rawQuery('''
+      SELECT nombre_receta, imagen_receta
+      FROM Recetas
+      WHERE clasificacion = 'Comida';
+    ''');
+    return recetasComida;
+  }
+
+  // Obtener recetas de Cena
+  Future<List<Map<String, dynamic>>> getRecetasCena() async {
+    final List<Map<String, dynamic>> recetasCena = await _database.rawQuery('''
+      SELECT nombre_receta, imagen_receta
+      FROM Recetas
+      WHERE clasificacion = 'Cena';
+    ''');
+    return recetasCena;
+  }
+
 }

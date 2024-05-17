@@ -25,10 +25,15 @@ class RecetasView extends StatefulWidget {
 // Logica para mostrar las recetas
 class _RecetasViewState extends State<RecetasView> {
   bool _recetasCargadas = false;
+  String _filtroActual = 'todas'; // Variable para almacenar el filtro actual
 
   @override
   void initState() {
     super.initState();
+    _cargarRecetas();
+  }
+
+  void _cargarRecetas() {
     if (widget.recetasViewModel != null) {
       widget.recetasViewModel!.obtenerRecetas().then((_) {
         setState(() {
@@ -94,21 +99,30 @@ class _RecetasViewState extends State<RecetasView> {
                   label: Text('Desayunos'),
                   backgroundColor: Color(0xFF9EE060),
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de desayunos
+                    setState(() {
+                      _filtroActual = selected ? 'desayunos' : 'todas';
+                      _cargarRecetasFiltradas();
+                    });
                   },
                 ),
                 FilterChip(
                   label: Text('Comidas'),
                   backgroundColor: Color(0xFF9EE060),
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de comidas
+                    setState(() {
+                      _filtroActual = selected ? 'comidas' : 'todas';
+                      _cargarRecetasFiltradas();
+                    });
                   },
                 ),
                 FilterChip(
                   label: Text('Cenas'),
                   backgroundColor: Color(0xFF9EE060),
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de cenas
+                    setState(() {
+                      _filtroActual = selected ? 'cenas' : 'todas';
+                      _cargarRecetasFiltradas();
+                    });
                   },
                 ),
               ],
@@ -135,8 +149,7 @@ class _RecetasViewState extends State<RecetasView> {
                     // Mostrar las recetas una vez que estén cargadas
                     if (_recetasCargadas && widget.recetasViewModel != null)
                       FutureBuilder<List<Map<String, dynamic>>>(
-                        future: widget.recetasViewModel!.getRecetasDisponibles(
-                            widget.ingredientesDisponibles ?? []),
+                        future: _obtenerRecetasFiltradas(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
@@ -255,6 +268,39 @@ class _RecetasViewState extends State<RecetasView> {
       _recetasCargadas = false;
     });
     widget.recetasViewModel!.obtenerRecetas().then((_) {
+      setState(() {
+        _recetasCargadas = true;
+      });
+    });
+  }
+
+  // Método para obtener las recetas filtradas
+  Future<List<Map<String, dynamic>>> _obtenerRecetasFiltradas() async {
+    if (widget.recetasViewModel != null) {
+      if (_filtroActual == 'desayunos') {
+        return await widget.recetasViewModel!.getRecetasDisponiblesDesayunos(
+            widget.ingredientesDisponibles ?? []);
+      } else if (_filtroActual == 'comidas') {
+        return await widget.recetasViewModel!.getRecetasDisponiblesComidas(
+            widget.ingredientesDisponibles ?? []);
+      } else if (_filtroActual == 'cenas') {
+        return await widget.recetasViewModel!.getRecetasDisponiblesCenas(
+            widget.ingredientesDisponibles ?? []);
+      } else {
+        return await widget.recetasViewModel!.getRecetasDisponibles(
+            widget.ingredientesDisponibles ?? []);
+      }
+    } else {
+      return [];
+    }
+  }
+
+  // Método para cargar las recetas filtradas
+  void _cargarRecetasFiltradas() {
+    setState(() {
+      _recetasCargadas = false;
+    });
+    _obtenerRecetasFiltradas().then((_) {
       setState(() {
         _recetasCargadas = true;
       });

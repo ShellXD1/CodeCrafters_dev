@@ -200,7 +200,7 @@ class _IngredientesViewState extends State<IngredientesView> {
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () {
                 // Al presionar el botón, se muestra el widget para agregar un ingrediente
-                showModalBottomSheet(
+                showDialog(
                   context: context,
                   builder: (context) => AgregarIngredienteWidget(
                     onIngredientAdded: (String name, int quantity) {  }, 
@@ -371,7 +371,8 @@ class AgregarIngredienteWidget extends StatefulWidget {
     Key? key,
     required this.onIngredientAdded,
     required this.ingredientViewModel,
-    this.database, required this.recetasViewModel,
+    this.database,
+    required this.recetasViewModel,
   }) : super(key: key);
 
   @override
@@ -398,71 +399,84 @@ class _AgregarIngredienteWidgetState extends State<AgregarIngredienteWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(20.0),
-          padding: EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            border: Border.all(color: Colors.blueGrey, width: 2.0),
-          ),
-          child: _ingredientesCargados
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: _selectedIngredient,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedIngredient = newValue;
-                        });
-                      },
-                      items: widget.ingredientViewModel!.ingredientes
-                          .map((Ingrediente ingrediente) {
-                        return DropdownMenuItem<String>(
-                          value: ingrediente.nombre,
-                          child: Text(ingrediente.nombre),
-                        );
-                      }).toList(),
-                      decoration: InputDecoration(
-                        labelText: 'Selecciona un ingrediente',
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Cantidad'),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        setState(() {
-                          _quantity = int.tryParse(value) ?? 0;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 10.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_selectedIngredient != null &&
-                            _selectedIngredient!.isNotEmpty) {
-                          widget.ingredientViewModel?.agregarCantidadIngredienteNombre(_selectedIngredient!, _quantity);
-                          widget.onIngredientAdded(_selectedIngredient!, _quantity);
-                          Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database, recetasViewModel: widget.recetasViewModel,)),
-                          );
-                        } else {
-                          // Handle error or empty selection
-                        }
-                      },
-                      child: Text('Agregar'),
-                    ),
-                  ],
-                )
-              : CircularProgressIndicator(),
-        ),
+      child: _buildAlertDialog(context),
+    );
+  }
+
+  Widget _buildAlertDialog(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
       ),
+      title: Text('Agregar Ingrediente'),
+      content: _ingredientesCargados
+          ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButtonFormField<String>(
+                    value: _selectedIngredient,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedIngredient = newValue;
+                      });
+                    },
+                    items: widget.ingredientViewModel!.ingredientes
+                        .map((Ingrediente ingrediente) {
+                      return DropdownMenuItem<String>(
+                        value: ingrediente.nombre,
+                        child: Text(ingrediente.nombre),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      labelText: 'Selecciona un ingrediente',
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Cantidad'),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _quantity = int.tryParse(value) ?? 0;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            )
+          : CircularProgressIndicator(),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_selectedIngredient != null && _selectedIngredient!.isNotEmpty) {
+              widget.ingredientViewModel?.agregarCantidadIngredienteNombre(_selectedIngredient!, _quantity);
+              widget.onIngredientAdded(_selectedIngredient!, _quantity);
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IngredientesView(
+                    ingredientViewModel: widget.ingredientViewModel,
+                    database: widget.database,
+                    recetasViewModel: widget.recetasViewModel,
+                  ),
+                ),
+              );
+            } else {
+              // Manejar error o selección vacía
+            }
+          },
+          child: Text('Agregar'),
+        ),
+      ],
     );
   }
 }

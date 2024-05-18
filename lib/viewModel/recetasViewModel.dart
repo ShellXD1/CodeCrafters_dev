@@ -157,4 +157,52 @@ class RecetasViewModel extends ChangeNotifier {
     return await _mRecetas.getRecetasDisponiblesCenas(ingredientesDisponibles);
   }
 
+  // Método dinamico para obtener las recetas favoritas de desayuno
+  Future<List<Map<String, dynamic>>> obtenerRecetasFavoritasDesayuno() async {
+    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritasDesayuno();
+    // Mapear las recetas favoritas a un formato de lista de mapas
+    List<Map<String, dynamic>> recetasFavoritasMap =
+        recetasFavoritas.map((receta) {
+      return {
+        'id_receta': receta.id,
+        'nombre_receta': receta.nombre,
+        'imagen_receta': receta.imagen,
+        // Añade otros campos de la receta según sea necesario
+      };
+    }).toList();
+    return recetasFavoritasMap;
+  }
+
+  // Método dinamico para obtener las recetas favoritas de comida
+  Future<List<Map<String, dynamic>>> obtenerRecetasFavoritasComida() async {
+    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritasComida();
+    // Mapear las recetas favoritas a un formato de lista de mapas
+    List<Map<String, dynamic>> recetasFavoritasMap =
+        recetasFavoritas.map((receta) {
+      return {
+        'id_receta': receta.id,
+        'nombre_receta': receta.nombre,
+        'imagen_receta': receta.imagen,
+        // Añade otros campos de la receta según sea necesario
+      };
+    }).toList();
+    return recetasFavoritasMap;
+  }
+
+  // Método dinamico para obtener las recetas favoritas
+  Future<List<Map<String, dynamic>>> obtenerRecetasFavoritasCena() async {
+    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritasCena();
+    // Mapear las recetas favoritas a un formato de lista de mapas
+    List<Map<String, dynamic>> recetasFavoritasMap =
+        recetasFavoritas.map((receta) {
+      return {
+        'id_receta': receta.id,
+        'nombre_receta': receta.nombre,
+        'imagen_receta': receta.imagen,
+        // Añade otros campos de la receta según sea necesario
+      };
+    }).toList();
+    return recetasFavoritasMap;
+  }
+
 }

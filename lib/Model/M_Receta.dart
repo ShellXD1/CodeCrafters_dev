@@ -76,5 +76,20 @@ class MReceta {
     // Llama al método correspondiente en el repositorio
     return await _repository.getRecetasDisponiblesCenas(ingredientesDisponibles);
   }
+
+  // Método para obtener las recetas favoritas
+  Future<List<Receta>> obtenerRecetaFavoritasDesayuno() async {
+    return await _repository.obtenerRecetaFavoritasDesayuno();
+  }
+
+  // Método para obtener las recetas favoritas
+  Future<List<Receta>> obtenerRecetaFavoritasComida() async {
+    return await _repository.obtenerRecetaFavoritasComida();
+  }
+
+  // Método para obtener las recetas favoritas
+  Future<List<Receta>> obtenerRecetaFavoritasCena() async {
+    return await _repository.obtenerRecetaFavoritasCena();
+  }
   
 }

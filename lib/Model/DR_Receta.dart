@@ -220,4 +220,62 @@ class DRReceta {
     return recetasDisponibles;
   }
 
+  // Método para obtener las recetas favoritas de desayuno
+  Future<List<Receta>> obtenerRecetaFavoritasDesayuno() async {
+    List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
+      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Desayuno"',
+    );
+    return recetasMap
+        .map((e) => Receta(
+              id: e['id_receta'],
+              nombre: e['nombre_receta'],
+              imagen: e['imagen_receta'],
+              preparacion: e['Preparacion_receta'],
+              favoritos: e['favoritos'],
+              clasificacion: e['clasificacion'],
+              ingredientes: e['ingredientes'],
+              informacion: e['info_nutricional']
+            ))
+        .toList();
+  }
+
+  // Método para obtener las recetas favoritas de comida
+  Future<List<Receta>> obtenerRecetaFavoritasComida() async {
+    List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
+      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Comida"',
+    );
+    return recetasMap
+        .map((e) => Receta(
+              id: e['id_receta'],
+              nombre: e['nombre_receta'],
+              imagen: e['imagen_receta'],
+              preparacion: e['Preparacion_receta'],
+              favoritos: e['favoritos'],
+              clasificacion: e['clasificacion'],
+              ingredientes: e['ingredientes'],
+              informacion: e['info_nutricional']
+            ))
+        .toList();
+  }
+
+  // Método para obtener las recetas favoritas de cena
+  Future<List<Receta>> obtenerRecetaFavoritasCena() async {
+    List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
+      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Cena"',
+    );
+    return recetasMap
+        .map((e) => Receta(
+              id: e['id_receta'],
+              nombre: e['nombre_receta'],
+              imagen: e['imagen_receta'],
+              preparacion: e['Preparacion_receta'],
+              favoritos: e['favoritos'],
+              clasificacion: e['clasificacion'],
+              ingredientes: e['ingredientes'],
+              informacion: e['info_nutricional']
+            ))
+        .toList();
+  }
+
+  
 }

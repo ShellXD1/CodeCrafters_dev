@@ -26,17 +26,42 @@ class RecetasFavoritasView extends StatefulWidget {
 // Logica para mostrar las recetas
 class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
   bool _recetasCargadas = false;
+  String _filtroActual = '';
 
   @override
   void initState() {
     super.initState();
-    if (widget.recetasViewModel != null) {
-      widget.recetasViewModel!.obtenerRecetasFavoritas().then((_) {
-        setState(() {
-          _recetasCargadas = true;
-        });
-      });
+    _actualizarRecetas();
+  }
+
+  // Método para actualizar las recetas según el filtro
+  void _actualizarRecetas() {
+    setState(() {
+      _recetasCargadas = false;
+    });
+
+    Future<List<Map<String, dynamic>>> futureRecetas;
+
+    switch (_filtroActual) {
+      case 'Desayunos':
+        futureRecetas = widget.recetasViewModel.obtenerRecetasFavoritasDesayuno();
+        break;
+      case 'Comidas':
+        futureRecetas = widget.recetasViewModel.obtenerRecetasFavoritasComida();
+        break;
+      case 'Cenas':
+        futureRecetas = widget.recetasViewModel.obtenerRecetasFavoritasCena();
+        break;
+      default:
+        futureRecetas = widget.recetasViewModel.getRecetasFavoritas();
+        break;
     }
+
+    futureRecetas.then((_) {
+      setState(() {
+        _recetasCargadas = true;
+      });
+    });
   }
 
   // Carga las recetas
@@ -94,22 +119,34 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
                 FilterChip(
                   label: Text('Desayunos'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'Desayunos',
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de desayunos
+                    setState(() {
+                      _filtroActual = selected ? 'Desayunos' : '';
+                      _actualizarRecetas();
+                    });
                   },
                 ),
                 FilterChip(
                   label: Text('Comidas'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'Comidas',
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de comidas
+                    setState(() {
+                      _filtroActual = selected ? 'Comidas' : '';
+                      _actualizarRecetas();
+                    });
                   },
                 ),
                 FilterChip(
                   label: Text('Cenas'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'Cenas',
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de cenas
+                    setState(() {
+                      _filtroActual = selected ? 'Cenas' : '';
+                      _actualizarRecetas();
+                    });
                   },
                 ),
               ],
@@ -136,7 +173,7 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
                     // Mostrar las recetas una vez que estén cargadas
                     if (_recetasCargadas && widget.recetasViewModel != null)
                       FutureBuilder<List<Map<String, dynamic>>>(
-                        future: widget.recetasViewModel!.getRecetasFavoritas(),
+                        future: _obtenerRecetasFiltradas(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
@@ -222,7 +259,8 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
                 MaterialPageRoute(
                   builder: (context) => RecetasView(
                     recetasViewModel: widget.recetasViewModel,
-                    database: null, ingredientesViewModel: widget.ingredientesViewModel, // Assuming you don't need database here
+                    database: null, 
+                    ingredientesViewModel: widget.ingredientesViewModel, // Assuming you don't need database here
                   ),
                 ),
               );
@@ -233,7 +271,8 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
                 MaterialPageRoute(
                   builder: (context) => IngredientesView(
                     ingredientViewModel: widget.ingredientesViewModel,
-                    database: widget.database, recetasViewModel: widget.recetasViewModel,
+                    database: widget.database, 
+                    recetasViewModel: widget.recetasViewModel,
                   ),
                 ),
               );
@@ -244,15 +283,17 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
     );
   }
 
-  // Método para actualizar las recetas
-  void _actualizarRecetas() {
-    setState(() {
-      _recetasCargadas = false;
-    });
-    widget.recetasViewModel!.obtenerRecetasFavoritas().then((_) {
-      setState(() {
-        _recetasCargadas = true;
-      });
-    });
+  // Método para obtener las recetas filtradas según el filtro actual
+  Future<List<Map<String, dynamic>>> _obtenerRecetasFiltradas() {
+    switch (_filtroActual) {
+      case 'Desayunos':
+        return widget.recetasViewModel.obtenerRecetasFavoritasDesayuno();
+      case 'Comidas':
+        return widget.recetasViewModel.obtenerRecetasFavoritasComida();
+      case 'Cenas':
+        return widget.recetasViewModel.obtenerRecetasFavoritasCena();
+      default:
+        return widget.recetasViewModel.getRecetasFavoritas();
+    }
   }
 }

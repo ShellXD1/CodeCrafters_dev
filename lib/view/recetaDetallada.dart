@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
 
 class RecetaDetalladaView extends StatelessWidget {
@@ -16,9 +15,10 @@ class RecetaDetalladaView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de la receta',
-            style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo')),
-        // Otras acciones del app bar
+        title: Text(
+          'Detalles de la receta',
+          style: TextStyle(fontSize: 30.0, fontFamily: 'Chivo'),
+        ),
       ),
       body: FutureBuilder(
         future: recetasViewModel.getRecipeDetails(recipeIndex),
@@ -34,8 +34,6 @@ class RecetaDetalladaView extends StatelessWidget {
           } else {
             return Cuerpo(
               recipeDetails: snapshot.data,
-              recipeIndex: recipeIndex,
-              recetasViewModel: recetasViewModel,
             );
           }
         },
@@ -46,15 +44,8 @@ class RecetaDetalladaView extends StatelessWidget {
 
 class Cuerpo extends StatelessWidget {
   final Map<String, dynamic>? recipeDetails;
-  final RecetasViewModel recetasViewModel;
-  final int recipeIndex;
 
-  const Cuerpo(
-      {Key? key,
-      this.recipeDetails,
-      required this.recetasViewModel,
-      required this.recipeIndex})
-      : super(key: key);
+  const Cuerpo({Key? key, this.recipeDetails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,51 +59,51 @@ class Cuerpo extends StatelessWidget {
     final String preparacion = recipeDetails!['preparacion'];
     final String informacion = recipeDetails!['informacion'];
 
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(12),
-        child: Align(
-          alignment: Alignment.center,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              RecetaDes(recipeDetails!['imagen']),
-              SizedBox(height: 20),
-              Text(
-                'Lista de Ingredientes:',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Chivo'),
-              ),
-              SizedBox(height: 5),
-              IngredientesWidget(ingredientes: ingredientes),
-              SizedBox(height: 20),
-              Text(
-                'Lista de Preparación:',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Chivo'),
-              ),
-              SizedBox(height: 5),
-              PreparacionWidget(preparacion: preparacion),
-              SizedBox(height: 20),
-              Text(
-                'Lista de Informacion Nutricional:',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Chivo'),
-              ),
-              SizedBox(height: 5),
-              InformacionWidget(informacion: informacion),
-            ],
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(height: 20),
+          RecetaDes(recipeDetails!['imagen']),
+          SizedBox(height: 20),
+          Text(
+            'Lista de Ingredientes:',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Chivo',
+            ),
           ),
-        ),
+          SizedBox(height: 5),
+          IngredientesWidget(ingredientes: ingredientes),
+          SizedBox(height: 20),
+          Text(
+            'Lista de Preparación:',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Chivo',
+            ),
+          ),
+          SizedBox(height: 5),
+          PreparacionWidget(preparacion: preparacion),
+          SizedBox(height: 20),
+          Text(
+            'Lista de Información Nutricional:',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Chivo',
+            ),
+          ),
+          SizedBox(height: 5),
+          InformacionWidget(informacion: informacion),
+          SizedBox(height: 20),
+        ],
       ),
     );
   }
@@ -126,53 +117,19 @@ class PreparacionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Color.fromARGB(255, 158, 224, 96),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Preparación",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Chivo'),
-                    ),
-                    SizedBox(height: 16),
-                    // Texto de la preparación
-                    Text(
-                      preparacion,
-                      textAlign:
-                          TextAlign.justify, // Alinea el texto justificado
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                // Botón para cerrar el diálogo
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cerrar'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        color: Color.fromARGB(255, 158, 224, 96),
-        child: Text(
-          "Preparación",
-          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
-        ),
+    return ExpansionTile(
+      title: Text(
+        "Preparación",
+        style: TextStyle(fontFamily: 'Chivo'),
       ),
+      children: [
+        ListTile(
+          title: Text(
+            preparacion,
+            textAlign: TextAlign.justify,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -197,51 +154,21 @@ class IngredientesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Color.fromARGB(255, 158, 224, 96),
-              content: SingleChildScrollView(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Ingredientes",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontFamily: 'Chivo'),
-                  ),
-                  SizedBox(height: 16),
-                  //Texto de los ingredientes
-                  Text(
-                    ingredientes,
-                    textAlign: TextAlign.justify, //Alinea el texto justificado
-                  )
-                ],
-              )),
-              actions: <Widget>[
-                // Botón para cerrar el diálogo
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cerrar'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        color: Color.fromARGB(255, 158, 224, 96),
-        child: Text(
-          "Ingredientes",
-          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
-        ),
+    List<String> ingredientesList = ingredientes.split('-');
+    return ExpansionTile(
+      title: Text(
+        "Ingredientes",
+        style: TextStyle(fontFamily: 'Chivo'),
       ),
+      children: [
+        for (var ingrediente in ingredientesList)
+          ListTile(
+            title: Text(
+              ingrediente,
+              textAlign: TextAlign.justify,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -254,53 +181,21 @@ class InformacionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Color.fromARGB(255, 158, 224, 96),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Informacion Nutricional",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Chivo'),
-                    ),
-                    SizedBox(height: 16),
-                    // Texto de la preparación
-                    Text(
-                      informacion,
-                      textAlign:
-                          TextAlign.justify, // Alinea el texto justificado
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                // Botón para cerrar el diálogo
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cerrar'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        color: Color.fromARGB(255, 158, 224, 96),
-        child: Text(
-          "Informacion Nutricional",
-          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
-        ),
+    List<String> informacionList = informacion.split('-');
+    return ExpansionTile(
+      title: Text(
+        "Información Nutricional",
+        style: TextStyle(fontFamily: 'Chivo'),
       ),
+      children: [
+        for (var info in informacionList)
+          ListTile(
+            title: Text(
+              info,
+              textAlign: TextAlign.justify,
+            ),
+          ),
+      ],
     );
   }
 }

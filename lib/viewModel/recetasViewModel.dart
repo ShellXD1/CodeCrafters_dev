@@ -226,4 +226,12 @@ class RecetasViewModel extends ChangeNotifier {
     }).toList();
     return recetasFavoritasMap;
   }
+
+  Future<List<Map<String, dynamic>>> getRecetasAleatorias(List<String> ingredientesDisponibles) async {
+    List<Map<String, dynamic>> recetas = List.from(await _mRecetas.getRecetasDisponibles(ingredientesDisponibles)); // Crear una copia modificable de la lista
+    recetas.shuffle(); // Mezclar las recetas
+    return recetas.take(3).toList(); // Tomar solo las primeras tres recetas (aleatorias)
+  }
+
 }
+

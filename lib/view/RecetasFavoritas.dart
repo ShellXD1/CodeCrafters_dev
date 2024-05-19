@@ -111,47 +111,19 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FilterChip(
-                  label: Text('Desayunos'),
-                  backgroundColor: Color(0xFF9EE060),
-                  selected: _filtroActual == 'Desayunos',
-                  onSelected: (bool selected) {
-                    setState(() {
-                      _filtroActual = selected ? 'Desayunos' : '';
-                      _actualizarRecetas();
-                    });
-                  },
-                ),
-                FilterChip(
-                  label: Text('Comidas'),
-                  backgroundColor: Color(0xFF9EE060),
-                  selected: _filtroActual == 'Comidas',
-                  onSelected: (bool selected) {
-                    setState(() {
-                      _filtroActual = selected ? 'Comidas' : '';
-                      _actualizarRecetas();
-                    });
-                  },
-                ),
-                FilterChip(
-                  label: Text('Cenas'),
-                  backgroundColor: Color(0xFF9EE060),
-                  selected: _filtroActual == 'Cenas',
-                  onSelected: (bool selected) {
-                    setState(() {
-                      _filtroActual = selected ? 'Cenas' : '';
-                      _actualizarRecetas();
-                    });
-                  },
-                ),
+                _buildFilterChip('Desayunos', 'desayunos'),
+                _buildFilterChip('Comidas', 'comidas'),
+                _buildFilterChip('Cenas', 'cenas'),
               ],
             ),
           ),
+
+
           Expanded(
             child: SingleChildScrollView(
               child: Center(
@@ -283,17 +255,64 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
     );
   }
 
-  // Método para obtener las recetas filtradas según el filtro actual
-  Future<List<Map<String, dynamic>>> _obtenerRecetasFiltradas() {
-    switch (_filtroActual) {
-      case 'Desayunos':
-        return widget.recetasViewModel.obtenerRecetasFavoritasDesayuno();
-      case 'Comidas':
-        return widget.recetasViewModel.obtenerRecetasFavoritasComida();
-      case 'Cenas':
-        return widget.recetasViewModel.obtenerRecetasFavoritasCena();
-      default:
-        return widget.recetasViewModel.getRecetasFavoritas();
+    // Método para obtener las recetas filtradas
+  Future<List<Map<String, dynamic>>> _obtenerRecetasFiltradas() async {
+    if (widget.recetasViewModel != null) {
+      if (_filtroActual == 'desayunos') {
+        return await widget.recetasViewModel.obtenerRecetasFavoritasDesayuno();
+      } else if (_filtroActual == 'comidas') {
+        return await widget.recetasViewModel.obtenerRecetasFavoritasComida();
+      } else if (_filtroActual == 'cenas') {
+        return await widget.recetasViewModel.obtenerRecetasFavoritasCena();
+      } else {
+        return await widget.recetasViewModel.getRecetasFavoritas();
+      }
+    } else {
+      return [];
     }
   }
+
+  // Método para cargar las recetas filtradas
+  void _cargarRecetasFiltradas() {
+    setState(() {
+      _recetasCargadas = false;
+    });
+    _obtenerRecetasFiltradas().then((_) {
+      setState(() {
+        _recetasCargadas = true;
+      });
+    });
+  }
+
+
+
+
+
+
+  // Método para construir un FilterChip con estilos personalizados
+  Widget _buildFilterChip(String label, String filtro) {
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: _filtroActual == filtro ? Colors.white : Colors.black,
+        ),
+      ),
+      backgroundColor: Colors.white,
+      selectedColor: Color(0xFF9EE060),
+      shape: StadiumBorder(
+        side: BorderSide(color: Color(0xFF9EE060)),
+      ),
+      elevation: 4.0,
+      shadowColor: Colors.black.withOpacity(0.5),
+      selected: _filtroActual == filtro,
+      onSelected: (bool selected) {
+        setState(() {
+          _filtroActual = selected ? filtro : 'todas';
+          _cargarRecetasFiltradas();
+        });
+      },
+    );
+  }
+
 }

@@ -86,63 +86,20 @@ class _RecetasViewState extends State<AllRecetasView> {
       ),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+            Container(
+            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FilterChip(
-                  label: Text('Desayunos'),
-                  backgroundColor: Color(0xFF9EE060),
-                  selected: _filtroActual == 'desayunos',
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
-                        _filtroActual = 'desayunos';
-                        _cargarRecetasFiltradas();
-                      } else {
-                        _filtroActual = 'todas';
-                        _cargarRecetasFiltradas();
-                      }
-                    });
-                  },
-                ),
-                FilterChip(
-                  label: Text('Comidas'),
-                  backgroundColor: Color(0xFF9EE060),
-                  selected: _filtroActual == 'comidas',
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
-                        _filtroActual = 'comidas';
-                        _cargarRecetasFiltradas();
-                      } else {
-                        _filtroActual = 'todas';
-                        _cargarRecetasFiltradas();
-                      }
-                    });
-                  },
-                ),
-                FilterChip(
-                  label: Text('Cenas'),
-                  backgroundColor: Color(0xFF9EE060),
-                  selected: _filtroActual == 'cenas',
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
-                        _filtroActual = 'cenas';
-                        _cargarRecetasFiltradas();
-                      } else {
-                        _filtroActual = 'todas';
-                        _cargarRecetasFiltradas();
-                      }
-                    });
-                  },
-                ),
+                _buildFilterChip('Desayunos', 'desayunos'),
+                _buildFilterChip('Comidas', 'comidas'),
+                _buildFilterChip('Cenas', 'cenas'),
               ],
             ),
           ),
+
+
           Expanded(
             child: SingleChildScrollView(
               child: Center(
@@ -315,6 +272,33 @@ class _RecetasViewState extends State<AllRecetasView> {
       });
     });
   }
+
+    // Método para construir un FilterChip con estilos personalizados
+  Widget _buildFilterChip(String label, String filtro) {
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: _filtroActual == filtro ? Colors.white : Colors.black,
+        ),
+      ),
+      backgroundColor: Colors.white,
+      selectedColor: Color(0xFF9EE060),
+      shape: StadiumBorder(
+        side: BorderSide(color: Color(0xFF9EE060)),
+      ),
+      elevation: 4.0,
+      shadowColor: Colors.black.withOpacity(0.5),
+      selected: _filtroActual == filtro,
+      onSelected: (bool selected) {
+        setState(() {
+          _filtroActual = selected ? filtro : 'todas';
+          _cargarRecetasFiltradas();
+        });
+      },
+    );
+  }
+
 }
 
 

@@ -29,6 +29,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/paper_texture.jpg
     - assets/recetas/ensalada.png
     - assets/recetas/spaghetti.png
     - assets/recetas/huarache.png

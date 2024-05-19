@@ -74,5 +74,12 @@ class IngredienteViewModel extends ChangeNotifier{
       notifyListeners();
     }
   }
+
+  Future<List<Ingrediente>> obtenerTresIngredientesMenosCantidad() async {
+  List<Ingrediente> ingredientes = await _mIngredientes.obtenerIngredientesNoVacios(); // Obtener todos los ingredientes
+  ingredientes.sort((a, b) => a.cantidad.compareTo(b.cantidad)); // Ordenar los ingredientes por cantidad
+  return ingredientes.take(3).toList(); // Tomar los tres primeros ingredientes (con menor cantidad)
+}
+
 }
 

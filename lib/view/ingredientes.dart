@@ -52,7 +52,7 @@ class _IngredientesViewState extends State<IngredientesView> {
                       controller: _cantidadController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: 'Cantidad',
+                        labelText: 'Cantidad en ${ingrediente.medida}',
                       ),
                     ),
                   ),
@@ -178,7 +178,7 @@ class _IngredientesViewState extends State<IngredientesView> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      'Cantidad: ${ingrediente.cantidad}',
+                                      'Cantidad: ${ingrediente.cantidad} ${ingrediente.medida}',
                                       style: TextStyle(fontSize: 16),
                                       textAlign: TextAlign.center,
                                     ),
@@ -258,105 +258,6 @@ class _IngredientesViewState extends State<IngredientesView> {
           }
         },
       ),
-
-
-
-      /*bottomNavigationBar: Container(
-        color: Color(0xFF9EE060),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AgregarIngredienteWidget(
-                      onIngredientAdded: (name, quantity) {
-                        print('Nombre del ingrediente: $name, Cantidad: $quantity');
-                        setState(() {});
-                      },
-                      ingredientViewModel: widget.ingredientViewModel,
-                      database: widget.database,
-                    );
-                  },
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF9EE060),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-                padding: EdgeInsets.all(20.0),
-              ),
-              child: Text(
-                'Agregar Ingrediente',
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: 'Chivo',
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      print("Botón 'Recetas' presionado");
-                      Navigator.popUntil(context, ModalRoute.withName('/'));
-                      Navigator.pushNamed(context,'/recetas');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF9EE060),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      padding: EdgeInsets.all(16.0),
-                    ),
-                    child: Text(
-                      'Recetas',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontFamily: 'Chivo',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      print("Botón 'Ingredientes' presionado");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF9EE060),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      padding: EdgeInsets.all(16.0),
-                    ),
-                    child: Text(
-                      'Ingredientes',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontFamily: 'Chivo',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),*/
-
-
-
-
-
-
     );
   }
 }

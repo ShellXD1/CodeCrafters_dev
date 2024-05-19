@@ -99,15 +99,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'], 
-              ingredientes: e['ingredientes'], 
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
@@ -162,7 +161,6 @@ class DRReceta {
     return false;
   }
 
-
   // Obtener recetas disponibles a partir de los ingredientes disponibles y que sean Desayunos
   Future<List<Map<String, dynamic>>> getRecetasDisponiblesDesayunos(
     List<String> ingredientesDisponibles,
@@ -178,7 +176,8 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
+    print(
+        'Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 
@@ -197,7 +196,8 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
+    print(
+        'Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 
@@ -216,7 +216,8 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
+    print(
+        'Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 
@@ -227,15 +228,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'],
-              ingredientes: e['ingredientes'],
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
@@ -246,15 +246,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'],
-              ingredientes: e['ingredientes'],
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
@@ -265,17 +264,24 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'],
-              ingredientes: e['ingredientes'],
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
-  
+  // Método para obtener la lista de informacion nutricional por preparación
+  Future<String?> obtenerInfoNutriReceta(int idReceta) async {
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    if (result.isNotEmpty) {
+      return result.first['info_nutricional'] as String?;
+    }
+    return null;
+  }
 }

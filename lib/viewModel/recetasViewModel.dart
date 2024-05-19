@@ -61,6 +61,7 @@ class RecetasViewModel extends ChangeNotifier {
       'imagen': receta.imagen, // URL de la imagen de la receta
       'ingredientes': receta.ingredientes,
       'preparacion': receta.preparacion,
+      'informacion': receta.informacion,
     };
 
     // Simular un retraso de 1 segundo para imitar una llamada asíncrona a una API o base de datos
@@ -143,12 +144,15 @@ class RecetasViewModel extends ChangeNotifier {
   // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Desayunos
   Future<List<Map<String, dynamic>>> getRecetasDisponiblesDesayunos(
       List<String> ingredientesDisponibles) async {
-    return await _mRecetas.getRecetasDisponiblesDesayunos(ingredientesDisponibles);
+    return await _mRecetas
+        .getRecetasDisponiblesDesayunos(ingredientesDisponibles);
   }
+
   // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Comidas
   Future<List<Map<String, dynamic>>> getRecetasDisponiblesComidas(
       List<String> ingredientesDisponibles) async {
-    return await _mRecetas.getRecetasDisponiblesComidas(ingredientesDisponibles);
+    return await _mRecetas
+        .getRecetasDisponiblesComidas(ingredientesDisponibles);
   }
 
   // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Cenas
@@ -159,7 +163,8 @@ class RecetasViewModel extends ChangeNotifier {
 
   // Método dinamico para obtener las recetas favoritas de desayuno
   Future<List<Map<String, dynamic>>> obtenerRecetasFavoritasDesayuno() async {
-    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritasDesayuno();
+    List<Receta> recetasFavoritas =
+        await _mRecetas.obtenerRecetaFavoritasDesayuno();
     // Mapear las recetas favoritas a un formato de lista de mapas
     List<Map<String, dynamic>> recetasFavoritasMap =
         recetasFavoritas.map((receta) {
@@ -175,7 +180,8 @@ class RecetasViewModel extends ChangeNotifier {
 
   // Método dinamico para obtener las recetas favoritas de comida
   Future<List<Map<String, dynamic>>> obtenerRecetasFavoritasComida() async {
-    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritasComida();
+    List<Receta> recetasFavoritas =
+        await _mRecetas.obtenerRecetaFavoritasComida();
     // Mapear las recetas favoritas a un formato de lista de mapas
     List<Map<String, dynamic>> recetasFavoritasMap =
         recetasFavoritas.map((receta) {
@@ -191,7 +197,8 @@ class RecetasViewModel extends ChangeNotifier {
 
   // Método dinamico para obtener las recetas favoritas
   Future<List<Map<String, dynamic>>> obtenerRecetasFavoritasCena() async {
-    List<Receta> recetasFavoritas = await _mRecetas.obtenerRecetaFavoritasCena();
+    List<Receta> recetasFavoritas =
+        await _mRecetas.obtenerRecetaFavoritasCena();
     // Mapear las recetas favoritas a un formato de lista de mapas
     List<Map<String, dynamic>> recetasFavoritasMap =
         recetasFavoritas.map((receta) {
@@ -204,5 +211,4 @@ class RecetasViewModel extends ChangeNotifier {
     }).toList();
     return recetasFavoritasMap;
   }
-
 }

@@ -10,9 +10,6 @@ class DRReceta {
 
   // Obtener la lista de recetas
   Future<List<Receta>> getRecetas() async {
-    List<Map<String, dynamic>> tables = await _database
-        .rawQuery("SELECT name FROM sqlite_master WHERE type='table';");
-    print("Tablas en la base de datos: $tables");
     List<Map<String, dynamic>> recetasMap = await _database.query('Recetas');
     return recetasMap
         .map((e) => Receta(
@@ -26,6 +23,38 @@ class DRReceta {
             informacion: e['info_nutricional']))
         .toList();
   }
+
+  Future<List<Receta>> getRecetasPorClasificacion(String clasificacion) async {
+  try {
+    // Depuración: Verifica el valor de la clasificación
+    print('Clasificación buscada: $clasificacion');
+    
+    List<Map<String, dynamic>> recetasMap = await _database.query(
+      'Recetas',
+      where: 'clasificacion = ?',
+      whereArgs: [clasificacion],
+    );
+
+    // Depuración: Verifica el resultado de la consulta
+    print('Resultados de la consulta: ${recetasMap.length} recetas encontradas');
+
+    return recetasMap
+        .map((e) => Receta(
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
+        .toList();
+  } catch (e) {
+    // Manejo de errores
+    print('Error al obtener recetas por clasificación: $e');
+    return [];
+  }
+}
 
   // Agregar una nueva receta
   Future<void> addReceta(Receta receta) async {
@@ -77,8 +106,6 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print(
-        'Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 
@@ -133,8 +160,6 @@ class DRReceta {
 
   // Método para comprobar si una receta es favorita
   Future<bool> esRecetaFavorita(int idReceta) async {
-    print('Consultando si la receta es favorita...');
-
     // Realizar la consulta a la base de datos para obtener el valor de 'favoritos'
     final result = await _database.query(
       'Recetas',
@@ -142,22 +167,15 @@ class DRReceta {
       where: 'id_receta = ?',
       whereArgs: [idReceta],
     );
-
-    print('Resultado de la consulta: $result');
-
     // Verificar si se encontró un registro para la receta
     if (result.isNotEmpty) {
       // Obtener el valor de 'favoritos' del primer registro
       final favoritos = result.first['favoritos'] as int?;
-      print('Valor de favoritos: $favoritos');
       // Verificar si el valor de 'favoritos' es 1 (favorita)
       if (favoritos != null && favoritos == 1) {
-        print('La receta es favorita.');
         return true;
       }
     }
-
-    print('La receta no es favorita.');
     // Si no se encontró un registro o 'favoritos' es distinto de 1, se asume que no es favorita
     return false;
   }
@@ -178,7 +196,6 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 
@@ -197,7 +214,6 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 
@@ -216,7 +232,6 @@ class DRReceta {
         WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
         );
     ''');
-    print('Entre AQUI WEEEEE AQUI WEEEE Recetas disponibles: $recetasDisponibles');
     return recetasDisponibles;
   }
 

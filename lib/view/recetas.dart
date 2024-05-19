@@ -91,6 +91,7 @@ class _RecetasViewState extends State<RecetasView> {
       ),
       body: Column(
         children: [
+          
           Container(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             color: Colors.white,
@@ -148,6 +149,7 @@ class _RecetasViewState extends State<RecetasView> {
               ],
             ),
           ),
+
           Expanded(
             child: SingleChildScrollView(
               child: Center(

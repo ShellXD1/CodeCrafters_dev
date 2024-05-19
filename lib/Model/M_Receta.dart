@@ -14,6 +14,11 @@ class MReceta {
     return _repository.getRecetas();
   }
 
+   // Método para obtener la lista de recetas
+  Future<List<Receta>> obtenerRecetasClasificacion(String clasificacion) async {
+    return _repository.getRecetasPorClasificacion(clasificacion);
+  }
+
   // Método para agregar una nueva receta
   Future<void> agregarReceta(Receta receta) async {
     await _repository.addReceta(receta);

@@ -26,6 +26,7 @@ class AllRecetasView extends StatefulWidget {
 // Logica para mostrar las recetas
 class _RecetasViewState extends State<AllRecetasView> {
   bool _recetasCargadas = false;
+  String _filtroActual = 'todas'; // Variable para almacenar el filtro actual
 
   @override
   void initState() {
@@ -94,22 +95,49 @@ class _RecetasViewState extends State<AllRecetasView> {
                 FilterChip(
                   label: Text('Desayunos'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'desayunos',
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de desayunos
+                    setState(() {
+                      if (selected) {
+                        _filtroActual = 'desayunos';
+                        _cargarRecetasFiltradas();
+                      } else {
+                        _filtroActual = 'todas';
+                        _cargarRecetasFiltradas();
+                      }
+                    });
                   },
                 ),
                 FilterChip(
                   label: Text('Comidas'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'comidas',
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de comidas
+                    setState(() {
+                      if (selected) {
+                        _filtroActual = 'comidas';
+                        _cargarRecetasFiltradas();
+                      } else {
+                        _filtroActual = 'todas';
+                        _cargarRecetasFiltradas();
+                      }
+                    });
                   },
                 ),
                 FilterChip(
                   label: Text('Cenas'),
                   backgroundColor: Color(0xFF9EE060),
+                  selected: _filtroActual == 'cenas',
                   onSelected: (bool selected) {
-                    // Lógica para filtrar recetas de cenas
+                    setState(() {
+                      if (selected) {
+                        _filtroActual = 'cenas';
+                        _cargarRecetasFiltradas();
+                      } else {
+                        _filtroActual = 'todas';
+                        _cargarRecetasFiltradas();
+                      }
+                    });
                   },
                 ),
               ],
@@ -136,7 +164,7 @@ class _RecetasViewState extends State<AllRecetasView> {
                     // Mostrar las recetas una vez que estén cargadas
                     if (_recetasCargadas && widget.recetasViewModel != null)
                       FutureBuilder<List<Map<String, dynamic>>>(
-                        future: widget.recetasViewModel!.getRecetas(),
+                        future: _obtenerRecetasFiltradas(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
@@ -254,4 +282,43 @@ class _RecetasViewState extends State<AllRecetasView> {
       });
     });
   }
+
+  // Método para obtener las recetas filtradas
+  Future<List<Map<String, dynamic>>> _obtenerRecetasFiltradas() async {
+    if (widget.recetasViewModel != null) {
+      if (_filtroActual == 'desayunos') {
+        return await widget.recetasViewModel!.getRecetasClasificacion(
+            "Desayuno");
+      } else if (_filtroActual == 'comidas') {
+        return await widget.recetasViewModel!.getRecetasClasificacion(
+            "Comida");
+      } else if (_filtroActual == 'cenas') {
+        return await widget.recetasViewModel!.getRecetasClasificacion(
+            "Cena");
+      } else {
+        return await widget.recetasViewModel!.getRecetas(
+            );
+      }
+    } else {
+      return [];
+    }
+  }
+
+  // Método para cargar las recetas filtradas
+  void _cargarRecetasFiltradas() {
+    setState(() {
+      _recetasCargadas = false;
+    });
+    _obtenerRecetasFiltradas().then((_) {
+      setState(() {
+        _recetasCargadas = true;
+      });
+    });
+  }
 }
+
+
+
+
+
+

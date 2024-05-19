@@ -126,15 +126,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'], 
-              ingredientes: e['ingredientes'], 
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
@@ -179,7 +178,6 @@ class DRReceta {
     // Si no se encontró un registro o 'favoritos' es distinto de 1, se asume que no es favorita
     return false;
   }
-
 
   // Obtener recetas disponibles a partir de los ingredientes disponibles y que sean Desayunos
   Future<List<Map<String, dynamic>>> getRecetasDisponiblesDesayunos(
@@ -242,15 +240,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'],
-              ingredientes: e['ingredientes'],
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
@@ -261,15 +258,14 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'],
-              ingredientes: e['ingredientes'],
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
@@ -280,17 +276,24 @@ class DRReceta {
     );
     return recetasMap
         .map((e) => Receta(
-              id: e['id_receta'],
-              nombre: e['nombre_receta'],
-              imagen: e['imagen_receta'],
-              preparacion: e['Preparacion_receta'],
-              favoritos: e['favoritos'],
-              clasificacion: e['clasificacion'],
-              ingredientes: e['ingredientes'],
-              informacion: e['info_nutricional']
-            ))
+            id: e['id_receta'],
+            nombre: e['nombre_receta'],
+            imagen: e['imagen_receta'],
+            preparacion: e['Preparacion_receta'],
+            favoritos: e['favoritos'],
+            clasificacion: e['clasificacion'],
+            ingredientes: e['ingredientes'],
+            informacion: e['info_nutricional']))
         .toList();
   }
 
-  
+  // Método para obtener la lista de informacion nutricional por preparación
+  Future<String?> obtenerInfoNutriReceta(int idReceta) async {
+    final result = await _database
+        .query('Recetas', where: 'id_receta = ?', whereArgs: [idReceta]);
+    if (result.isNotEmpty) {
+      return result.first['info_nutricional'] as String?;
+    }
+    return null;
+  }
 }

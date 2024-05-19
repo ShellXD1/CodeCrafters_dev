@@ -66,6 +66,7 @@ class Cuerpo extends StatelessWidget {
 
     final String ingredientes = recipeDetails!['ingredientes'];
     final String preparacion = recipeDetails!['preparacion'];
+    final String informacion = recipeDetails!['informacion'];
 
     return Center(
       child: Container(
@@ -98,6 +99,17 @@ class Cuerpo extends StatelessWidget {
               ),
               SizedBox(height: 5),
               PreparacionWidget(preparacion: preparacion),
+              SizedBox(height: 20),
+              Text(
+                'Lista de Informacion Nutricional:',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Chivo'),
+              ),
+              SizedBox(height: 5),
+              InformacionWidget(informacion: informacion),
             ],
           ),
         ),
@@ -227,6 +239,65 @@ class IngredientesWidget extends StatelessWidget {
         color: Color.fromARGB(255, 158, 224, 96),
         child: Text(
           "Ingredientes",
+          style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
+        ),
+      ),
+    );
+  }
+}
+
+class InformacionWidget extends StatelessWidget {
+  final String informacion;
+
+  const InformacionWidget({Key? key, required this.informacion})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Color.fromARGB(255, 158, 224, 96),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Informacion Nutricional",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontFamily: 'Chivo'),
+                    ),
+                    SizedBox(height: 16),
+                    // Texto de la preparación
+                    Text(
+                      informacion,
+                      textAlign:
+                          TextAlign.justify, // Alinea el texto justificado
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                // Botón para cerrar el diálogo
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cerrar'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        color: Color.fromARGB(255, 158, 224, 96),
+        child: Text(
+          "Informacion Nutricional",
           style: TextStyle(fontSize: 16, fontFamily: 'Chivo'),
         ),
       ),

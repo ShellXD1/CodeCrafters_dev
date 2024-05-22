@@ -49,20 +49,15 @@
    - Busca e instala las siguientes extensiones:
      - **Flutter** (también instalará Dart automáticamente).
 
-## Crear un Proyecto Flutter
+## Descargar el proyecto
+   - Con ssh
+   ```sh
+   git clone git@github.com:ShellXD1/CodeCrafters_dev.git
+   ```
 
-1. **Crear un nuevo proyecto:**
-   - Abre una terminal en VS Code o utiliza la terminal de tu sistema.
-   - Ejecuta el siguiente comando para crear un nuevo proyecto Flutter:
-     ```sh
-     flutter create nombre_de_tu_proyecto
-     ```
-   - Navega al directorio de tu proyecto:
-     ```sh
-     cd nombre_de_tu_proyecto
-     ```
+## Abrir en Proyecto Flutter
 
-2. **Abrir el proyecto en VS Code:**
+1. **Abrir el proyecto en VS Code:**
    - En VS Code, abre la carpeta del proyecto:
      ```sh
      code .

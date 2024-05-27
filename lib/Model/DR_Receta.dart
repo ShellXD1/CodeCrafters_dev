@@ -99,11 +99,11 @@ class DRReceta {
         await _database.rawQuery('''
     SELECT r.id_receta, r.nombre_receta, r.imagen_receta
     FROM Recetas r
-    WHERE NOT EXISTS (
+    WHERE EXISTS (
         SELECT *
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
-        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
         );
     ''');
     return recetasDisponibles;

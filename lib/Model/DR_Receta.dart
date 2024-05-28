@@ -97,7 +97,7 @@ class DRReceta {
   ) async {
     final List<Map<String, dynamic>> recetasDisponibles =
         await _database.rawQuery('''
-    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    SELECT *
     FROM Recetas r
     WHERE EXISTS (
         SELECT *
@@ -185,13 +185,13 @@ class DRReceta {
   ) async {
     final List<Map<String, dynamic>> recetasDisponibles =
         await _database.rawQuery('''
-    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    SELECT *
     FROM Recetas r
-    WHERE r.clasificacion = 'Desayuno' AND NOT EXISTS (
+    WHERE r.clasificacion = 'Desayuno' AND EXISTS (
         SELECT *
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
-        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
         );
     ''');
     return recetasDisponibles;
@@ -203,13 +203,13 @@ class DRReceta {
   ) async {
     final List<Map<String, dynamic>> recetasDisponibles =
         await _database.rawQuery('''
-    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    SELECT *
     FROM Recetas r
-    WHERE r.clasificacion = 'Comida' AND NOT EXISTS (
+    WHERE r.clasificacion = 'Comida' AND EXISTS (
         SELECT *
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
-        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
         );
     ''');
     return recetasDisponibles;
@@ -221,13 +221,13 @@ class DRReceta {
   ) async {
     final List<Map<String, dynamic>> recetasDisponibles =
         await _database.rawQuery('''
-    SELECT r.id_receta, r.nombre_receta, r.imagen_receta
+    SELECT *
     FROM Recetas r
-    WHERE r.clasificacion = 'Cena' AND NOT EXISTS (
+    WHERE r.clasificacion = 'Cena' AND EXISTS (
         SELECT *
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
-        WHERE li.id_receta = r.id_receta AND (i.id_ingrediente IS NULL OR li.cantidad_ingrediente > i.cantidad)
+        WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
         );
     ''');
     return recetasDisponibles;

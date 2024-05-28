@@ -13,8 +13,9 @@ class DRLista {
         await _database.query('Lista_Ingredientes');
     return ListaIngMap.map((e) => ListIng(
         idList: e['idList'],
-        cantidad: e['cantidad'],
+        cantidad: e['cantidad_ingrediente'],
         idIng: e['idIng'],
         idreceta: e['idreceta'])).toList();
   }
+
 }

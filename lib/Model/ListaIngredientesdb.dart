@@ -14,9 +14,9 @@ class ListIng {
   Map<String, dynamic> toMap() {
     return {
       'id_lis_ing': idList,
-      'cantidad_lis_ing': cantidad,
-      'id_ing': idIng,
-      'id_recetas': idreceta
+      'cantidad_ingrediente': cantidad,
+      'id_ingrediente': idIng,
+      'id_receta': idreceta
     };
   }
 }

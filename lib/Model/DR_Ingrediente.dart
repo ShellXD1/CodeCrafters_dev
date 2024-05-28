@@ -138,4 +138,18 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
     ''');
     return recetasDisponibles;
   }
+
+  //Obtener ingredientes de las recetas
+  Future<List<Map<String, dynamic>>> getIngredientesReceta(
+  int receta
+  ) async {
+    final List<Map<String, dynamic>> ingredientesReceta =
+        await _database.rawQuery('''
+    SELECT i.nombre_ing, li.cantidad_ingrediente, i.medida
+    FROM Ingredientes i
+    JOIN Lista_Ingredientes li ON i.id_ingrediente = li.id_ingrediente
+    WHERE li.id_receta = ?;
+    ''', [receta]);
+    return ingredientesReceta;
+  }
 }

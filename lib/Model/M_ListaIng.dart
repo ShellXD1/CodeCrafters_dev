@@ -12,4 +12,5 @@ class MLista {
   Future<List<ListIng>> obtenerIngredientes() async {
     return _repository.getListaIngredientes();
   }
+
 }

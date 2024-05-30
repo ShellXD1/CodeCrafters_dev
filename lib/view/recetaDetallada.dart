@@ -126,18 +126,20 @@ class PreparacionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> informacionList = preparacion.split('-');
     return ExpansionTile(
       title: Text(
         "Preparación",
         style: TextStyle(fontFamily: 'Chivo'),
       ),
       children: [
-        ListTile(
-          title: Text(
-            preparacion,
-            textAlign: TextAlign.justify,
+        for (var info in informacionList)
+          ListTile(
+            title: Text(
+              info,
+              textAlign: TextAlign.justify,
+            ),
           ),
-        ),
       ],
     );
   }

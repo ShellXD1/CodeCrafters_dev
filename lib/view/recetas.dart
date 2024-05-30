@@ -160,7 +160,7 @@ class _RecetasViewState extends State<RecetasView> {
                                         // Actualizar la lista de recetas para que el cambio de favoritos se refleje
                                         _actualizarRecetas();
                                       });
-                                    },
+                                    }, ingredientesViewModel: widget.ingredientesViewModel,
                                   );
                                 }).toList(),
                               );

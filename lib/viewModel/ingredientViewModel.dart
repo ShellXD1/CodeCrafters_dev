@@ -81,7 +81,7 @@ class IngredienteViewModel extends ChangeNotifier{
   return ingredientes.take(3).toList(); // Tomar los tres primeros ingredientes (con menor cantidad)
   }
 
-  // Función para obtener las recetas disponibles a partir de los ingredientes disponibles y son Desayunos
+  
   Future<List<Map<String, dynamic>>> getIngredientesReceta(
       int receta) async {
     return await _mIngredientes

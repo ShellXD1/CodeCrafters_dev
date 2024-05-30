@@ -178,7 +178,7 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
                                       setState(() {
                                         _actualizarRecetas();
                                       });
-                                    },
+                                    }, ingredientesViewModel: widget.ingredientesViewModel,
                                   );
                                 }).toList(),
                               );

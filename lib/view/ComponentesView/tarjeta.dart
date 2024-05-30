@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/view/ComponentesView/botonFavorito.dart';
 import 'package:proyecto_tsp_dev/view/recetaDetallada.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 
 // Clase para mostrar la tarjeta de una receta
 class RecetaItem extends StatefulWidget {
   final Map<String, dynamic> recetaInfo;
   final RecetasViewModel? recetasViewModel;
+  final IngredienteViewModel ingredientesViewModel;
   final VoidCallback? onFavoritoPressed;
 
   const RecetaItem({
     Key? key,
     required this.recetaInfo,
     this.recetasViewModel,
-    this.onFavoritoPressed,
+    this.onFavoritoPressed, 
+    required this.ingredientesViewModel,
   }) : super(key: key);
 
   @override
@@ -61,7 +64,7 @@ class _RecetaItemState extends State<RecetaItem> {
               MaterialPageRoute(
                 builder: (context) => RecetaDetalladaView(
                   recetasViewModel: widget.recetasViewModel!,
-                  recipeIndex: recipeIndex,
+                  recipeIndex: recipeIndex, ingredienteViewModel: widget.ingredientesViewModel,
                 ),
               ),
             );

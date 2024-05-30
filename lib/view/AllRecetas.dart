@@ -154,7 +154,7 @@ class _RecetasViewState extends State<AllRecetasView> {
                                       setState(() {
                                         _actualizarRecetas();
                                       });
-                                    },
+                                    }, ingredientesViewModel: widget.ingredientesViewModel,
                                   );
                                 }).toList(),
                               );

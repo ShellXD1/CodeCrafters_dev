@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_tsp_dev/viewModel/recetasViewModel.dart';
+import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
 
 class RecetaDetalladaView extends StatelessWidget {
   final RecetasViewModel recetasViewModel;
+  final IngredienteViewModel ingredienteViewModel;
   final int recipeIndex;
 
   const RecetaDetalladaView({
     Key? key,
     required this.recetasViewModel,
-    required this.recipeIndex,
+    required this.recipeIndex, 
+    required this.ingredienteViewModel,
   }) : super(key: key);
 
   @override
@@ -21,8 +24,11 @@ class RecetaDetalladaView extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: recetasViewModel.getRecipeDetails(recipeIndex),
-        builder: (context, snapshot) {
+        future: Future.wait([
+          recetasViewModel.getRecipeDetails(recipeIndex),
+          ingredienteViewModel.getIngredientesReceta(recipeIndex),
+        ]),
+        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -32,8 +38,11 @@ class RecetaDetalladaView extends StatelessWidget {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
+            final recipeDetails = snapshot.data?[0];
+            final ingredientes = snapshot.data?[1];
             return Cuerpo(
-              recipeDetails: snapshot.data,
+              recipeDetails: recipeDetails,
+              ingredientes: ingredientes,
             );
           }
         },
@@ -44,18 +53,18 @@ class RecetaDetalladaView extends StatelessWidget {
 
 class Cuerpo extends StatelessWidget {
   final Map<String, dynamic>? recipeDetails;
+  final List<Map<String, dynamic>> ingredientes;
 
-  const Cuerpo({Key? key, this.recipeDetails}) : super(key: key);
+  const Cuerpo({Key? key, this.recipeDetails, required this.ingredientes}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (recipeDetails == null) {
+    if (recipeDetails == null || ingredientes == null) {
       return Center(
-        child: Text('No se encontraron detalles de la receta'),
+        child: Text('No se encontraron detalles de la receta o ingredientes'),
       );
     }
 
-    final String ingredientes = recipeDetails!['ingredientes'];
     final String preparacion = recipeDetails!['preparacion'];
     final String informacion = recipeDetails!['informacion'];
 
@@ -147,24 +156,23 @@ Widget RecetaDes(String imagen) {
 }
 
 class IngredientesWidget extends StatelessWidget {
-  final String ingredientes;
+  final List<Map<String, dynamic>> ingredientes;
 
   const IngredientesWidget({Key? key, required this.ingredientes})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<String> ingredientesList = ingredientes.split('-');
     return ExpansionTile(
       title: Text(
         "Ingredientes",
         style: TextStyle(fontFamily: 'Chivo'),
       ),
       children: [
-        for (var ingrediente in ingredientesList)
+        for (var ingrediente in ingredientes)
           ListTile(
             title: Text(
-              ingrediente,
+              ingrediente['cantidad_ingrediente'].toString() + ' ' + ingrediente['medida'] + ' de ' + ingrediente['nombre_ing'],  // Ajusta según la estructura de tus datos
               textAlign: TextAlign.justify,
             ),
           ),

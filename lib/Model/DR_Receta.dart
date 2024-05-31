@@ -10,7 +10,8 @@ class DRReceta {
 
   // Obtener la lista de recetas
   Future<List<Receta>> getRecetas() async {
-    List<Map<String, dynamic>> recetasMap = await _database.query('Recetas', orderBy: 'nombre_receta ASC');
+    List<Map<String, dynamic>> recetasMap =
+        await _database.query('Recetas', orderBy: 'nombre_receta ASC');
     return recetasMap
         .map((e) => Receta(
             id: e['id_receta'],
@@ -19,7 +20,6 @@ class DRReceta {
             preparacion: e['Preparacion_receta'],
             favoritos: e['favoritos'],
             clasificacion: e['clasificacion'],
-            ingredientes: e['ingredientes'],
             informacion: e['info_nutricional']))
         .toList();
   }
@@ -27,33 +27,28 @@ class DRReceta {
   //ORDER BY nombre_ing ASC
 
   Future<List<Receta>> getRecetasPorClasificacion(String clasificacion) async {
-  try {
-    
-    List<Map<String, dynamic>> recetasMap = await _database.query(
-      'Recetas',
-      where: 'clasificacion = ?',
-      whereArgs: [clasificacion],
-      orderBy: 'nombre_receta ASC'
-    );
+    try {
+      List<Map<String, dynamic>> recetasMap = await _database.query('Recetas',
+          where: 'clasificacion = ?',
+          whereArgs: [clasificacion],
+          orderBy: 'nombre_receta ASC');
 
-
-    return recetasMap
-        .map((e) => Receta(
-            id: e['id_receta'],
-            nombre: e['nombre_receta'],
-            imagen: e['imagen_receta'],
-            preparacion: e['Preparacion_receta'],
-            favoritos: e['favoritos'],
-            clasificacion: e['clasificacion'],
-            ingredientes: e['ingredientes'],
-            informacion: e['info_nutricional']))
-        .toList();
-  } catch (e) {
-    // Manejo de errores
-    print('Error al obtener recetas por clasificación: $e');
-    return [];
+      return recetasMap
+          .map((e) => Receta(
+              id: e['id_receta'],
+              nombre: e['nombre_receta'],
+              imagen: e['imagen_receta'],
+              preparacion: e['Preparacion_receta'],
+              favoritos: e['favoritos'],
+              clasificacion: e['clasificacion'],
+              informacion: e['info_nutricional']))
+          .toList();
+    } catch (e) {
+      // Manejo de errores
+      print('Error al obtener recetas por clasificación: $e');
+      return [];
+    }
   }
-}
 
   // Agregar una nueva receta
   Future<void> addReceta(Receta receta) async {
@@ -131,7 +126,6 @@ class DRReceta {
             preparacion: e['Preparacion_receta'],
             favoritos: e['favoritos'],
             clasificacion: e['clasificacion'],
-            ingredientes: e['ingredientes'],
             informacion: e['info_nutricional']))
         .toList();
   }
@@ -245,7 +239,6 @@ class DRReceta {
             preparacion: e['Preparacion_receta'],
             favoritos: e['favoritos'],
             clasificacion: e['clasificacion'],
-            ingredientes: e['ingredientes'],
             informacion: e['info_nutricional']))
         .toList();
   }
@@ -263,7 +256,6 @@ class DRReceta {
             preparacion: e['Preparacion_receta'],
             favoritos: e['favoritos'],
             clasificacion: e['clasificacion'],
-            ingredientes: e['ingredientes'],
             informacion: e['info_nutricional']))
         .toList();
   }
@@ -281,7 +273,6 @@ class DRReceta {
             preparacion: e['Preparacion_receta'],
             favoritos: e['favoritos'],
             clasificacion: e['clasificacion'],
-            ingredientes: e['ingredientes'],
             informacion: e['info_nutricional']))
         .toList();
   }

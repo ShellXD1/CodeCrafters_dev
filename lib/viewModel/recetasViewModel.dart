@@ -22,9 +22,11 @@ class RecetasViewModel extends ChangeNotifier {
     notifyListeners(); // Notificar a los oyentes del cambio en el estado
   }
 
-    // Método dinamico para obtener todas las recetas
-  Future<List<Map<String, dynamic>>> getRecetasClasificacion(String clasificacion) async {
-    List<Receta> recetas = await _mRecetas.obtenerRecetasClasificacion(clasificacion);
+  // Método dinamico para obtener todas las recetas
+  Future<List<Map<String, dynamic>>> getRecetasClasificacion(
+      String clasificacion) async {
+    List<Receta> recetas =
+        await _mRecetas.obtenerRecetasClasificacion(clasificacion);
     // Mapear las recetas a un formato de lista de mapas
     List<Map<String, dynamic>> recetasMap = recetas.map((receta) {
       return {
@@ -64,16 +66,15 @@ class RecetasViewModel extends ChangeNotifier {
 
   Future<Map<String, dynamic>?> getRecipeDetails(int recipeIndex) async {
     // Buscar la receta que tenga el id especificado
-  Receta? receta = recetas.firstWhere(
-    (receta) => receta.id == recipeIndex,
-    orElse: () => recetas[recipeIndex],
-  );
+    Receta? receta = recetas.firstWhere(
+      (receta) => receta.id == recipeIndex,
+      orElse: () => recetas[recipeIndex],
+    );
 
     // Construir un mapa con los detalles de la receta
     Map<String, dynamic> recipeDetails = {
       'nombre': receta.nombre,
       'imagen': receta.imagen, // URL de la imagen de la receta
-      'ingredientes': receta.ingredientes,
       'preparacion': receta.preparacion,
       'informacion': receta.informacion,
     };
@@ -226,11 +227,15 @@ class RecetasViewModel extends ChangeNotifier {
     return recetasFavoritasMap;
   }
 
-  Future<List<Map<String, dynamic>>> getRecetasAleatorias(List<String> ingredientesDisponibles) async {
-    List<Map<String, dynamic>> recetas = List.from(await _mRecetas.getRecetasDisponibles(ingredientesDisponibles)); // Crear una copia modificable de la lista
+  Future<List<Map<String, dynamic>>> getRecetasAleatorias(
+      List<String> ingredientesDisponibles) async {
+    List<
+        Map<String,
+            dynamic>> recetas = List.from(await _mRecetas.getRecetasDisponibles(
+        ingredientesDisponibles)); // Crear una copia modificable de la lista
     recetas.shuffle(); // Mezclar las recetas
-    return recetas.take(3).toList(); // Tomar solo las primeras tres recetas (aleatorias)
+    return recetas
+        .take(3)
+        .toList(); // Tomar solo las primeras tres recetas (aleatorias)
   }
-
 }
-

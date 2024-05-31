@@ -5,7 +5,6 @@ class Receta {
   String preparacion;
   int favoritos;
   String clasificacion;
-  String ingredientes;
   String informacion;
 
   Receta(
@@ -15,10 +14,7 @@ class Receta {
       required this.preparacion,
       required this.favoritos,
       required this.clasificacion,
-      required this.ingredientes,
       required this.informacion});
-
-  
 
   // Método para convertir un objeto Receta a un mapa
   Map<String, dynamic> toMap() {
@@ -27,11 +23,9 @@ class Receta {
       'nombre_receta': nombre,
       'imagen_receta': imagen,
       'Preparacion_receta': preparacion,
-      'favoritos' : favoritos,
-      'clasificacion' : clasificacion,
-      'ingredientes' : ingredientes,
-      'info_nutricional' : informacion
-
+      'favoritos': favoritos,
+      'clasificacion': clasificacion,
+      'info_nutricional': informacion
     };
   }
 }

@@ -137,6 +137,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        iconSize: 30.0,  // Aumenta el tamaño de los íconos
+        selectedFontSize: 18.0,  // Aumenta el tamaño del texto seleccionado
+        unselectedFontSize: 16.0,  // Aumenta el tamaño del texto no seleccionado
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.book),

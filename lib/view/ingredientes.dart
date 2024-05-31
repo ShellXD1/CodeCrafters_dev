@@ -95,12 +95,8 @@ class _IngredientesViewState extends State<IngredientesView> {
             ),
             TextButton(
               onPressed: () {
-                widget.ingredientViewModel?.quitarCantidadIngrediente(ingrediente, 0);
                 Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database, recetasViewModel: widget.recetasViewModel,)),
-                );
+                _showConfirmDeleteDialog(ingrediente);
               },
               child: Text('Eliminar'),
             ),
@@ -122,6 +118,36 @@ class _IngredientesViewState extends State<IngredientesView> {
     );
   }
 
+  void _showConfirmDeleteDialog(Ingrediente ingrediente) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar Eliminación'),
+          content: Text('¿Está seguro de que desea eliminar el ingrediente ${ingrediente.nombre}?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                widget.ingredientViewModel?.quitarCantidadIngrediente(ingrediente, 0);
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => IngredientesView(ingredientViewModel: widget.ingredientViewModel, database: widget.database, recetasViewModel: widget.recetasViewModel,)),
+                );
+              },
+              child: Text('Eliminar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +266,9 @@ class _IngredientesViewState extends State<IngredientesView> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         backgroundColor: Color.fromARGB(255, 158, 224, 96),
+        iconSize: 30.0,  // Aumenta el tamaño de los íconos
+        selectedFontSize: 18.0,  // Aumenta el tamaño del texto seleccionado
+        unselectedFontSize: 16.0,  // Aumenta el tamaño del texto no seleccionado
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.book),

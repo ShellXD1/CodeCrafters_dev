@@ -39,6 +39,7 @@ class _RecetaItemState extends State<RecetaItem> {
   Future<bool> _obtenerEsFavorita() async {
     // Obtener el índice de la receta
     int recipeIndex = widget.recetaInfo['id_receta'] ?? 0;
+    print(widget.recetaInfo['id_receta']);
     // Obtener el estado de favoritos desde el ViewModel
     return widget.recetasViewModel!.esRecetaFavorita(recipeIndex);
   }
@@ -54,7 +55,7 @@ class _RecetaItemState extends State<RecetaItem> {
             widget.recetaInfo['nombre_receta'] ?? 'Receta sin nombre';
         final String imagenRecetaPath =
             widget.recetaInfo['imagen_receta'] ?? '';
-        final int recipeIndex = (widget.recetaInfo['id_receta']) - 1 ?? 0;
+        final int recipeIndex = (widget.recetaInfo['id_receta']) ?? 0;
         // Mostrar la tarjeta de una receta
         return GestureDetector(
           onTap: () {

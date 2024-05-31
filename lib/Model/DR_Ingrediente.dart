@@ -10,7 +10,7 @@ class DRIngrediente {
   // Obtener la lista de ingredientes
   Future<List<Ingrediente>> getIngredientes() async {
     List<Map<String, dynamic>> ingredientesMap =
-        await _database.query('Ingredientes');
+        await _database.query('Ingredientes', orderBy: 'nombre_ing ASC');
     return ingredientesMap
         .map((e) => Ingrediente(
             id: e['id_ingrediente'],
@@ -23,7 +23,7 @@ class DRIngrediente {
 
 Future<List<Ingrediente>> getIngredientesNoVacios() async {
   List<Map<String, dynamic>> ingredientesMap =
-      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad > 0');
+      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad > 0 ORDER BY nombre_ing ASC');
   return ingredientesMap
       .map((e) => Ingrediente(
           id: e['id_ingrediente'],
@@ -36,7 +36,7 @@ Future<List<Ingrediente>> getIngredientesNoVacios() async {
 
 Future<List<Ingrediente>> getIngredientesVacios() async {
   List<Map<String, dynamic>> ingredientesMap =
-      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad <= 0');
+      await _database.rawQuery('SELECT * FROM Ingredientes WHERE cantidad <= 0 ORDER BY nombre_ing ASC');
   return ingredientesMap
       .map((e) => Ingrediente(
           id: e['id_ingrediente'],
@@ -54,7 +54,7 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
       SELECT Ingredientes.*
       FROM Ingredientes
       INNER JOIN Lista_ingredientes ON Ingredientes.id_ing = Lista_ingredientes.id_ing
-      WHERE Lista_ingredientes.id_receta = ?
+      WHERE Lista_ingredientes.id_receta = ? ORDER BY nombre_ing ASC
     ''', [idReceta]);
     return listaIngredientesMap
         .map((e) => Ingrediente(
@@ -74,7 +74,7 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
       SELECT Ingredientes.id_ingrediente, Ingredientes.nombre_ing, Ingredientes.cantidad
       FROM Ingredientes
       INNER JOIN Lista_ingredientes ON Ingredientes.id_ing = Lista_ingredientes.id_ing
-      WHERE Lista_ingredientes.id_pre = ?
+      WHERE Lista_ingredientes.id_pre = ? ORDER BY nombre_ing ASC
     ''', [idPreparacion]);
 
     return ingredientesPorPreparacion
@@ -134,7 +134,7 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
       INNER JOIN Receta_Ingrediente ri ON r.id_receta = ri.id_receta
       WHERE ri.nombre_ingrediente IN (${ingredientesDisponibles.map((e) => "'$e'").join(',')})
       GROUP BY r.id_receta
-      HAVING COUNT(DISTINCT ri.nombre_ingrediente) = ${ingredientesDisponibles.length}
+      HAVING COUNT(DISTINCT ri.nombre_ingrediente) = ${ingredientesDisponibles.length} ORDER BY nombre_ing ASC
     ''');
     return recetasDisponibles;
   }
@@ -148,7 +148,7 @@ Future<List<Ingrediente>> getIngredientesVacios() async {
     SELECT i.nombre_ing, li.cantidad_ingrediente, i.medida
     FROM Ingredientes i
     JOIN Lista_Ingredientes li ON i.id_ingrediente = li.id_ingrediente
-    WHERE li.id_receta = ?;
+    WHERE li.id_receta = ? ORDER BY nombre_ing ASC;
     ''', [receta]);
     return ingredientesReceta;
   }

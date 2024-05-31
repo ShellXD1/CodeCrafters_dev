@@ -113,12 +113,12 @@ class _RecetasViewState extends State<RecetasView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Mis Recetas',
+                      'Recetas Recomendadas',
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                         height:
-                            16), // Espaciado entre el texto y el indicador de carga
+                            16), //sd Espaciado entre el texto y el indicador de carga
 
                     // Mostrar un indicador de carga mientras se obtienen las recetas
                     if (!_recetasCargadas) CircularProgressIndicator(),

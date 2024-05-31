@@ -63,16 +63,15 @@ class RecetasViewModel extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>?> getRecipeDetails(int recipeIndex) async {
-    // Verificar si el índice es válido
-    if (recipeIndex < 0 || recipeIndex >= recetas.length) {
-      return null;
-    }
-
-    // Obtener la receta correspondiente al índice
-    Receta receta = recetas[recipeIndex];
+    // Buscar la receta que tenga el id especificado
+  Receta? receta = recetas.firstWhere(
+    (receta) => receta.id == recipeIndex,
+    orElse: () => recetas[recipeIndex],
+  );
 
     // Construir un mapa con los detalles de la receta
     Map<String, dynamic> recipeDetails = {
+      'nombre': receta.nombre,
       'imagen': receta.imagen, // URL de la imagen de la receta
       'ingredientes': receta.ingredientes,
       'preparacion': receta.preparacion,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:proyecto_tsp_dev/Model/ingredientedb.dart';
 import 'package:proyecto_tsp_dev/view/recetas.dart';
 import 'package:proyecto_tsp_dev/viewModel/ingredientViewModel.dart';
@@ -150,48 +151,69 @@ class _IngredientesViewState extends State<IngredientesView> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Expanded(
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 1.0,
-                    mainAxisSpacing: 1.0,
-                    children: widget.ingredientViewModel!.ingredientes.map((ingrediente) {
-                      return GestureDetector(
-                        onTap: () {
-                          _showIngredientDetailDialog(ingrediente);
-                        },
-                        child: Center(
-                          child: Container(
-                            width: 150,
-                            height: 150,
-                            child: Card(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      ingrediente.nombre,
-                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.ingredientViewModel!.ingredientes.length,
+                  itemBuilder: (context, index) {
+                    final ingrediente = widget.ingredientViewModel!.ingredientes[index];
+                    print(ingrediente.imagen);
+                    return GestureDetector(
+                      onTap: () {
+                        _showIngredientDetailDialog(ingrediente);
+                      },
+                      child: Center(
+                        child: Container(
+                          width: double.infinity,
+                          height: 150,
+                          margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            image: DecorationImage(
+                              image:AssetImage(ingrediente.imagen), // URL de la imagen del ingrediente
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Card(
+                            color: Colors.transparent, // Para que el fondo del Card sea transparente
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    ingrediente.nombre,
+                                    style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white, // Color de texto blanco para mejor visibilidad
                                     ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      'Cantidad: ${ingrediente.cantidad} ${ingrediente.medida}',
-                                      style: TextStyle(fontSize: 16),
-                                      textAlign: TextAlign.center,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Cantidad: ${ingrediente.cantidad} ${ingrediente.medida}',
+                                    style: TextStyle(
+                                      fontSize:32,
+                                      color: Colors.white, // Color de texto blanco para mejor visibilidad
                                     ),
-                                  ],
-                                ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  },
                 ),
+              ),
+
               ],
             )
           : Center(child: CircularProgressIndicator()),

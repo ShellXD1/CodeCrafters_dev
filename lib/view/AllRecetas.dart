@@ -61,10 +61,10 @@ class _RecetasViewState extends State<AllRecetasView> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: Text(
-                  'Ver todas las recetas',
+                  'Ver recetas recomendadas',
                   style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo'),
                 ),
-                value: 'ver_todas',
+                value: 'ver_recomendadas',
               ),
               PopupMenuItem(
                 child: Text(
@@ -75,8 +75,8 @@ class _RecetasViewState extends State<AllRecetasView> {
               ),
             ],
             onSelected: (value) {
-              if (value == 'ver_todas') {
-                Navigator.pushNamed(context, '/allRecetas');
+              if (value == 'ver_recomendadas') {
+                Navigator.pushNamed(context, '/recetas');
               } else if (value == 'ver_favoritas') {
                 Navigator.pushNamed(context, '/RecetasFavoritas');
               }

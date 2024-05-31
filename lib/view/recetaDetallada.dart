@@ -16,6 +16,8 @@ class RecetaDetalladaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Building RecetaDetalladaView with recipeIndex: $recipeIndex');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -73,6 +75,15 @@ class Cuerpo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Text(
+            recipeDetails!['nombre'].toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Chivo',
+            ),
+          ),
           SizedBox(height: 20),
           RecetaDes(recipeDetails!['imagen']),
           SizedBox(height: 20),
@@ -129,7 +140,7 @@ class PreparacionWidget extends StatelessWidget {
     List<String> informacionList = preparacion.split('-');
     return ExpansionTile(
       title: Text(
-        "Preparación",
+        "Preparacion",
         style: TextStyle(fontFamily: 'Chivo'),
       ),
       children: [

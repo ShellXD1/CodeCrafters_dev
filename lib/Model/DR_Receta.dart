@@ -10,7 +10,7 @@ class DRReceta {
 
   // Obtener la lista de recetas
   Future<List<Receta>> getRecetas() async {
-    List<Map<String, dynamic>> recetasMap = await _database.query('Recetas');
+    List<Map<String, dynamic>> recetasMap = await _database.query('Recetas', orderBy: 'nombre_receta ASC');
     return recetasMap
         .map((e) => Receta(
             id: e['id_receta'],
@@ -24,19 +24,18 @@ class DRReceta {
         .toList();
   }
 
+  //ORDER BY nombre_ing ASC
+
   Future<List<Receta>> getRecetasPorClasificacion(String clasificacion) async {
   try {
-    // Depuración: Verifica el valor de la clasificación
-    print('Clasificación buscada: $clasificacion');
     
     List<Map<String, dynamic>> recetasMap = await _database.query(
       'Recetas',
       where: 'clasificacion = ?',
       whereArgs: [clasificacion],
+      orderBy: 'nombre_receta ASC'
     );
 
-    // Depuración: Verifica el resultado de la consulta
-    print('Resultados de la consulta: ${recetasMap.length} recetas encontradas');
 
     return recetasMap
         .map((e) => Receta(
@@ -104,7 +103,7 @@ class DRReceta {
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
         WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
-        );
+        ) ORDER BY nombre_receta ASC
     ''');
     return recetasDisponibles;
   }
@@ -122,7 +121,7 @@ class DRReceta {
   // Método para obtener las recetas favoritas
   Future<List<Receta>> obtenerRecetaFavoritas() async {
     List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
-      'SELECT * FROM Recetas WHERE favoritos = 1',
+      'SELECT * FROM Recetas WHERE favoritos = 1 ORDER BY nombre_receta ASC',
     );
     return recetasMap
         .map((e) => Receta(
@@ -192,7 +191,7 @@ class DRReceta {
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
         WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
-        );
+        ) ORDER BY nombre_receta ASC
     ''');
     return recetasDisponibles;
   }
@@ -210,7 +209,7 @@ class DRReceta {
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
         WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
-        );
+        ) ORDER BY nombre_receta ASC
     ''');
     return recetasDisponibles;
   }
@@ -228,7 +227,7 @@ class DRReceta {
         FROM Lista_Ingredientes li
         LEFT JOIN Ingredientes i ON li.id_ingrediente = i.id_ingrediente
         WHERE li.id_receta = r.id_receta AND (i.cantidad > 0)
-        );
+        ) ORDER BY nombre_receta ASC
     ''');
     return recetasDisponibles;
   }
@@ -236,7 +235,7 @@ class DRReceta {
   // Método para obtener las recetas favoritas de desayuno
   Future<List<Receta>> obtenerRecetaFavoritasDesayuno() async {
     List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
-      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Desayuno"',
+      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Desayuno" ORDER BY nombre_receta ASC',
     );
     return recetasMap
         .map((e) => Receta(
@@ -254,7 +253,7 @@ class DRReceta {
   // Método para obtener las recetas favoritas de comida
   Future<List<Receta>> obtenerRecetaFavoritasComida() async {
     List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
-      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Comida"',
+      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Comida" ORDER BY nombre_receta ASC',
     );
     return recetasMap
         .map((e) => Receta(
@@ -272,7 +271,7 @@ class DRReceta {
   // Método para obtener las recetas favoritas de cena
   Future<List<Receta>> obtenerRecetaFavoritasCena() async {
     List<Map<String, dynamic>> recetasMap = await _database.rawQuery(
-      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Cena"',
+      'SELECT * FROM Recetas WHERE favoritos = 1 AND clasificacion = "Cena" ORDER BY nombre_receta ASC',
     );
     return recetasMap
         .map((e) => Receta(

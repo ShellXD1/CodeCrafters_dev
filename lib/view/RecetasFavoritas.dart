@@ -92,17 +92,17 @@ class _RecetasFavoritasViewState extends State<RecetasFavoritasView> {
               ),
               PopupMenuItem(
                 child: Text(
-                  'Ver recetas favoritas',
+                  'Ver recetas recomendadas',
                   style: TextStyle(fontSize: 20.0, fontFamily: 'Chivo'),
                 ),
-                value: 'ver_favoritas',
+                value: 'ver_recomendadas',
               ),
             ],
             onSelected: (value) {
               if (value == 'ver_todas') {
                 Navigator.pushNamed(context, '/allRecetas');
-              } else if (value == 'ver_favoritas') {
-                Navigator.pushNamed(context, '/RecetasFavoritas');
+              } else if (value == 'ver_recomendadas') {
+                Navigator.pushNamed(context, '/recetas');
               }
             },
           ),

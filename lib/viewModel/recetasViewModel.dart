@@ -238,4 +238,10 @@ class RecetasViewModel extends ChangeNotifier {
         .take(3)
         .toList(); // Tomar solo las primeras tres recetas (aleatorias)
   }
+
+  // Método para obtener la informacion Nutricional de una receta
+  Future<Map<String, String?>> obtenerInfoNutriReceta(int idReceta) async {
+    final infoNutri = await _mRecetas.obtenerInfoNutriReceta(idReceta);
+    return {'info_nutricional': infoNutri};
+  }
 }

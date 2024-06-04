@@ -10,14 +10,12 @@ class RecetaDetalladaView extends StatelessWidget {
   const RecetaDetalladaView({
     Key? key,
     required this.recetasViewModel,
-    required this.recipeIndex, 
+    required this.recipeIndex,
     required this.ingredienteViewModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('Building RecetaDetalladaView with recipeIndex: $recipeIndex');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -29,6 +27,8 @@ class RecetaDetalladaView extends StatelessWidget {
         future: Future.wait([
           recetasViewModel.getRecipeDetails(recipeIndex),
           ingredienteViewModel.getIngredientesReceta(recipeIndex),
+          recetasViewModel.obtenerInfoNutriReceta(
+              recipeIndex), // Llamada adicional para la información nutricional
         ]),
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,12 +39,31 @@ class RecetaDetalladaView extends StatelessWidget {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
-          } else {
-            final recipeDetails = snapshot.data?[0];
-            final ingredientes = snapshot.data?[1];
+          } else if (snapshot.hasData) {
+            final recipeDetails = snapshot.data?[0] as Map<String, dynamic>?;
+            final ingredientes =
+                snapshot.data?[1] as List<Map<String, dynamic>>?;
+            final infoNutricional = snapshot.data?[2] as Map<String,
+                String?>?; // Nueva variable para la información nutricional
+
+            if (recipeDetails == null ||
+                ingredientes == null ||
+                infoNutricional == null) {
+              return Center(
+                child: Text(
+                    'No se encontraron detalles de la receta, ingredientes o información nutricional'),
+              );
+            }
+
             return Cuerpo(
               recipeDetails: recipeDetails,
               ingredientes: ingredientes,
+              infoNutricional:
+                  infoNutricional, // Pasar la información nutricional
+            );
+          } else {
+            return Center(
+              child: Text('No se encontraron datos.'),
             );
           }
         },
@@ -54,21 +73,24 @@ class RecetaDetalladaView extends StatelessWidget {
 }
 
 class Cuerpo extends StatelessWidget {
-  final Map<String, dynamic>? recipeDetails;
+  final Map<String, dynamic> recipeDetails;
   final List<Map<String, dynamic>> ingredientes;
+  final Map<String, String?>
+      infoNutricional; // Nueva variable para la información nutricional
 
-  const Cuerpo({Key? key, this.recipeDetails, required this.ingredientes}) : super(key: key);
+  const Cuerpo(
+      {Key? key,
+      required this.recipeDetails,
+      required this.ingredientes,
+      required this.infoNutricional})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (recipeDetails == null || ingredientes == null) {
-      return Center(
-        child: Text('No se encontraron detalles de la receta o ingredientes'),
-      );
-    }
-
-    final String preparacion = recipeDetails!['preparacion'];
-    final String informacion = recipeDetails!['informacion'];
+    final String preparacion = recipeDetails['preparacion'];
+    final String informacion = recipeDetails['informacion'];
+    final String? infoNutri = infoNutricional[
+        'info_nutricional']; // Obtener la información nutricional
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(12),
@@ -76,7 +98,7 @@ class Cuerpo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
-            recipeDetails!['nombre'].toString(),
+            recipeDetails['nombre'].toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,
@@ -85,7 +107,7 @@ class Cuerpo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          RecetaDes(recipeDetails!['imagen']),
+          RecetaDes(imagen: recipeDetails['imagen']),
           SizedBox(height: 20),
           Text(
             'Lista de Ingredientes:',
@@ -112,7 +134,7 @@ class Cuerpo extends StatelessWidget {
           PreparacionWidget(preparacion: preparacion),
           SizedBox(height: 20),
           Text(
-            'Lista de Información Nutricional:',
+            'Información Nutricional:',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,
@@ -121,7 +143,9 @@ class Cuerpo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 5),
-          InformacionWidget(informacion: informacion),
+          InformacionWidget(
+              informacion: infoNutri ??
+                  'No disponible'), // Pasar la información nutricional
           SizedBox(height: 20),
         ],
       ),
@@ -137,35 +161,40 @@ class PreparacionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> informacionList = preparacion.split('-');
+    List<String> preparacionList = preparacion.split('-');
     return ExpansionTile(
       title: Text(
-        "Preparacion",
+        "Preparación",
         style: TextStyle(fontFamily: 'Chivo'),
       ),
-      children: [
-        for (var info in informacionList)
-          ListTile(
-            title: Text(
-              info,
-              textAlign: TextAlign.justify,
-            ),
-          ),
-      ],
+      children: preparacionList
+          .map((step) => ListTile(
+                title: Text(
+                  step,
+                  textAlign: TextAlign.justify,
+                ),
+              ))
+          .toList(),
     );
   }
 }
 
-Widget RecetaDes(String imagen) {
-  return Container(
-    height: 200,
-    width: 250,
-    child: Image.asset(
-      '$imagen',
-      fit: BoxFit.cover,
-      height: 150.0,
-    ),
-  );
+class RecetaDes extends StatelessWidget {
+  final String imagen;
+
+  const RecetaDes({Key? key, required this.imagen}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: 250,
+      child: Image.asset(
+        imagen,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
 }
 
 class IngredientesWidget extends StatelessWidget {
@@ -181,15 +210,14 @@ class IngredientesWidget extends StatelessWidget {
         "Ingredientes",
         style: TextStyle(fontFamily: 'Chivo'),
       ),
-      children: [
-        for (var ingrediente in ingredientes)
-          ListTile(
-            title: Text(
-              ingrediente['cantidad_ingrediente'].toString() + ' ' + ingrediente['medida'] + ' de ' + ingrediente['nombre_ing'],  // Ajusta según la estructura de tus datos
-              textAlign: TextAlign.justify,
-            ),
-          ),
-      ],
+      children: ingredientes
+          .map((ingrediente) => ListTile(
+                title: Text(
+                  '${ingrediente['cantidad_ingrediente']} ${ingrediente['medida']} de ${ingrediente['nombre_ing']}',
+                  textAlign: TextAlign.justify,
+                ),
+              ))
+          .toList(),
     );
   }
 }
@@ -208,15 +236,14 @@ class InformacionWidget extends StatelessWidget {
         "Información Nutricional",
         style: TextStyle(fontFamily: 'Chivo'),
       ),
-      children: [
-        for (var info in informacionList)
-          ListTile(
-            title: Text(
-              info,
-              textAlign: TextAlign.justify,
-            ),
-          ),
-      ],
+      children: informacionList
+          .map((info) => ListTile(
+                title: Text(
+                  info,
+                  textAlign: TextAlign.justify,
+                ),
+              ))
+          .toList(),
     );
   }
 }

@@ -14,7 +14,7 @@ class MReceta {
     return _repository.getRecetas();
   }
 
-   // Método para obtener la lista de recetas
+  // Método para obtener la lista de recetas
   Future<List<Receta>> obtenerRecetasClasificacion(String clasificacion) async {
     return _repository.getRecetasPorClasificacion(clasificacion);
   }
@@ -98,5 +98,10 @@ class MReceta {
   // Método para obtener las recetas favoritas
   Future<List<Receta>> obtenerRecetaFavoritasCena() async {
     return await _repository.obtenerRecetaFavoritasCena();
+  }
+
+  //Método para obtener la informacion nutricional de la receta
+  Future<String?> obtenerInfoNutriReceta(int idReceta) async {
+    return await _repository.obtenerInfoNutriReceta(idReceta);
   }
 }
